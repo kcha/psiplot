@@ -34,7 +34,7 @@ An example entry looks like:
 1 Ooctye  EarlyDev  36}
 
 The \emph{SampleName} must match the column names in \code{psi}.
-\cr\cr
+\cr
 
 The RColorCode value corresponds to the index of the vector produced by
 \code{colors()}. For example, RColorCode = 36 corresponds to:
