@@ -46,6 +46,8 @@ mycolour <- cols[36]}
 A list consisting of:
   \item{data}{data frame of PSI values with columns re-ordered}
   \item{col}{vector of colors corresponding to the re-ordered columns}
+  \item{group.index}{list of column indices corresponding to each \emph{GroupName}}
+  \item{group.col}{vector of colors corresponding to each \emph{GroupName}}
 %%  ~Describe the value returned
 %%  If it is a LIST, use
 %%  \item{comp1 }{Description of 'comp1'}
@@ -68,13 +70,8 @@ Kevin Ha <k.ha@mail.utoronto.ca>, Blencowe Lab
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
 
-## The function is currently defined as
-function (x) 
-{
-  }
+See Plot_PSIs_NEW_KH.R for usage example.
+
 }
 
