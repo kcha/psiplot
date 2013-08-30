@@ -48,13 +48,28 @@ preprocess_sample_colors <- function(psi, database) {
    # Re-order the PSI table
    db <- db[order(db$Order),]
    db$Order <- 1:nrow(db)
-   new.column.idx <- sapply(colnames(psi), 
-                            function(x) db[db$SampleName == x, "Order"])
+   new.column.idx <- sapply(db$SampleName, 
+                            function(x) which(colnames(psi) == x))
    
    psi.new <- psi[,new.column.idx]
    
    # Generate a corresponding color code sequence
    mycols <- colors()[db$RColorCode]
+   names(mycols) <- db$SampleName
    
-   return(list(data=psi.new, col=mycols))
+   # Store indices of columns for each group
+   groups <- unique(db$GroupName)
+   mygroups <- list()
+   mygroupcol <- rep(NA, length(groups))
+   for (i in 1:length(groups)) {
+      mygroups[[i]] <- which(colnames(psi.new) %in%  
+                                 db[db$GroupName == groups[i],"SampleName"])
+      mygroupcol[i] <- colors()[unique(db[db$GroupName == groups[i], 
+                                          "RColorCode"])]
+   }
+   names(mygroups) <- groups
+   names(mygroupcol) <- groups
+   
+   return(list(data=psi.new, col=mycols, 
+               group.index=mygroups, group.col=mygroupcol))
 }
