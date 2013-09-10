@@ -38,8 +38,10 @@ The \emph{SampleName} must match the column names in \code{psi}.
 
 The RColorCode value corresponds to the index of the vector produced by
 \code{colors()}. For example, RColorCode = 36 corresponds to:
-\preformatted{cols <- colors()
-mycolour <- cols[36]}
+\preformatted{> cols <- colors()
+> mycolour <- cols[36]
+> mycolour
+[1] "brown4"}
 
 }
 \value{
