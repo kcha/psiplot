@@ -7,7 +7,6 @@ source("preprocess_sample_colors.R")
 # - Tissue group or Species
 
 print_help <- function() {
-  updated <- "2013-Sept-19"
   text <- "**** PSI Plotter ****\nUpdated: 2013-Sept-19\n\nUsage: R CMD BATCH PSI_Plotter.R PSI_Input.tab Tissue_Groups.txt
 
 Arguments:
@@ -26,16 +25,7 @@ if (length(args) < 2) {
 }
 
 file <- args[1]
-
-# Figure out what tissue data to use 
 tissueFile <- args[2]
-# if (grepl("mouse|mmu", file, ignore.case=T)) {
-#   tissueFile <- "test_data/Tissues.Mmu.txt"
-# } else if (grepl("human|hsa", file, ignore.case=T)) {
-#   tissueFile <- "../../HONG/Tissues.Hsa.txt"
-# } else {
-#   stop("Invalid tissue group option - please double check")
-# }
 
 if (!file.exists(file))
   stop("Input PSI file doesn't exist!")
@@ -44,7 +34,8 @@ if (!file.exists(tissueFile))
 
 cat("\n// Input file:", file, "\n")
 cat("// Tissue Group file:", tissueFile, "\n")
-#########################################################################
+
+#### Format input data ####
 
 all_events <- read.csv(file, sep="\t")
 
@@ -74,12 +65,16 @@ PSIs <- as.matrix(reordered.PSI$data)
 ALLev <- row.names(PSIs)
 samples <- colnames(PSIs)
 
+cat("//", ncol(PSIs), "samples detected\n")
+
+#### Prepare plotting ####
+cat("// Plotting...\n")
+
 # assign list of colors
 supercolors <- reordered.PSI$col
 
 # Set output file
-cat("// Plotting...\n")
-outfile <- sub("\\.[^.]*(\\.gz)?$", ".pdf", file)
+outfile <- sub("\\.[^.]*(\\.gz)?$", ".PSI_plots.pdf", file)
 
 par(mfrow=c(1,1),las=2) #3 graphs per row; 2=label always perpendicular to the axis
 pdf(outfile,width=8.5,height=5.5)
@@ -106,12 +101,11 @@ for(i in 1:nrow(PSIs)){
   abline(h=mean(PSIs[i, reordered.PSI$group.index[["Tissues"]] ], na.rm=TRUE),
          col=reordered.PSI$group.col["Tissues"], lwd=0.5)
 
-  for (j in 1:ncol(PSIs)){
-    abline(v=j,col="grey",lwd=0.3,lty=2)
-  }
+  abline(v=1:ncol(PSIs), col="grey", lwd=0.3, lty=2)
+  abline(h=seq(0,100,10), col="grey", lwd=0.3, lty=2)
 }
 dev.off()
 
 cat("// Done!\n")
-cat("// Plots are saved in:", outfile, "\n")
+cat("//", nrow(PSIs), "plots are saved in:", outfile, "\n")
 ####
