@@ -7,7 +7,8 @@ source("preprocess_sample_colors.R")
 # - Tissue group or Species
 
 print_help <- function() {
-  text <- "**** PSI Plotter ****\nUpdated: 2013-Sept-19\n\nUsage: R CMD BATCH PSI_Plotter.R PSI_Input.tab Tissue_Groups.txt
+  text <- "**** PSI Plotter ****\nUpdated: 2013-Oct-3\n
+Usage: Rscript PSI_Plotter.R --args PSI_Input.tab Tissue_Groups.txt
 
 Arguments:
     1) Input PSI data - one AS event per row - using the standard PSI format
