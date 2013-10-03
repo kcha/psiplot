@@ -22,9 +22,11 @@ Execution
 From command-line:
 
 ~~~~
-> Rscript PSI_Plotter.R --args PSI_Input.tab Tissues.Mmu.txt
+> Rscript PSI_Plotter.R --args \
+    test_data/INCLUSION_LEVELS-ALL3m-Mmu89-SELECTED.test.tab \
+    test_data/Tissues.Mmu.txt
 ~~~~
 
-PSI_Plotter.R will output a pdf file named after the input file (e.g.
-PSI_Input.PSI_plots.pdf). The pdf will be saved in the same directory as the
-input file. 
+PSI_Plotter.R will output a pdf file named after the input file and
+will be saved in the same directory as the input file (e.g.
+test_data/INCLUSION_LEVELS-ALL3m-Mmu89-SELECTED.test.PSI_plots.pdf)
