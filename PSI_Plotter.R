@@ -1,4 +1,4 @@
-# PSI Plotter
+# PSI Plotter (aka "Nuno" plots)
 
 source("preprocess_sample_colors.R")
 

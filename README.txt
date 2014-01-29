@@ -1,5 +1,5 @@
-Using PSI Plotter script
-========================
+Using PSI Plotter (aka "Nuno plots") script
+===========================================
 
 Dependencies
 ------------
