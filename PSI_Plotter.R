@@ -25,8 +25,8 @@ if (length(args) < 2) {
   stop("Missing arguments")
 }
 
-file <- args[1]
-tissueFile <- args[2]
+file <- args[2]
+tissueFile <- args[3]
 
 if (!file.exists(file))
   stop("Input PSI file doesn't exist!")
