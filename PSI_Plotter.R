@@ -2,7 +2,7 @@
 #
 # PSI Plotter script
 
-MAX_ENTRIES <- 100
+MAX_ENTRIES <- 1000
 
 args <- commandArgs(trailingOnly = F)
 scriptPath <- dirname(sub("--file=","", args[grep("--file",args)]))
@@ -116,7 +116,7 @@ if (!grepl("^GENE", colnames(all_events)[1])) {
 
 if (nrow(all_events) > MAX_ENTRIES) {
   warning(paste("Too many entries in input file. Plotting only the first",
-      MAX_ENTRIES))
+      MAX_ENTRIES, ". Try splitting your input file into smaller files."))
 }
 
 # Format input data ###########################################################
