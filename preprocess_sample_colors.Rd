@@ -60,7 +60,7 @@ A list consisting of:
 %% ~put references to the literature/web site here ~
 }
 \author{
-Kevin Ha <k.ha@mail.utoronto.ca>, Blencowe Lab
+Kevin Ha <k.ha@mail.utoronto.ca>, Blencowe Lab, University of Toronto
 }
 \note{
 %%  ~~further notes~~

@@ -1,11 +1,17 @@
-Using PSI Plotter (aka "Nuno plots") script
-===========================================
+PSI Plotter (aka "Nuno plots") R script
+=======================================
 
 Dependencies
 ------------
 
 * preprocess_sample_colors.R - a helper script for re-organizing the PSI input
 data
+
+To test if the dependencies are satisfied, run the following command:
+
+> make check
+
+If everything is satisfied, this command should return "OK".
 
 Input File Requirements
 ------------------------
@@ -34,14 +40,26 @@ Two input files are required:
 Execution
 ---------
 
-From command-line:
+From command-line (PSI_Plotter.R should be executable):
 
-~~~~
-> Rscript PSI_Plotter.R --args \
+> ./PSI_Plotter.R \
     test_data/INCLUSION_LEVELS-ALL3m-Mmu89-SELECTED.test.tab \
     test_data/Tissues.Mmu.txt
-~~~~
+
+or
+
+> make test
 
 PSI_Plotter.R will output a pdf file named after the input file and
 will be saved in the same directory as the input file (e.g.
 test_data/INCLUSION_LEVELS-ALL3m-Mmu89-SELECTED.test.PSI_plots.pdf)
+
+Author
+------
+Kevin Ha <k.ha@mail.utoronto.ca>, Blencowe Lab, University of Toronto
+
+Adapted from original plotting code written by Nuno Barbosa Morais and Manuel Irimia.
+
+Acknowledgements
+----------------
+KH is supported by funding from Canadian Institutes of Health Research
