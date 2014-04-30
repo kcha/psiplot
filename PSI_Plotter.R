@@ -1,23 +1,24 @@
 #!/usr/bin/env Rscript
 #
-# PSI Plotter script (aka "Nuno" plots)
+# PSI Plotter script
 
 source("preprocess_sample_colors.R")
 
 version <- function() {
-  return("0.3")
+  return("0.4")
 }
 
 print_help <- function() {
   text <- "**** PSI Plotter ****
 Script for generating PSI plots across samples (aka Nuno plots).
 
-Usage: ./PSI_Plotter.R PSI_Input.tab[.gz] Tissue_Groups.txt
+Usage: ./PSI_Plotter.R PSI_Input.tab[.gz] [Tissue_Groups.txt]
 
 Arguments:
   1) Input PSI data - one AS event per row - using the standard PSI format
     e.g. GENE  EVENT  COORD  LENGTH FullCO  COMPLEX  Tissue1_PSI Tissue1_Q ... 
-  2) Tissue group file or species (currently supports Hsa or Mmu)
+  2) [optional] Tissue group file or species (currently supports Hsa or Mmu)
+    Use for customizing the order and colors of the scatter plot.
 
 Options:
   --version     Display the version    
@@ -32,7 +33,7 @@ Test run:
 "
   writeLines(text, stderr())
   write(paste("Version:", version()), stderr())
-  write("Updated: 2014-04-09", stderr())
+  write("Updated: 2014-04-30", stderr())
 }
 
 #### Arguments #################################################################
@@ -41,27 +42,31 @@ Test run:
 
 args <- commandArgs(TRUE)
 
-if (args[1] == "--help") {
-  print_help()
-  stop()
-}
-if (args[1] == "--version") {
-  write(paste("Version:", version()), stderr())
-  stop()
-}
-if (length(args) < 2) {
+if (length(args) < 1) {
   print_help()
   stop("Missing arguments")
 }
+if (args[1] %in% c("-h", "--help", "-help")) {
+  print_help()
+  stop("Terminating")
+}
+if (args[1] == "--version") {
+  write(paste("Version:", version()), stderr())
+  stop("Terminating")
+}
 
-file <- args[length(args)-1]
-tissueFile <- args[length(args)]
-
+file <- args[1]
 if (!file.exists(file))
   stop(paste("Input PSI file", file, "doesn't exist!"))
-if (!file.exists(tissueFile))
-  stop(paste("Tissue Group file", tissueFile, "doesn't exist!"))
 
+tissueFile <- NULL
+if (length(args) == 2) {
+    tissueFile <- args[2]
+    if (!file.exists(tissueFile))
+      stop(paste("Tissue Group file", tissueFile, "doesn't exist!"))
+}
+
+write(paste("PSI Plotter - Version", version()), stderr())
 write(paste("\n// Input file:", file), stderr())
 write(paste("// Tissue Group file:", tissueFile), stderr())
 
@@ -146,14 +151,16 @@ for (i in 1:nrow(PSIs)) {
        labels = samples, 
        srt = 45, adj=c(1,1), xpd = TRUE,cex=0.5)
   
-  abline(h=mean(PSIs[i, reordered.PSI$group.index[["ESC"]] ], na.rm=TRUE), 
-         col=reordered.PSI$group.col["ESC"], lwd=0.5)
-  abline(h=mean(PSIs[i, reordered.PSI$group.index[["Neural"]] ], na.rm=TRUE),
-         col=reordered.PSI$group.col["Neural"], lwd=0.5)
-  abline(h=mean(PSIs[i, reordered.PSI$group.index[["Muscle"]] ], na.rm=TRUE),
-         col=reordered.PSI$group.col["Muscle"], lwd=0.5)
-  abline(h=mean(PSIs[i, reordered.PSI$group.index[["Tissues"]] ], na.rm=TRUE),
-         col=reordered.PSI$group.col["Tissues"], lwd=0.5)
+  if (!is.null(tissueFile)) {
+      abline(h=mean(PSIs[i, reordered.PSI$group.index[["ESC"]] ], na.rm=TRUE), 
+             col=reordered.PSI$group.col["ESC"], lwd=0.5)
+      abline(h=mean(PSIs[i, reordered.PSI$group.index[["Neural"]] ], na.rm=TRUE),
+             col=reordered.PSI$group.col["Neural"], lwd=0.5)
+      abline(h=mean(PSIs[i, reordered.PSI$group.index[["Muscle"]] ], na.rm=TRUE),
+             col=reordered.PSI$group.col["Muscle"], lwd=0.5)
+      abline(h=mean(PSIs[i, reordered.PSI$group.index[["Tissues"]] ], na.rm=TRUE),
+             col=reordered.PSI$group.col["Tissues"], lwd=0.5)
+  }
 
   abline(v=1:ncol(PSIs), col="grey", lwd=0.3, lty=2)
   abline(h=seq(0,100,10), col="grey", lwd=0.3, lty=2)
