@@ -130,11 +130,11 @@ PSIs <- format_table(all_events)
 #   group.index - list of indices for each sample group (e.g. ESC, Neural, etc.)
 #   group.col   - corresponding color for sample group
 reordered.PSI <- preprocess_sample_colors(PSIs, tissueFile)
+write(paste("//", ncol(reordered.PSI$data), "out of", ncol(PSIs), "samples detected"), stderr())
 PSIs <- as.matrix(reordered.PSI$data)
 ALLev <- row.names(PSIs)
 samples <- colnames(PSIs)
 
-write(paste("//", ncol(PSIs), "samples detected"), stderr())
 
 #### Prepare plotting ##########################################################
 write("// Plotting...", stderr())
