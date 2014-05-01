@@ -28,7 +28,7 @@ preprocess_sample_colors <- function(psi, database) {
 
    R <- list()
 
-   if (is.null(tissueFile)) {
+   if (is.null(database)) {
         mycols <- rep("black", ncol(psi))
         R <- list(data=psi, col=mycols, group.index=NULL, group.col=NULL)
    } else {
