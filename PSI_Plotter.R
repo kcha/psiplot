@@ -1,6 +1,23 @@
 #!/usr/bin/env Rscript
 #
-# PSI Plotter script
+# Copyright (C) 2014 Kevin Ha
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the "Software"), 
+# to deal in the Software without restriction, including without limitation 
+# the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+# and/or sell copies of the Software, and to permit persons to whom the Software 
+# is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in 
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+# OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 MAX_ENTRIES <- 1000
 
@@ -8,37 +25,7 @@ args <- commandArgs(trailingOnly = F)
 scriptPath <- dirname(sub("--file=","", args[grep("--file",args)]))
 source(file.path(scriptPath, "preprocess_sample_colors.R"))
 
-version <- function() {
-  return("0.5")
-}
-
-print_help <- function() {
-  text <- "**** PSI Plotter ****
-Script for generating PSI plots across samples (aka Nuno plots).
-
-Usage: ./PSI_Plotter.R PSI_Input.tab[.gz] [Tissue_Groups.txt]
-
-Arguments:
-  1) Input PSI data - one AS event per row - using the standard PSI format
-    e.g. GENE  EVENT  COORD  LENGTH FullCO  COMPLEX  Tissue1_PSI Tissue1_Q ... 
-  2) [optional] Tissue group file or species (currently supports Hsa or Mmu)
-    Use for customizing the order and colors of the scatter plot.
-
-Options:
-  --version     Display the version    
-  --help        This help message
-
-Output:
-  A PDF file will be created with one PSI plot per page.
-
-Test run:
-  ./PSI_Plotter.R test_data/INCLUSION_LEVELS-ALL3m-Mmu89-SELECTED.test.tab \\
-    test_data/Tissues.Mmu.txt
-"
-  writeLines(text, stderr())
-  write(paste("Version:", version()), stderr())
-  write("Updated: 2014-04-30", stderr())
-}
+library(optparse)
 
 #### Arguments #################################################################
 # - Input file
@@ -46,35 +33,81 @@ Test run:
 
 args <- commandArgs(TRUE)
 
-if (length(args) < 1) {
-  print_help()
-  stop("Missing arguments")
-}
-if (args[1] %in% c("-h", "--help", "-help")) {
-  print_help()
-  stop("Terminating")
-}
-if (args[1] == "--version") {
-  write(paste("Version:", version()), stderr())
-  stop("Terminating")
+desc <- "Script for generating PSI plots (scatterplot) across samples.
+
+Input:
+  PSI data - one AS event per row - using the standard PSI format
+      e.g. GENE  EVENT  COORD  LENGTH FullCO  COMPLEX  Tissue1 Tissue1_Q ... 
+  Recommended to use only a subset of AS events instead of the full table
+  otherwise the resulting PDF file will be very large. See options for customizing
+  the maximum number of plots to generate.
+
+Output:
+  A PDF file will be created with one PSI plot per page.
+
+Customizing plots [optional]:
+  The color and ordering of samples can be customized by supplying a plot
+  configuration file. This file is tab-delimited and in the following format:
+  Order    SampleName    GroupName    RColorCode
+  1        Ooctye        EarlyDev     36
+  2        Embr_2C       EarlyDev     36
+  etc..
+ 
+  Order 		: The ordering of the samples from left to right.
+  SampleName 	: Name of the sample. MUST match sample name in input table.
+  GroupName		: Group name. Use for plotting the average PSI of samples
+      belonging to the same group. Currently supports grouping of ESC, Muscle,
+      Neural, and Tissues. Everything else is ignored.
+  RColorCode	: Color value corresponding to the index of the vector produced by
+      colors(). For example, RColorCode = 36 corresponds to:
+        > cols <- colors()
+        > mycolour <- cols[36]
+
+  Only the samples listed in the config file will be represented in the 
+  resulting plots. Other samples in the PSI table but not in the config 
+  file will be ignored. This may be useful if you want to customize the 
+  type of samples in your plots.
+"
+
+option.list <- list(
+        make_option(c("-v", "--verbose"), type = "logical", default = TRUE,
+            help="Enable verbose [%default]"),
+        make_option(c("-c", "--config"), type = "character", default = NULL,
+            help = "Plot configuration file. Used for customizing order and color
+            [%default]"),
+        make_option(c("--max"), type = "integer", default = MAX_ENTRIES,
+            help = "Maximum number of AS events to plot [first %default]"),
+        make_option(c("-o", "--output"), type = "character", default = NULL,
+            help = "Output directory [%default]")
+)
+parser <- OptionParser(option_list = option.list,
+                        desc = desc,
+                        usage = "usage: %prog [options] INCLUSION_LEVELS.tab")
+opt <- parse_args(parser, args = args, positional_arguments = TRUE)
+
+if (length(opt$args) == 0) {
+    print_help(parser)
+    stop("Missing arguments")
 }
 
-file <- args[1]
+file <- opt$args[1]
 if (!file.exists(file))
   stop(paste("Input PSI file", file, "doesn't exist!"))
 
-tissueFile <- NULL
-if (length(args) == 2) {
-    tissueFile <- args[2]
-    if (!file.exists(tissueFile))
-      stop(paste("Tissue Group file", tissueFile, "doesn't exist!"))
+tissueFile <- opt$options$config
+if (!(is.null(tissueFile) || file.exists(tissueFile)))
+  stop(paste("Tissue Group file", tissueFile, "doesn't exist!"))
+
+verbPrint <- function(s) {
+    if (opt$options$verbose) {
+        write(s, stderr()) 
+    }
 }
 
-write(paste("PSI Plotter - Version", version()), stderr())
-write(paste("\n// Input file:", file), stderr())
-write(paste("// Tissue Group file:", 
-    ifelse(is.null(tissueFile), "Did not provide", tissueFile)), 
-    stderr())
+verbPrint(paste("PSI Plotter"))
+verbPrint(paste("\n// Input file:", file))
+verbPrint(paste("// Tissue Group file:", 
+    ifelse(is.null(tissueFile), "Did not provide", tissueFile)))
 
 #### Format input data #########################################################
 
@@ -116,13 +149,13 @@ if (!grepl("^GENE", colnames(all_events)[1])) {
   stop("Invalid column names. Does your input file contain the correct header?")
 }
 
-if (nrow(all_events) > MAX_ENTRIES) {
+if (nrow(all_events) > opt$options$max) {
   warning(paste("Too many entries in input file. Plotting only the first",
-      MAX_ENTRIES, ". Try splitting your input file into smaller files."))
+      opt$optiosn$max, ". Try splitting your input file into smaller files."))
 }
 
 # Format input data ###########################################################
-write("// Formatting input data for plotting...", stderr())
+verbPrint("// Formatting input data for plotting...")
 PSIs <- format_table(all_events)
 # Call function to re-order columns of PSI data
 #
@@ -132,24 +165,33 @@ PSIs <- format_table(all_events)
 #   group.index - list of indices for each sample group (e.g. ESC, Neural, etc.)
 #   group.col   - corresponding color for sample group
 reordered.PSI <- preprocess_sample_colors(PSIs, tissueFile)
-write(paste("//", ncol(reordered.PSI$data), "out of", ncol(PSIs), "samples detected"), stderr())
+verbPrint(paste("//", ncol(reordered.PSI$data), "out of", ncol(PSIs), "samples detected"))
 PSIs <- as.matrix(reordered.PSI$data)
 ALLev <- row.names(PSIs)
 samples <- colnames(PSIs)
 
-
 #### Prepare plotting ##########################################################
-write("// Plotting...", stderr())
+verbPrint("// Plotting...")
 
 # assign list of colors
 supercolors <- reordered.PSI$col
 
 # Set output file
-outfile <- sub("\\.[^.]*(\\.gz)?$", ".PSI_plots.pdf", file)
+outfile <- sub("\\.[^.]*(\\.gz)?$", ".PSI_plots.pdf", basename(file))
+
+# Check if output directory was specified
+if (is.null(opt$options$output)) {
+    outfile <- file.path(dirname(file), outfile)
+} else {
+    # Create directory if necessary
+    if (!file.exists(opt$options$output))
+        dir.create(opt$options$output, recursive = TRUE) 
+    outfile <- file.path(opt$options$output, outfile)
+}
 
 pdf(outfile, width = 8.5, height = 5.5)
 par(mfrow = c(1,1), las = 2) #3 graphs per row; 2=label always perpendicular to the axis
-nplot <- min(nrow(PSIs), MAX_ENTRIES)
+nplot <- min(nrow(PSIs), opt$options$max)
 for (i in 1:nplot) {
   plot(as.numeric(PSIs[i,]),
        col=supercolors,
@@ -180,6 +222,6 @@ for (i in 1:nplot) {
 }
 dev.off()
 
-write("// Done!\n", stderr())
-write(paste("//", nplot, "plots are saved in:", outfile), stderr())
+verbPrint("// Done!\n")
+verbPrint(paste("//", nplot, "plots are saved in:", outfile))
 ####
