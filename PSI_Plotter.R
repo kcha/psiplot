@@ -72,7 +72,9 @@ if (length(args) == 2) {
 
 write(paste("PSI Plotter - Version", version()), stderr())
 write(paste("\n// Input file:", file), stderr())
-write(paste("// Tissue Group file:", tissueFile), stderr())
+write(paste("// Tissue Group file:", 
+    ifelse(is.null(tissueFile), "Did not provide", tissueFile)), 
+    stderr())
 
 #### Format input data #########################################################
 
