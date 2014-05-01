@@ -24,7 +24,7 @@ and \emph{m} is the number of samples.
   }
 }
 \details{
-\code{preprocess_sample_colors} depends on a pre-defined "samples inventory"
+\code{preprocess_sample_colors} depends on a pre-defined "tissues/samples inventory"
 database file in tab-delimited format. This file is species-specific and 
 consists of four columns: \emph{Order, SampleName, GroupName, RColorCode}. This
 header is required in the file.
@@ -33,7 +33,12 @@ An example entry looks like:
 \preformatted{Order SampleName  GroupName RColorCode
 1 Ooctye  EarlyDev  36}
 
-The \emph{SampleName} must match the column names in \code{psi}.
+The \emph{SampleName} must match the column names in \code{psi}. It is possible
+for \code{database} to contain more samples than the \code{psi}. In this case,
+the extra samples will be ignored. It is also possible that 
+\code{database} contains only a subset of the samples in \code{psi}. In this
+case, only the samples specified in the \code{database} will be plotted and everything
+else is ignored.
 \cr
 
 The RColorCode value corresponds to the index of the vector produced by

@@ -9,7 +9,7 @@ scriptPath <- dirname(sub("--file=","", args[grep("--file",args)]))
 source(file.path(scriptPath, "preprocess_sample_colors.R"))
 
 version <- function() {
-  return("0.4")
+  return("0.5")
 }
 
 print_help <- function() {
