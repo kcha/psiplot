@@ -5,7 +5,7 @@
 psiplot
 =======
 
-psiplot is an R package for generating plots of percent spliced-in (PSI) values of alternatively-spliced exons. It is a supplement to the `plot` tool provided by [vast-tools](https://github.com/vastgroup/vast-tool), an RNA-Seq pipeline for alternative splicing analysis. The `plot` functionality in vast-tools was designed to be run as an executable. The `plot` code base has been forked to create this R package.
+psiplot is an R package for generating plots of percent spliced-in (PSI) values of alternatively-spliced exons. It is a supplement to the `plot` tool provided by [vast-tools](https://github.com/vastgroup/vast-tools), an RNA-Seq pipeline for alternative splicing analysis. The `plot` functionality in vast-tools was designed to be run as an executable. The `plot` code base has been forked to create this R package.
 
 Currently, the plot code for vast-tools and psiplot are maintained separately, even though they are technically identical. Future work is planned to integrate psiplot into the vast-tools `plot` code.
 
@@ -66,7 +66,7 @@ PSI plots can also be configured using the standard R options.
 Related Projects
 ----------------
 
--   [vast-tools](https://github.com/vastgroup/vast-tool)
+-   [vast-tools](https://github.com/vastgroup/vast-tools)
 
 References
 ----------
