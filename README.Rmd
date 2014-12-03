@@ -1,5 +1,4 @@
 ---
-title: psiplot
 output:
   md_document:
     variant: markdown_github
@@ -14,3 +13,5 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+
+# psiplot

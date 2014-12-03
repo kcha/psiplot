@@ -1,5 +1,4 @@
 ---
-title: psiplot
 output:
   md_document:
     variant: markdown_github
@@ -8,3 +7,5 @@ output:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 
+
+# psiplot
