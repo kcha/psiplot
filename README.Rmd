@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 # psiplot
 
-psiplot is an R package for generated plots of percent spliced-in (PSI) values of 
+psiplot is an R package for generating plots of percent spliced-in (PSI) values of 
 alternatively-spliced exons. It is a supplement to the `plot` tool provided
 by [vast-tools](https://github.com/vastgroup/vast-tool), an RNA-Seq pipeline for 
 alternative splicing analysis. The `plot` functionality in vast-tools was designed
