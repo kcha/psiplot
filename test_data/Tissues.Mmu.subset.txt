@@ -1,6 +1,0 @@
-Order	SampleName	GroupName	RColorCode
-1	Oocyte_M	EarlyDev	36
-2	Embr_2C_M	EarlyDev	36
-3	Embr_4C	EarlyDev	36
-4	Embr_8C	EarlyDev	36
-5	Blastocyst	EarlyDev	36
