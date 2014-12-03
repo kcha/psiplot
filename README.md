@@ -53,9 +53,8 @@ etc..
 -   SampleName: Name of the sample. MUST match sample name in input table.
 -   GroupName: Group name. Use for plotting the average PSI of samples belonging to the same group (need to use option -u/--group-means)
 -   RColorCode: Any of the three kinds of R color specifications:
-
-1.  color name (as specified by `colors()`)
-2.  hex color code (\#rrggbb)
+    1.  color name (as specified by `colors()`)
+    2.  hex color code (\#rrggbb)
 
 The samples under SampleName MUST MATCH the names in the PSI input table. Only the samples listed in the config file will be represented in the resulting plots. Other samples in the PSI table but not in the config file will be ignored. This may be useful if you want to customize the type of samples in your plots.
 
