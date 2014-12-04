@@ -60,7 +60,7 @@ The samples under SampleName MUST MATCH the names in the PSI input table. Only t
 
 #### The R way
 
-PSI plots can also be configured using the standard R options.
+The colors and other graphical paramters can also be configured in R. `plot_events()` provides some limited options. See `?plot_events` for more details on the available options.
 
 Related Projects
 ----------------
