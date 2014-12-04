@@ -19,10 +19,11 @@
 #' @param cex
 #' @param gridlines Logical indicating whether grid lines should be drawn
 plot_event <- function(
-  x, config = NULL, errorbar = TRUE, groupmean = config, col = NULL,
+  x, config = NULL, errorbar = TRUE,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "", ylim = c(1,100),
-  xlim = c(1, ncol(x)), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6,
-  pch = 20, gridlines = TRUE) {
+  xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6,
+  pch = 20, cex = 1, gridlines = TRUE) {
   # Add some checks
 #   if (!is.null(config) && is.character(config)) {
 #     config <- read.csv(config, sep="\t")
@@ -47,7 +48,7 @@ plot_event <- function(
   axis(1, at=seq(1, ncol(psi), by=1), labels = FALSE)
   text(seq(1, ncol(psi), by=1),
        par("usr")[3] - 3.5,
-       labels = colnames(x),
+       labels = colnames(psi),
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
 
 
@@ -68,15 +69,16 @@ plot_event <- function(
     seen <- vector()
     groups <- names(reordered$group.index)
     for (t in 1:length(groups)) {
-      abline(h=mean(psi[ reordered$group.index[[groups[t]]] ],
-                    na.rm=TRUE),
-             col=reordered$group.col[groups[t]], lwd=0.5)
+      mu <- mean(as.numeric(
+        psi[reordered$group.index[[groups[t]]]]
+        ), na.rm=TRUE)
+      abline(h=mu, col=reordered$group.col[groups[t]], lwd=0.5)
       seen <- append(seen, paste(groups[t]))
     }
 
     # plot legend for mean group values
     if (length(seen) > 0) {
-      legend_position <- ifelse(psi[i,ncol(psi)] > 50, "bottomright", "topright")
+      legend_position <- ifelse(psi[ncol(psi)] > 50, "bottomright", "topright")
       legend(legend_position, legend = seen, lty = 1, col = reordered$group.col,
              title = "Group Means", cex = 0.7, ncol = 2)
     }
