@@ -1,7 +1,8 @@
 #' Calculate confidence intervals for error bars
 #'
 #' Helper function to filter and return confidence intervals based on beta
-#' distribution from Q scores. For internal use.
+#' distribution from Q scores. For internal use. Beta sampling functions
+#' provided by Tim Sterne-Weiler.
 #'
 #' @param q original PSI plus quality scores WITHOUT the first 7 columns
 #' @return Confidence intevals of PSI values
