@@ -18,5 +18,5 @@ convert_psi <- function(t) {
     if (length(na) > 0)
       psi[na, i] <- NA
   }
-  return(psi[, seq(1, ncol(psi), 2)])
+  return(psi)
 }
