@@ -18,6 +18,14 @@
 #' @param pch
 #' @param cex
 #' @param gridlines Logical indicating whether grid lines should be drawn
+#' @examples
+#' data(mm.psi)
+#' head(mm.psi)
+#' plot_event(mm.psi[1,]) 
+#'
+#' # Plot with custom configuration
+#' data(mm.psi.config)
+#' plot_event(mm.psi[1,], config = mm.psi.config)
 plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
