@@ -23,4 +23,7 @@ Prepares input event data for plotting. Calls \code{\link{convert_psi}}.
 mm.psi
 format_table(mm.psi)
 }
+\seealso{
+\code{\link{convert_psi}}
+}
 

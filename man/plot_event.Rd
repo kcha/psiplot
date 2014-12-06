@@ -6,21 +6,23 @@
 plot_event(x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(1, 100), xlim = c(1,
-  ncol(x)/2), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6, pch = 20,
-  cex.pch = 1, lines = FALSE, gridlines = TRUE)
+  ncol(x)/2), cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
+  pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing PSI values to be plotted}
 
 \item{config}{Optional configuration settings for \code{plot_event}. Can be
-a path to the \code{.config} file, or 4-column data frame of the \code{.config} file. Use the latter option if you are calling \code{plot_event} multiple times.}
+a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+file. Use the latter option if you are calling \code{plot_event} multiple times.}
 
 \item{errorbar}{Logical indicating whether error bars should be drawn}
 
 \item{groupmean}{Logical indicating whether grouped means should be drawn.
 Requires \code{config}.}
 
-\item{col}{Vector of colors for the points on the plot}
+\item{col}{Vector of colors with length matching the number of samples. If
+specificed, this will override the color settings specified in \code{config}.}
 
 \item{title}{Title of the plot}
 
@@ -34,9 +36,9 @@ Requires \code{config}.}
 
 \item{cex.main}{Plot title size}
 
-\item{cex.axis}{Axis label size}
+\item{cex.yaxis}{Y-axis font size}
 
-\item{cex.xaxis}{Size of sample name labels on x-axis}
+\item{cex.xaxis}{X-axis font size (i.e. the sample names)}
 
 \item{pch}{Point symbol}
 
@@ -53,25 +55,25 @@ corresponding quality scores are typically obtained from the
 pipeline.
 }
 \details{
-Plots can be customized via the \emph{config} option. Either a data frame or
+Plots can be customized via the \code{config} option. Either a data frame or
 the filepath to the config file can be used. Alternatively, plots can be
 customized using a limited set of graphical parameters as described above.
 
 The order of samples (e.g. columns in \emph{x}) as it appears on the
 resulting plot can be customized using a config file. If a config file is not
 used and re-ordering is desired, then it must be done manually before calling
-\emph{plot_event} by altering the columns of \emph{x}.
+\code{\link{plot_event}} by altering the columns of \emph{x}.
 
-If groups are defined in \emph{config} and \emph{groupmean=TRUE}, the mean
+If groups are defined in \code{config} and \code{groupmean=TRUE}, the mean
 PSI of the samples within each group are drawn as horizontal lines. The
 colors of the lines are determined by the color set to the first sample of
-each group by \emph{RColorCode} in \emph{config}. A corresponding legend key
+each group by \code{RColorCode} in \code{config}. A corresponding legend key
 will also be drawn.
 
 PSI values that have \emph{NA} value are omitted and not plotted.
 
 Error bars based on the confidence interval of the PSI estimation can be
-shown by setting \emph{errorbar=TRUE}.
+shown by setting \code{errorbar=TRUE}.
 }
 \examples{
 plot_event(mm.psi[1,])
@@ -83,6 +85,12 @@ plot_event(mm.psi[1,], config = "/path/to/mm.psi.config")
 
 # Plot using custom configuration, changing point sympol, and y-axis
 # scale
-plot_event(mm.psi[1,], config = mm.psi.config, pch = 19, ylim = c(20, 80))
+plot_event(mm.psi[1,], config = mm.psi.config, pch = 9, ylim = c(20, 80))
+}
+\seealso{
+\code{\link{format_table}} for performing some initial conversion steps of \code{x}
+
+\code{\link{preprocess_sample_colors}} for pre-processing of \code{x} using
+\code{config}
 }
 

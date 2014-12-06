@@ -3,23 +3,26 @@
 \alias{preprocess_sample_colors}
 \title{Preprocess PSI data frame using configuration file}
 \usage{
-preprocess_sample_colors(psi, config)
+preprocess_sample_colors(data, config)
 }
 \arguments{
-\item{data}{a \emph{n} x \emph{2*m} data frame of PSI and quality score values where \emph{n} is the number of AS events
+\item{data}{A \emph{n} x \emph{2*m} data frame of PSI and quality score values where \emph{n} is the number of AS events
 and \emph{m} is the number of samples.}
 
-\item{config}{filename of the configuration file for \code{data}. Also
-accepts \emph{m'} x \emph{4} data frame of the configuration file, \code{m <=
-m}}
+\item{config}{Filename of the configuration file for \code{data}. Also
+accepts \emph{m*} x \emph{4} data frame of the configuration file,
+\code{m* <= m}}
+
+\item{col}{Vector of colors with length matching the number of samples. If
+specificed, this will override the color settings specified in \code{config}.}
 }
 \value{
 A list containing:
  \item{data}{data frame of PSI values with columns re-ordered}
  \item{qual}{data frame of quality scores with columns re-ordered}
  \item{col}{vector of colors corresponding to the re-ordered columns}
- \item{group.index}{list of column indices corresponding to each \emph{GroupName}}
- \item{group.col}{vector of colors corresponding to each \emph{GroupName}}
+ \item{group.index}{list of column indices corresponding to each \code{GroupName}}
+ \item{group.col}{vector of colors corresponding to each \code{GroupName}}
 }
 \description{
 \code{preprocess_sample_colors} re-orders PSI sample columns to a specified order
@@ -46,17 +49,24 @@ where:
  \item SampleName: Name of the sample. MUST match sample name in input table.
  \item Group name: Use for plotting the average PSI of samples belonging
 to the same group (need to use option -u/--group-means)
- \item RColorCode: Color name as specified by \code{colors()} or hex color code (\code{#RRGGBB})
+ \item RColorCode: Color name as specified by \code{\link{colors}} or hex color code (\code{#RRGGBB})
 }
 
-The \emph{SampleName} must match the column names in \code{psi}. It is possible
-for \code{config} to contain more samples than the \code{psi}. In this case,
+The \emph{SampleName} must match the column names in \code{data}. It is possible
+for \code{config} to contain more samples than the \code{data}. In this case,
 the extra samples will be ignored. It is also possible that
-\code{config} contains only a subset of the samples in \code{psi}. In this
+\code{config} contains only a subset of the samples in \code{data}. In this
 case, only the samples specified in the \code{config} will be plotted and everything
 else is ignored.
+
+The colors can be overridden by specifiying \code{col}. This was mainly added
+to support the \code{col} option provided by \code{\link{plot_event}} --
+particularly when \code{config} is not provided.
 }
 \examples{
 reorderedpsi <- preprocess_sample_colors(mm.psi, config = mm.psi.config)
+}
+\seealso{
+\code{\link{plot_event}}
 }
 

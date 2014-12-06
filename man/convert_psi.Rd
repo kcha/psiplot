@@ -10,7 +10,8 @@ convert_psi(t)
 metadata columns}
 }
 \value{
-Data frame with converted NA PSI values
+Data frame with the same dimensions as \emph{t} and low/bad quality P
+SI values converted to \code{NA}
 }
 \description{
 Helper function to filter and return PSI values.
