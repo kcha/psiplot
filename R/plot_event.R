@@ -77,7 +77,7 @@ plot_event <- function(
 
   # Format input
   x <- format_table(x)
-  reordered <- preprocess_sample_colors(x, config)
+  reordered <- preprocess_sample_colors(x, config, col = col)
   psi <- reordered$data
 
 # Set plot title
