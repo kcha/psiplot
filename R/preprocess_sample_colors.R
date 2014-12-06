@@ -60,13 +60,13 @@ preprocess_sample_colors <- function(data, config) {
                qual=data[, seq(2, ncol(data), 2)],
                col=mycols, group.index=NULL, group.col=NULL)
    } else {
-     if (!is.character(config)) {
+     if (is.character(config)) {
        config <- read.table(config, header = T, sep="\t", comment.char="", 
                             stringsAsFactors=FALSE)
      }
 
      # check input file
-     if (all(colnames(config) == c("Order", "SampleName", "GroupName", "RColorCode"))) {
+     if (!all(colnames(config) == c("Order", "SampleName", "GroupName", "RColorCode"))) {
        stop("Incorrect formatting of headers in config")
      }
 
