@@ -7,7 +7,8 @@
 #'
 #' @param t Original PSI plus quality scores data frame WITHOUT the exon
 #' metadata columns
-#' @return Data frame with converted NA PSI values
+#' @return Data frame with the same dimensions as \emph{t} and low/bad quality P
+#' SI values converted to \code{NA}
 #' @export
 #' @examples
 #' convert_psi(mm.psi[,7:ncol(mm.psi)])

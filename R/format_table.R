@@ -1,13 +1,14 @@
 #' Format input event data
-#' 
+#'
 #' Convert low/bad quality PSI values and convert event metadata as rownames.
 #' Prepares input event data for plotting. Calls \code{\link{convert_psi}}.
 #'
 #' @param m A data frame of event data as outputted by
-#' \code{vast-tools combine}. e.g. each row is an event containing exon 
+#' \code{vast-tools combine}. e.g. each row is an event containing exon
 #' metadata, PSI and quality scores values.
 #' @return Data frame with PSI and quality scores. Rownames set as a
 #' concatenation of exon metadata delimited by |.
+#' @seealso \code{\link{convert_psi}}
 #' @export
 #' @examples
 #' # For example input, see:

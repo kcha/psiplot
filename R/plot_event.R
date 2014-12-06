@@ -6,45 +6,53 @@
 #' pipeline.
 #'
 #' @details
-#' Plots can be customized via the \emph{config} option. Either a data frame or
+#' Plots can be customized via the \code{config} option. Either a data frame or
 #' the filepath to the config file can be used. Alternatively, plots can be
 #' customized using a limited set of graphical parameters as described above.
 #'
 #' The order of samples (e.g. columns in \emph{x}) as it appears on the
 #' resulting plot can be customized using a config file. If a config file is not
 #' used and re-ordering is desired, then it must be done manually before calling
-#' \emph{plot_event} by altering the columns of \emph{x}.
+#' \code{\link{plot_event}} by altering the columns of \emph{x}.
 #'
-#' If groups are defined in \emph{config} and \emph{groupmean=TRUE}, the mean
+#' If groups are defined in \code{config} and \code{groupmean=TRUE}, the mean
 #' PSI of the samples within each group are drawn as horizontal lines. The
 #' colors of the lines are determined by the color set to the first sample of
-#' each group by \emph{RColorCode} in \emph{config}. A corresponding legend key
+#' each group by \code{RColorCode} in \code{config}. A corresponding legend key
 #' will also be drawn.
 #'
 #' PSI values that have \emph{NA} value are omitted and not plotted.
 #'
 #' Error bars based on the confidence interval of the PSI estimation can be
-#' shown by setting \emph{errorbar=TRUE}.
+#' shown by setting \code{errorbar=TRUE}.
 #'
 #' @param x A 1-row data frame containing PSI values to be plotted
 #' @param config Optional configuration settings for \code{plot_event}. Can be
-#' a path to the \code{.config} file, or 4-column data frame of the \code{.config} file. Use the latter option if you are calling \code{plot_event} multiple times.
+#' a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+#' file. Use the latter option if you are calling \code{plot_event} multiple times.
 #' @param errorbar Logical indicating whether error bars should be drawn
 #' @param groupmean Logical indicating whether grouped means should be drawn.
 #' Requires \code{config}.
-#' @param col Vector of colors for the points on the plot
+#' @param col Vector of colors with length matching the number of samples. If
+#' specificed, this will override the color settings specified in \code{config}.
 #' @param title Title of the plot
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
 #' @param ylim Range of y-axis
 #' @param xlim Range of x-axis
 #' @param cex.main Plot title size
-#' @param cex.axis Axis label size
-#' @param cex.xaxis Size of sample name labels on x-axis
+#' @param cex.yaxis Y-axis font size
+#' @param cex.xaxis X-axis font size (i.e. the sample names)
 #' @param pch Point symbol
 #' @param cex.pch Size of datapoints
 #' @param lines Draw a connecting line between points for an event
 #' @param gridlines Logical indicating whether grid lines should be drawn
+#' @seealso
+#' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
+#'
+#' \code{\link{preprocess_sample_colors}} for pre-processing of \code{x} using
+#' \code{config}
+#'
 #' @export
 #' @examples
 #' plot_event(mm.psi[1,])
@@ -56,14 +64,14 @@
 #'
 #' # Plot using custom configuration, changing point sympol, and y-axis
 #' # scale
-#' plot_event(mm.psi[1,], config = mm.psi.config, pch = 19, ylim = c(20, 80))
+#' plot_event(mm.psi[1,], config = mm.psi.config, pch = 9, ylim = c(20, 80))
 plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(1,100),
-  xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6,
+  xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
   pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE) {
-  if(nrow(x) != 1) {
+  if (nrow(x) != 1) {
     stop("Too many rows!")
   }
 
@@ -72,7 +80,7 @@ plot_event <- function(
   reordered <- preprocess_sample_colors(x, config)
   psi <- reordered$data
 
-  # Set plot title
+# Set plot title
   if (is.null(title)) {
     title <- make_title(rownames(x))
   }
@@ -82,7 +90,7 @@ plot_event <- function(
        main=title,
        ylab=ylab, xlab=xlab, xaxt="n",
        ylim=ylim, xlim=xlim,
-       cex.main=cex.main, cex.axis=cex.axis)
+       cex.main=cex.main, cex.axis=cex.yaxis)
   axis(1, at=seq(1, ncol(psi), by=1), labels = FALSE)
   text(seq(1, ncol(psi), by=1),
        par("usr")[3] - 3.5,
@@ -135,7 +143,7 @@ plot_event <- function(
 
   # Draw psi
   points(1:ncol(psi), as.numeric(psi), col=as.character(reordered$col),
-         pch=pch, cex = cex)
+         pch=pch, cex = cex.pch)
 
 }
 
