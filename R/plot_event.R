@@ -60,7 +60,7 @@
 plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
-  title = NULL, xlab = "", ylab = "", ylim = c(1,100),
+  title = NULL, xlab = "", ylab = "PSI", ylim = c(1,100),
   xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6,
   pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE) {
   if(nrow(x) != 1) {
