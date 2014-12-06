@@ -18,6 +18,7 @@
 #' @param pch
 #' @param cex
 #' @param gridlines Logical indicating whether grid lines should be drawn
+#' @export
 #' @examples
 #' data(mm.psi)
 #' head(mm.psi)
@@ -111,6 +112,10 @@ plot_event <- function(
 #' @param x A character containing the event ID like
 #' "\code{S|TSPAN6|chrX:99885756-99885863|108}"
 #' @return A character with a human-friendly title
+#' @export
+#' @examples
+#' f <- format_table(mm.psi)
+#' print(make_title(rownames(f)[1]))
 make_title <- function(x) {
   event <- strsplit(x, split = "\\|")[[1]]
   sprintf("%s (position = %s, length = %s, type = %s)",

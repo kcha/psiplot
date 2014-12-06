@@ -4,8 +4,9 @@
 #' distribution from Q scores. For internal use. Beta sampling functions
 #' provided by Tim Sterne-Weiler.
 #'
-#' @param q original PSI plus quality scores WITHOUT the first 7 columns
+#' @param q a data frame of PSI and corresponding quality values
 #' @return Confidence intevals of PSI values
+#' @export
 get_beta_ci <- function(q) {
   #  This function takes a qual and returns c(post_alpha, post_beta)
   #  Increments by prior alpha and prior distribution beta, uniform by default

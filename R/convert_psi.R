@@ -3,9 +3,13 @@
 #' Helper function to filter and return PSI values
 #' PSIs are converted to NA if first coverage code is 'N'
 #' e.g. PSI=100, Coverage=N,N,N,OK,S ---> PSI=NA
+#' For internal use. Called by \code{format_table}.
 #'
 #' @param t Original PSI plus quality scores data frame WITHOUT the first 7 columns
 #' @return Data frame with converted NA PSI values
+#' @export
+#' @examples
+#' convert_psi(mm.psi[,7:ncol(mm.psi)])
 convert_psi <- function(t) {
   stopifnot(ncol(t) %% 2 == 0)
   psi <- t

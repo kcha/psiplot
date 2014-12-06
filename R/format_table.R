@@ -1,9 +1,16 @@
+#' Format input event data
+#' 
 #' Format table to keep only PSIs and convert exon metadata as rownames.
+#' Prepares input event data for plotting. Calls \code{convert_psi()}.
 #'
-#' Calls \code{convert_psi()}.
-#'
-#' @param m Original PSI plus quality score data frame
+#' @param m A data frame of PSI and quality scores as outputted by
+#' \code{vast-tools combine}
 #' @return Formatted data frame keeping only PSI values
+#' @export
+#' @examples
+#' # For example input, see:
+#' mm.psi
+#' format_table(mm.psi)
 format_table <- function(m) {
   if (!grepl("^GENE", colnames(m)[1])) {
     stop("Invalid column names. Does your input file contain the correct header?")
