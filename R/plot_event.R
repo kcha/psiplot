@@ -1,5 +1,31 @@
 #' Plot PSI values of a given alternative splicing event
 #'
+#' Generate a plot of PSI values for a given exon. The PSI values and
+#' corresponding quality scores are typically obtained from the
+#' \href{https://www.github.com/vastgroup/vast-tools}{vast-tools}
+#' pipeline.
+#'
+#' @details
+#' Plots can be customized via the \emph{config} option. Either a data frame or
+#' the filepath to the config file can be used. Alternatively, plots can be
+#' customized using a limited set of graphical parameters as described above.
+#'
+#' The order of samples (e.g. columns in \emph{x}) as it appears on the
+#' resulting plot can be customized using a config file. If a config file is not
+#' used and re-ordering is desired, then it must be done manually before calling
+#' \emph{plot_event} by altering the columns of \emph{x}.
+#'
+#' If groups are defined in \emph{config} and \emph{groupmean=TRUE}, the mean
+#' PSI of the samples within each group are drawn as horizontal lines. The
+#' colors of the lines are determined by the color set to the first sample of
+#' each group by \emph{RColorCode} in \emph{config}. A corresponding legend key
+#' will also be drawn.
+#'
+#' PSI values that have \emph{NA} value are omitted and not plotted.
+#'
+#' Error bars based on the confidence interval of the PSI estimation can be
+#' shown by setting \emph{errorbar=TRUE}.
+#'
 #' @param x A 1-row data frame containing PSI values to be plotted
 #' @param config Optional configuration settings for \code{plot_event}. Can be
 #' a path to the \code{.config} file, or 4-column data frame of the \code{.config} file. Use the latter option if you are calling \code{plot_event} multiple times.
@@ -10,23 +36,27 @@
 #' @param title Title of the plot
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
-#' @param ylim
-#' @param xlim
-#' @param cex.main
-#' @param cex.axis
-#' @param cex.xaxis
-#' @param pch
-#' @param cex
+#' @param ylim Range of y-axis
+#' @param xlim Range of x-axis
+#' @param cex.main Plot title size
+#' @param cex.axis Axis label size
+#' @param cex.xaxis Size of sample name labels on x-axis
+#' @param pch Point symbol
+#' @param cex.pch Size of datapoints
+#' @param lines Draw a connecting line between points for an event
 #' @param gridlines Logical indicating whether grid lines should be drawn
 #' @export
 #' @examples
-#' data(mm.psi)
-#' head(mm.psi)
-#' plot_event(mm.psi[1,]) 
+#' plot_event(mm.psi[1,])
 #'
 #' # Plot with custom configuration
-#' data(mm.psi.config)
-#' plot_event(mm.psi[1,], config = mm.psi.config)
+#' mm.psi.config
+#' plot_event(mm.psi[1,], config = mm.psi.config, groupmean=TRUE)
+#' plot_event(mm.psi[1,], config = "/path/to/mm.psi.config")
+#'
+#' # Plot using custom configuration, changing point sympol, and y-axis
+#' # scale
+#' plot_event(mm.psi[1,], config = mm.psi.config, pch = 19, ylim = c(20, 80))
 plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,

@@ -1,11 +1,12 @@
 #' Convert low/bad quality PSI values to NA
 #'
-#' Helper function to filter and return PSI values
+#' Helper function to filter and return PSI values.
 #' PSIs are converted to NA if first coverage code is 'N'
 #' e.g. PSI=100, Coverage=N,N,N,OK,S ---> PSI=NA
-#' For internal use. Called by \code{format_table}.
+#' For internal use. Called by \code{\link{format_table}}.
 #'
-#' @param t Original PSI plus quality scores data frame WITHOUT the first 7 columns
+#' @param t Original PSI plus quality scores data frame WITHOUT the exon
+#' metadata columns
 #' @return Data frame with converted NA PSI values
 #' @export
 #' @examples
