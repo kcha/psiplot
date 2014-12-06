@@ -62,11 +62,10 @@ plot_event <- function(
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "", ylim = c(1,100),
   xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.axis = 0.8, cex.xaxis = 0.6,
-  pch = 20, cex = 1, gridlines = TRUE) {
-  # Add some checks
-#   if (!is.null(config) && is.character(config)) {
-#     config <- read.csv(config, sep="\t")
-#   }
+  pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE) {
+  if(nrow(x) != 1) {
+    stop("Too many rows!")
+  }
 
   # Format input
   x <- format_table(x)
@@ -127,6 +126,11 @@ plot_event <- function(
   if (gridlines) {
     abline(v=1:ncol(psi), col="grey", lwd=0.3, lty=2)
     abline(h=seq(0,100,10), col="grey", lwd=0.3, lty=2)
+  }
+
+  # Draw line
+  if (lines) {
+    lines(1:ncol(psi), as.numeric(psi), col = "black")
   }
 
   # Draw psi
