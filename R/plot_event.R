@@ -82,7 +82,11 @@ plot_event <- function(
   reordered <- preprocess_sample_colors(x, config, col = col)
   psi <- reordered$data
 
-# Set plot title
+  if (all(is.na(psi))) {
+    warning("Did not find any points to plot")
+  }
+
+  # Set plot title
   if (is.null(title)) {
     title <- make_title(rownames(x))
   }
