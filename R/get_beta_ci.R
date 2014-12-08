@@ -6,6 +6,7 @@
 #'
 #' @param q a data frame of PSI and corresponding quality values
 #' @return Confidence intevals of PSI values
+#' @author Tim Sterne-Weiler, Kevin Ha
 #' @export
 get_beta_ci <- function(q) {
   #  This function takes a qual and returns c(post_alpha, post_beta)

@@ -16,4 +16,7 @@ Helper function to filter and return confidence intervals based on beta
 distribution from Q scores. For internal use. Beta sampling functions
 provided by Tim Sterne-Weiler.
 }
+\author{
+Tim Sterne-Weiler, Kevin Ha
+}
 

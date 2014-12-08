@@ -1,5 +1,25 @@
-#' psiplot
+#' Produce PSI plots based on output from vast-tools
+#'
+#' \code{psiplot} is an R package for generating plots of percent spliced-in (PSI)
+#' values of alternatively-spliced exons. It is based on the plot tool provided
+#' by \href{https://www.github.com/vastgroup/vast-tools}{vast-tools}, an RNA-Seq
+#' pipeline for alternative splicing analysis.
+#'
+#' @details
+#' A sample dataset (\code{mm.psi}) and sample configuration file
+#' (\code{mm.psi.config}) is provided.
+#'
+#' The main function to generate plots is \code{\link{plot_event}}.
+#'
+#' Report bugs and issues to \url{https://github.com/kcha/psiplot/issues}.
 #'
 #' @name psiplot
 #' @docType package
+#' @seealso \url{https://www.github.com/vastgroup/vast-tools}
+#' @examples
+#' library(psiplot)
+#' \dontrun{
+#' plot_event(mm.psi[1,])
+#' plot_event(mm.psi[1,], config=mm.psi.config)
+#' }
 NULL

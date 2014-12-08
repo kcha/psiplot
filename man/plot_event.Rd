@@ -76,6 +76,7 @@ Error bars based on the confidence interval of the PSI estimation can be
 shown by setting \code{errorbar=TRUE}.
 }
 \examples{
+\dontrun{
 plot_event(mm.psi[1,])
 
 # Plot with custom configuration
@@ -86,6 +87,7 @@ plot_event(mm.psi[1,], config = "/path/to/mm.psi.config")
 # Plot using custom configuration, changing point sympol, and y-axis
 # scale
 plot_event(mm.psi[1,], config = mm.psi.config, pch = 9, ylim = c(20, 80))
+}
 }
 \seealso{
 \code{\link{format_table}} for performing some initial conversion steps of \code{x}

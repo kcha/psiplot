@@ -55,6 +55,7 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{
 #' plot_event(mm.psi[1,])
 #'
 #' # Plot with custom configuration
@@ -65,6 +66,7 @@
 #' # Plot using custom configuration, changing point sympol, and y-axis
 #' # scale
 #' plot_event(mm.psi[1,], config = mm.psi.config, pch = 9, ylim = c(20, 80))
+#' }
 plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
