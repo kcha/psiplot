@@ -34,6 +34,7 @@ get_beta_ci <- function(q) {
     if (is.na(alpha) || is.na(beta)) {
       sample <- NA
     } else {
+      set.seed(79)
       sample <- rbeta(n, alpha, beta)
     }
     return(betaCI(sample))
