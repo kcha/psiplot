@@ -67,7 +67,7 @@ to support the \code{col} option provided by \code{\link{plot_event}} --
 particularly when \code{config} is not provided.
 }
 \examples{
-reorderedpsi <- preprocess_sample_colors(mm.psi, config = mm.psi.config)
+reorderedpsi <- preprocess_sample_colors(psi, config = config)
 }
 \seealso{
 \code{\link{plot_event}}

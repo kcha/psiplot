@@ -20,8 +20,8 @@ Prepares input event data for plotting. Calls \code{\link{convert_psi}}.
 }
 \examples{
 # For example input, see:
-mm.psi
-format_table(mm.psi)
+psi
+format_table(psi)
 }
 \seealso{
 \code{\link{convert_psi}}

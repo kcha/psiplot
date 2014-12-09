@@ -77,16 +77,16 @@ shown by setting \code{errorbar=TRUE}.
 }
 \examples{
 \dontrun{
-plot_event(mm.psi[1,])
+plot_event(psi[1,])
 
 # Plot with custom configuration
-mm.psi.config
-plot_event(mm.psi[1,], config = mm.psi.config, groupmean=TRUE)
-plot_event(mm.psi[1,], config = "/path/to/mm.psi.config")
+config
+plot_event(psi[1,], config = config, groupmean=TRUE)
+plot_event(psi[1,], config = "/path/to/config")
 
 # Plot using custom configuration, changing point sympol, and y-axis
 # scale
-plot_event(mm.psi[1,], config = mm.psi.config, pch = 9, ylim = c(20, 80))
+plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 }
 }
 \seealso{
