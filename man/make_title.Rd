@@ -16,7 +16,7 @@ A character with a human-friendly title
 Create a plot title using the event ID
 }
 \examples{
-f <- format_table(mm.psi)
+f <- format_table(psi)
 print(make_title(rownames(f)[1]))
 }
 

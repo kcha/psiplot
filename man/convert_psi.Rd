@@ -20,6 +20,6 @@ e.g. PSI=100, Coverage=N,N,N,OK,S ---> PSI=NA
 For internal use. Called by \code{\link{format_table}}.
 }
 \examples{
-convert_psi(mm.psi[,7:ncol(mm.psi)])
+convert_psi(psi[,7:ncol(psi)])
 }
 
