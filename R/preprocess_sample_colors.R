@@ -5,8 +5,6 @@
 #' corresponding colors are taken from a pre-defined tab-delimited file
 #' (see \code{details}).
 #'
-#' @usage preprocess_sample_colors(data, config)
-#'
 #' @details
 #' \code{preprocess_sample_colors} depends on a pre-defined "sample inventory"
 #' database file in tab-delimited format. This file is species-specific and
@@ -41,18 +39,23 @@
 #' to support the \code{col} option provided by \code{\link{plot_event}} --
 #' particularly when \code{config} is not provided.
 #'
+#' This function is also used for formatting cRPKM input data by setting
+#' \code{expr = TRUE}.
+#'
 #' @param data A \emph{n} x \emph{2*m} data frame of PSI and quality score values where \emph{n} is the number of AS events
 #' and \emph{m} is the number of samples.
 #' @param config Filename of the configuration file for \code{data}. Also
 #' accepts \emph{m*} x \emph{4} data frame of the configuration file,
 #' \code{m* <= m}
+#' @param expr Set to \code{TRUE} if formatting a cRPKM table. Otherwise, \code{FALSE}.
 #' @param col Vector of colors with length matching the number of samples. If
 #' specificed, this will override the color settings specified in \code{config}.
 #' @return
 #' A list containing:
 #' \itemize{
 #'  \item{data}{data frame of PSI values with columns re-ordered}
-#'  \item{qual}{data frame of quality scores with columns re-ordered}
+#'  \item{qual}{data frame of quality scores with columns re-ordered. \code{NULL}
+#'  if \code{expr = TRUE}}
 #'  \item{col}{vector of colors corresponding to the re-ordered columns}
 #'  \item{group.index}{list of column indices corresponding to each \code{GroupName}}
 #'  \item{group.col}{vector of colors corresponding to each \code{GroupName}}
@@ -61,9 +64,11 @@
 #' @export
 #' @examples
 #' reorderedpsi <- preprocess_sample_colors(psi, config = config)
-preprocess_sample_colors <- function(data, config, col = NULL) {
+#'
+#' reorderedcrpkm <- preprocess_sample_colors(crpkm, config = config, expr = TRUE)
+preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
   R <- list()
-  N <- ncol(data) / 2
+  N <- ifelse(expr, ncol(data), ncol(data) / 2)
 
   if (!is.null(col) && length(col) != N) {
     stop("The length of col does not match the number of samples")
@@ -73,8 +78,15 @@ preprocess_sample_colors <- function(data, config, col = NULL) {
     if (is.null(col)) {
       col <- rep("black", N)
     }
-    R <- list(data=data[, seq(1, ncol(data), 2)],
-              qual=data[, seq(2, ncol(data), 2)],
+    if (expr) {
+      data.new <- data
+      qual.new <- NULL
+    } else {
+      data.new <- data[, seq(1, ncol(data), 2)]
+      qual.new <- data[, seq(2, ncol(data), 2)]
+    }
+    R <- list(data=data.new,
+              qual=qual.new,
               col=col, group.index=NULL, group.col=NULL)
   } else {
     if (is.character(config)) {
@@ -128,7 +140,11 @@ preprocess_sample_colors <- function(data, config, col = NULL) {
     names(mygroups) <- groups
     names(mygroupcol) <- groups
 
-    qual.new <- data[,new.column.idx + 1]
+    if (expr) {
+      qual.new <- NULL
+    } else {
+      qual.new <- data[,new.column.idx + 1]
+    }
     R <- list(data=data.new,
               qual=qual.new,
               col=mycols,
