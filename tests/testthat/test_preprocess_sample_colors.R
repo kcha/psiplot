@@ -7,6 +7,8 @@ config <- data.frame(Order=c(1,2),
                      )
 
 test_that("Only samples in config are retained", {
-    r <- preprocess_sample_colors(mm.psi, config = config)
+    r <- preprocess_sample_colors(psi, config = config)
     expect_equal(ncol(r$data), nrow(config))
     })
+
+context("Test re-ordering of cRPKM data using configuration file")
