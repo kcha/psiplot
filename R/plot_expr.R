@@ -102,7 +102,7 @@ plot_expr <- function(
   # Draw grid lines
   if (gridlines) {
     abline(v=1:ncol(crpkm), col="grey", lwd=0.5, lty=2)
-    abline(h=seq(ylim[1],ylim[2],1), col="grey", lwd=0.5, lty=2)
+    abline(h=seq(0,ylim[2],2), col="grey", lwd=0.5, lty=2)
   }
 
   # Draw line
