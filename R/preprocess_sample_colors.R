@@ -26,7 +26,7 @@
 #'  \item{SampleName}{Name of the sample. MUST match sample name in input table}
 #'  \item{Group name}{Use for plotting the average PSI of samples belonging
 #' to the same group (need to use option -u/--group-means)}
-#'  \item {RColorCode}{Color name as specified by \code{\link{colors}} or hex 
+#'  \item {RColorCode}{Color name as specified by \code{\link{colors}} or hex
 #'  color code (\code{#RRGGBB})}
 #' }
 #'
@@ -60,7 +60,7 @@
 #' @seealso \code{\link{plot_event}}
 #' @export
 #' @examples
-#' reorderedpsi <- preprocess_sample_colors(mm.psi, config = mm.psi.config)
+#' reorderedpsi <- preprocess_sample_colors(psi, config = config)
 preprocess_sample_colors <- function(data, config, col = NULL) {
   R <- list()
   N <- ncol(data) / 2

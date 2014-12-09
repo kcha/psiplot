@@ -12,8 +12,8 @@
 #' @export
 #' @examples
 #' # For example input, see:
-#' mm.psi
-#' format_table(mm.psi)
+#' psi
+#' format_table(psi)
 format_table <- function(m) {
   if (!grepl("^GENE", colnames(m)[1])) {
     stop("Invalid column names. Does your input file contain the correct header?")

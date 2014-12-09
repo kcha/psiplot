@@ -11,7 +11,7 @@
 #' SI values converted to \code{NA}
 #' @export
 #' @examples
-#' convert_psi(mm.psi[,7:ncol(mm.psi)])
+#' convert_psi(psi[,7:ncol(psi)])
 convert_psi <- function(t) {
   stopifnot(ncol(t) %% 2 == 0)
   psi <- t
