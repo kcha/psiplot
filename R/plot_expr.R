@@ -96,7 +96,7 @@ plot_expr <- function(
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
-    draw_group_means(reordered, config)
+    draw_group_means(reordered)
   }
 
   # Draw grid lines

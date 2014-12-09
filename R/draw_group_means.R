@@ -1,5 +1,13 @@
 #' Draw group means as horizontal lines
-draw_group_means <- function(reordered, config) {
+#'
+#' When this function is called, the group means are calculated and plotted
+#' as horizontal lines. For internal use only.
+#'
+#' @param reordered a list containing input data and plot configuration. Produced
+#' by \code{\link{preprocess_sample_colors}}
+#' @seealso \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
+#' \code{\link{plot_expr}}
+draw_group_means <- function(reordered) {
   # Draw horizontal lines for groups
   seen <- vector()
   groups <- names(reordered$group.index)

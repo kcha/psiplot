@@ -3,9 +3,18 @@
 \alias{draw_group_means}
 \title{Draw group means as horizontal lines}
 \usage{
-draw_group_means(reordered, config)
+draw_group_means(reordered)
+}
+\arguments{
+\item{reordered}{a list containing input data and plot configuration. Produced
+by \code{\link{preprocess_sample_colors}}}
 }
 \description{
-Draw group means as horizontal lines
+When this function is called, the group means are calculated and plotted
+as horizontal lines. For internal use only.
+}
+\seealso{
+\code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
+\code{\link{plot_expr}}
 }
 
