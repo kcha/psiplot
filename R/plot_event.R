@@ -39,7 +39,6 @@
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
 #' @param ylim Range of y-axis
-#' @param xlim Range of x-axis
 #' @param cex.main Plot title size
 #' @param cex.yaxis Y-axis font size
 #' @param cex.xaxis X-axis font size (i.e. the sample names)
@@ -71,7 +70,7 @@ plot_event <- function(
   x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(1,100),
-  xlim = c(1, ncol(x)/2), cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
+  cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
   pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE) {
   if (nrow(x) != 1) {
     stop("Too many rows!")
@@ -95,7 +94,7 @@ plot_event <- function(
   plot(NA,
        main=title,
        ylab=ylab, xlab=xlab, xaxt="n",
-       ylim=ylim, xlim=xlim,
+       ylim=ylim, xlim=c(1, ncol(psi)),
        cex.main=cex.main, cex.axis=cex.yaxis)
   axis(1, at=seq(1, ncol(psi), by=1), labels = FALSE)
   text(seq(1, ncol(psi), by=1),
@@ -118,28 +117,13 @@ plot_event <- function(
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
-    seen <- vector()
-    groups <- names(reordered$group.index)
-    for (t in 1:length(groups)) {
-      mu <- mean(as.numeric(
-        psi[reordered$group.index[[groups[t]]]]
-        ), na.rm=TRUE)
-      abline(h=mu, col=reordered$group.col[groups[t]], lwd=0.5)
-      seen <- append(seen, paste(groups[t]))
-    }
-
-    # plot legend for mean group values
-    if (length(seen) > 0) {
-      legend_position <- ifelse(psi[ncol(psi)] > 50, "bottomright", "topright")
-      legend(legend_position, legend = seen, lty = 1, col = reordered$group.col,
-             title = "Group Means", cex = 0.7, ncol = 2)
-    }
+    draw_group_means(reordered, config)
   }
 
   # Draw grid lines
   if (gridlines) {
-    abline(v=1:ncol(psi), col="grey", lwd=0.3, lty=2)
-    abline(h=seq(0,100,10), col="grey", lwd=0.3, lty=2)
+    abline(v=1:ncol(psi), col="grey", lwd=0.5, lty=2)
+    abline(h=seq(0,100,10), col="grey", lwd=0.5, lty=2)
   }
 
   # Draw line
