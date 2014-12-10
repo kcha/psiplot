@@ -18,7 +18,7 @@ specificed, this will override the color settings specified in \code{config}.}
 }
 \value{
 A list containing:
-\itemize{
+\describe{
  \item{data}{data frame of PSI values with columns re-ordered}
  \item{qual}{data frame of quality scores with columns re-ordered}
  \item{col}{vector of colors corresponding to the re-ordered columns}
@@ -47,11 +47,11 @@ etc..}
 
 where:
 \itemize{
- \item{Order}{The ordering of the samples from left to right}
- \item{SampleName}{Name of the sample. MUST match sample name in input table}
- \item{Group name}{Use for plotting the average PSI of samples belonging
+ \item{Order: The ordering of the samples from left to right}
+ \item{SampleName: Name of the sample. MUST match sample name in input table}
+ \item{Group name: Use for plotting the average PSI of samples belonging
 to the same group (need to use option -u/--group-means)}
- \item {RColorCode}{Color name as specified by \code{\link{colors}} or hex
+ \item {RColorCode: Color name as specified by \code{\link{colors}} or hex
  color code (\code{#RRGGBB})}
 }
 
