@@ -71,6 +71,10 @@ The samples under SampleName MUST MATCH the names in the PSI input table. Only t
 
 The colors and other graphical paramters can also be configured in R. `plot_events()` provides some limited options. See `?plot_events` for more details on the available options.
 
+``` {.r}
+plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
+```
+
 Related Projects
 ----------------
 

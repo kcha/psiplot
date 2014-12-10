@@ -91,6 +91,7 @@ The colors and other graphical paramters can also be configured in R.
 details on the available options.
 
 ```{r eval=FALSE}
+plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 ```
 
 ## Related Projects
