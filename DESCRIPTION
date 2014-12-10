@@ -11,3 +11,6 @@ License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/kcha/psiplot
 BugReports: https://github.com/kcha/psiplot/issues
+Imports:
+    ggplot2 (>= 1.0.0),
+    reshape2 (>= 1.4)
