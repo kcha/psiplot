@@ -2,16 +2,15 @@
 \docType{data}
 \name{config}
 \alias{config}
-\title{Sample psiplot configuration settings for dataset \code{psi}}
+\title{Sample psiplot configuration settings for datasets \code{psi} and \code{crpkm}}
 \format{A 4 x 4 data frame}
 \usage{
 config
 }
 \description{
 Example of how a psiplot configuration file should be formatted. This can be
-passed to \code{psiplot::plot_event} using the \code{config} argument, which
-accepts either the file path of the config file or an \code{n x 4} data frame where
-\code{n} is the number of samples.
+passed to \code{\link{plot_event}} or \code{\link{plot_expr}} using the
+\code{config} argument.
 }
 \keyword{datasets}
 
