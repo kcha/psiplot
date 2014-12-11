@@ -9,7 +9,7 @@ psi
 }
 \description{
 Contains simulated PSI and quality score data as produced by \code{vast-tools
-combine} of a few randomly selected mouse genes.
+combine}.
 }
 \keyword{datasets}
 
