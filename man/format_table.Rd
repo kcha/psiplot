@@ -3,12 +3,15 @@
 \alias{format_table}
 \title{Format input event data}
 \usage{
-format_table(m)
+format_table(x, expr = FALSE)
 }
 \arguments{
-\item{m}{A data frame of event data as outputted by
+\item{x}{A data frame of event data as outputted by
 \code{vast-tools combine}. e.g. each row is an event containing exon
-metadata, PSI and quality scores values.}
+metadata, PSI and quality scores values. If \code{expr = TRUE}, then each row
+is a gene containing two columns of metadata, and cRPKM values.}
+
+\item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise, \code{FALSE}.}
 }
 \value{
 Data frame with PSI and quality scores. Rownames set as a
@@ -18,10 +21,17 @@ concatenation of exon metadata delimited by |.
 Convert low/bad quality PSI values and convert event metadata as rownames.
 Prepares input event data for plotting. Calls \code{\link{convert_psi}}.
 }
+\details{
+This function is also used for formatting cRPKM input data by setting
+\code{expr = TRUE}.
+}
 \examples{
 # For example input, see:
 psi
 format_table(psi)
+
+# For cRPKM
+format_table(crpkm, expr = TRUE)
 }
 \seealso{
 \code{\link{convert_psi}}

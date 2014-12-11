@@ -3,7 +3,7 @@
 \alias{preprocess_sample_colors}
 \title{Preprocess PSI data frame using configuration file}
 \usage{
-preprocess_sample_colors(data, config)
+preprocess_sample_colors(data, config, expr = FALSE, col = NULL)
 }
 \arguments{
 \item{data}{A \emph{n} x \emph{2*m} data frame of PSI and quality score values where \emph{n} is the number of AS events
@@ -13,6 +13,8 @@ and \emph{m} is the number of samples.}
 accepts \emph{m*} x \emph{4} data frame of the configuration file,
 \code{m* <= m}}
 
+\item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise, \code{FALSE}.}
+
 \item{col}{Vector of colors with length matching the number of samples. If
 specificed, this will override the color settings specified in \code{config}.}
 }
@@ -20,7 +22,8 @@ specificed, this will override the color settings specified in \code{config}.}
 A list containing:
 \describe{
  \item{data}{data frame of PSI values with columns re-ordered}
- \item{qual}{data frame of quality scores with columns re-ordered}
+ \item{qual}{data frame of quality scores with columns re-ordered. \code{NULL}
+ if \code{expr = TRUE}}
  \item{col}{vector of colors corresponding to the re-ordered columns}
  \item{group.index}{list of column indices corresponding to each \code{GroupName}}
  \item{group.col}{vector of colors corresponding to each \code{GroupName}}
@@ -65,9 +68,14 @@ else is ignored.
 The colors can be overridden by specifiying \code{col}. This was mainly added
 to support the \code{col} option provided by \code{\link{plot_event}} --
 particularly when \code{config} is not provided.
+
+This function is also used for formatting cRPKM input data by setting
+\code{expr = TRUE}.
 }
 \examples{
 reorderedpsi <- preprocess_sample_colors(psi, config = config)
+
+reorderedcrpkm <- preprocess_sample_colors(crpkm, config = config, expr = TRUE)
 }
 \seealso{
 \code{\link{plot_event}}

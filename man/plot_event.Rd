@@ -5,9 +5,9 @@
 \usage{
 plot_event(x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
-  title = NULL, xlab = "", ylab = "PSI", ylim = c(1, 100), xlim = c(1,
-  ncol(x)/2), cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
-  pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE)
+  title = NULL, xlab = "", ylab = "PSI", ylim = c(1, 100),
+  cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6, pch = 20,
+  cex.pch = 1, lines = FALSE, gridlines = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing PSI values to be plotted}
@@ -31,8 +31,6 @@ specificed, this will override the color settings specified in \code{config}.}
 \item{ylab}{The y-axis label}
 
 \item{ylim}{Range of y-axis}
-
-\item{xlim}{Range of x-axis}
 
 \item{cex.main}{Plot title size}
 

@@ -1,4 +1,4 @@
-context("Test formatting of input table")
+context("Test formatting of PSI input table")
 
 x <- data.frame(GENE = "TEST",
                 EVENT = "ENSG00000000000_CASSETTE1",
@@ -14,7 +14,6 @@ x <- data.frame(GENE = "TEST",
                 SampleC.Q = "N,N,N,Bn,S@1,0",
                 stringsAsFactors=FALSE
 )
-xname <- "S|TEST|chrX:100-101|1"
 
 test_that("PSI values with N quality scores are converted to NA", {
   target <- format_table(x)
@@ -25,7 +24,7 @@ test_that("PSI values with N quality scores are converted to NA", {
                          SampleC = as.numeric(NA),
                          SampleC.Q = "N,N,N,Bn,S@1,0",
                          stringsAsFactors=FALSE)
-  rownames(expected) <- xname
+  rownames(expected) <- "S|TEST|chrX:100-101|1"
   expect_equal(target, expected)
 })
 
@@ -34,3 +33,24 @@ test_that("An error is thrown if input is missing the correct first column: GENE
   expect_error(format_table(x[,1:7]))
 })
 
+context("Test formatting of cRPKM input table")
+
+z <- data.frame(ID = "ENSG000000000001",
+                NAME = "TEST",
+                SampleA = 0,
+                SampleB = 1,
+                SampleC = 100,
+                stringsAsFactors=FALSE
+)
+
+test_that("Row names for cRPKM", {
+  target <- format_table(z, expr = TRUE)
+  expected <- data.frame(
+                  SampleA = 0,
+                  SampleB = 1,
+                  SampleC = 100,
+                  stringsAsFactors=FALSE
+  )
+  rownames(expected) <- "TEST | ENSG000000000001"
+  expect_equal(target, expected)
+})
