@@ -115,6 +115,10 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     # (to take into account samples that might have been excluded)
     config <- config[config$SampleName %in% colnames(data),]
 
+    if (nrow(config) == 0) {
+      stop("No matching samples found in config. Are you using the correct config?")
+    }
+
     # Re-order the PSI table
     config <- config[order(config$Order),]
     config$Order <- 1:nrow(config)
