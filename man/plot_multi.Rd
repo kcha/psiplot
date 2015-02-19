@@ -31,12 +31,15 @@ Visualize multiple PSI or cRPKM values in a single plot.
 Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
 
 Uses \code{\link[ggplot2]{geom_tile}} to generate heatmap.
+
+If \code{cluster_rows = TRUE}, then heiarchical clustering using \code{hclust}
+and distance matrix from \code{dist} will be performed.
 }
 \examples{
 \dontrun{
 plot_multi(psi, config = config)
 plot_multi(crpkm, config = config, expr = TRUE)
-plot_multi(crpkm, config = config, expr = TRUE, cluster_rows)
+plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 }
 }
 

@@ -7,6 +7,9 @@
 #'
 #' Uses \code{\link[ggplot2]{geom_tile}} to generate heatmap.
 #'
+#' If \code{cluster_rows = TRUE}, then a heiarchical clustering using \code{hclust}
+#' will be performed on a distance matrix computed by \code{dist}.
+#'
 #' @param df A data frame of input values (PSI or cRPKM). If the latter, need to
 #' set \code{expr = TRUE}.
 #' @param config Optional configuration settings. Can be
@@ -24,7 +27,7 @@
 #' \dontrun{
 #' plot_multi(psi, config = config)
 #' plot_multi(crpkm, config = config, expr = TRUE)
-#' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows)
+#' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 #' }
 plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
            title = "Heatmap", cluster_rows = FALSE) {
