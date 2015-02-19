@@ -78,7 +78,7 @@ plot_expr <- function(
   }
 
   if (is.null(ylim)) {
-    ylim <- c(round(min(x)) - 1, round(max(x)) + 1)
+    ylim <- c(0, round(max(x)) + 1)
   }
 
   # Set up plot
