@@ -51,7 +51,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
     theme(axis.text.x = element_text(angle= 45, hjust = 0.5, vjust = 0, size = 9),
           axis.text.y = element_text(size = 8)) +
     xlab(xlab) + ylab(ylab) + ggtitle(title) +
-    coord_fixed(ratio = ratio)
+    coord_fixed(ratio = 1)
 
   if (expr) {
     gp <- gp +
