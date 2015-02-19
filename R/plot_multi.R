@@ -43,7 +43,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
   m <- melt(reordered$data)
   m$variable <- factor(m$variable, levels = colnames(reordered$data),
                        ordered = TRUE)
-  m$id <- factor(m$id, levels = reordered$data$id, ordered = TRU)
+  m$id <- factor(m$id, levels = reordered$data$id, ordered = TRUE)
 
   gp <- ggplot(m, aes(x = variable, y = id)) +
     geom_tile(aes(fill = value)) +
