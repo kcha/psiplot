@@ -85,7 +85,10 @@ config
     1.  color name (as specified by `colors()`)
     2.  hex color code (\#rrggbb)
 
-The samples under SampleName MUST MATCH the names in the PSI input table. Only the samples listed in the config file will be represented in the resulting plots. Other samples in the PSI table but not in the config file will be ignored. This may be useful if you want to customize the type of samples in your plots.
+Tips:
+
+-   The samples under SampleName MUST MATCH the names in the input table. Only the samples listed in the config file will be represented in the resulting plots. Other samples in the input table but not in the config file will be ignored. This may be useful for plotting only a subset of samples.
+-   The column **Order** does not need to be in sorted order. Thus, you can change the ordering of your samples by simply changing the order number.
 
 #### The R way
 
