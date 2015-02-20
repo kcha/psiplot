@@ -32,8 +32,8 @@ Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
 
 Uses \code{\link[ggplot2]{geom_tile}} to generate heatmap.
 
-If \code{cluster_rows = TRUE}, then heiarchical clustering using \code{hclust}
-and distance matrix from \code{dist} will be performed.
+If \code{cluster_rows = TRUE}, then a heiarchical clustering using \code{hclust}
+will be performed on a distance matrix computed by \code{dist}.
 }
 \examples{
 \dontrun{
