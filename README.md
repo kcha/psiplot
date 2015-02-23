@@ -92,7 +92,7 @@ Tips:
 
 #### The R way
 
-The colors and other graphical paramters can also be configured in R. `plot_events()` and `plot_expr()` provides some limited options. See `?plot_events` and `?plot_expr` for more details on the available options.
+The colors and other graphical parameters can also be configured in R via arguments. `plot_events()` and `plot_expr()` provides a limited set of arguments and can be used in conjunction with a config file. See `?plot_events` and `?plot_expr` for more details on the available options.
 
 ``` {.r}
 plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
