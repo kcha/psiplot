@@ -95,7 +95,7 @@ plot_event <- function(
        main=title,
        ylab=ylab, xlab=xlab, xaxt="n",
        ylim=ylim, xlim=c(1, ncol(psi)),
-       cex.main=cex.main, cex.axis=cex.yaxis)
+       cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
   axis(1, at=seq(1, ncol(psi), by=1), labels = FALSE)
   text(seq(1, ncol(psi), by=1),
        par("usr")[3] - 3.5,

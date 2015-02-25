@@ -86,7 +86,7 @@ plot_expr <- function(
        main=title,
        ylim = ylim, xlim = c(1, ncol(crpkm)),
        ylab=ylab, xlab=xlab, xaxt="n",
-       cex.main=cex.main, cex.axis=cex.yaxis)
+       cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
   axis(1, at=seq(1, ncol(crpkm), by=1), labels = FALSE)
   text(seq(1, ncol(crpkm), by=1),
        par("usr")[3] - 0.2,
