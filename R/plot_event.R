@@ -85,6 +85,11 @@ plot_event <- function(
     warning("Did not find any points to plot")
   }
 
+  N <- ifelse(is.null(ncol(psi)), 1, ncol(psi))
+  if (N < 2) {
+    stop("Need two or more samples!")
+  }
+
   # Set plot title
   if (is.null(title)) {
     title <- make_title(rownames(x))
@@ -94,10 +99,10 @@ plot_event <- function(
   plot(NA,
        main=title,
        ylab=ylab, xlab=xlab, xaxt="n",
-       ylim=ylim, xlim=c(1, ncol(psi)),
+       ylim=ylim, xlim=c(1, N),
        cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
-  axis(1, at=seq(1, ncol(psi), by=1), labels = FALSE)
-  text(seq(1, ncol(psi), by=1),
+  axis(1, at=seq(1, N, by=1), labels = FALSE)
+  text(seq(1, N, by=1),
        par("usr")[3] - 3.5,
        labels = colnames(psi),
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
@@ -108,8 +113,8 @@ plot_event <- function(
     ci <- get_beta_ci(reordered$qual)
     ci[which(is.na(psi)),] <- NA
 
-    arrows(1:ncol(psi), ci[,1],
-           1:ncol(psi), ci[,2],
+    arrows(1:N, ci[,1],
+           1:N, ci[,2],
            length = 0.025,
            angle = 90,
            code = 3, col = as.character(reordered$col))
@@ -122,17 +127,17 @@ plot_event <- function(
 
   # Draw grid lines
   if (gridlines) {
-    abline(v=1:ncol(psi), col="grey", lwd=0.5, lty=2)
+    abline(v=1:N, col="grey", lwd=0.5, lty=2)
     abline(h=seq(0,100,10), col="grey", lwd=0.5, lty=2)
   }
 
   # Draw line
   if (lines) {
-    lines(1:ncol(psi), as.numeric(psi), col = "black")
+    lines(1:N, as.numeric(psi), col = "black")
   }
 
   # Draw psi
-  points(1:ncol(psi), as.numeric(psi), col=as.character(reordered$col),
+  points(1:N, as.numeric(psi), col=as.character(reordered$col),
          pch=pch, cex = cex.pch)
 
 }

@@ -64,6 +64,11 @@ plot_expr <- function(
     stop("Too many rows!")
   }
 
+  N <- ncol(x) - 2
+  if (N < 2) {
+    stop("Need two or more samples!")
+  }
+
   x <- format_table(x, expr = TRUE)
   reordered <- preprocess_sample_colors(x, config = config, expr = TRUE, col = col)
   crpkm <- reordered$data
@@ -84,11 +89,11 @@ plot_expr <- function(
   # Set up plot
   plot(NA,
        main=title,
-       ylim = ylim, xlim = c(1, ncol(crpkm)),
+       ylim = ylim, xlim = c(1, N),
        ylab=ylab, xlab=xlab, xaxt="n",
        cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
-  axis(1, at=seq(1, ncol(crpkm), by=1), labels = FALSE)
-  text(seq(1, ncol(crpkm), by=1),
+  axis(1, at=seq(1, N, by=1), labels = FALSE)
+  text(seq(1, N, by=1),
        par("usr")[3] - 0.2,
        labels = colnames(crpkm),
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
@@ -101,16 +106,16 @@ plot_expr <- function(
 
   # Draw grid lines
   if (gridlines) {
-    abline(v=1:ncol(crpkm), col="grey", lwd=0.5, lty=2)
+    abline(v=1:N, col="grey", lwd=0.5, lty=2)
     abline(h=seq(0,ylim[2],5), col="grey", lwd=0.5, lty=2)
   }
 
   # Draw line
   if (lines) {
-    lines(1:ncol(crpkm), as.numeric(crpkm), col = "black")
+    lines(1:N, as.numeric(crpkm), col = "black")
   }
 
   # Draw crpkm
-  points(1:ncol(crpkm), as.numeric(crpkm), col=as.character(reordered$col),
+  points(1:N, as.numeric(crpkm), col=as.character(reordered$col),
          pch=pch, cex = cex.pch)
 }
