@@ -3,6 +3,7 @@
 export(convert_psi)
 export(format_table)
 export(get_beta_ci)
+export(get_psi_samples)
 export(make_title)
 export(plot_event)
 export(plot_expr)
