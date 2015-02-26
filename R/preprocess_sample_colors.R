@@ -90,8 +90,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
               col=col, group.index=NULL, group.col=NULL)
   } else {
     if (is.character(config)) {
-      config <- read.table(config, header = T, sep="\t", comment.char="",
-                           stringsAsFactors=FALSE)
+      config <- read.delim(config, stringsAsFactors=FALSE)
     }
 
     # check input file
