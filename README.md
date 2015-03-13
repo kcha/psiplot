@@ -107,3 +107,4 @@ Related Projects
 ----------------
 
 -   [VAST-TOOLS](https://github.com/vastgroup/vast-tools)
+-   [psiplotter-app](https://github.com/kcha/psiplotter-app): A Shiny app for visualizing PSI plots

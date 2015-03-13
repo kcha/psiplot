@@ -124,3 +124,4 @@ tracker](https://github.com/kcha/psiplot/issues).
 
 ## Related Projects
 - [VAST-TOOLS](https://github.com/vastgroup/vast-tools)
+- [psiplotter-app](https://github.com/kcha/psiplotter-app): A Shiny app for visualizing PSI plots
