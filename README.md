@@ -9,6 +9,8 @@ psiplot is an R package for generating plots of percent spliced-in (PSI) values 
 
 Currently, the plot code for VAST-TOOLS and psiplot are maintained separately, even though they are technically identical. Future work is planned to integrate psiplot into the vast-tools `plot` code.
 
+For a demo of psiplot, take a look at the companion Shiny app here: <http://kcha.shinyapps.io/psiplotter-app>.
+
 Installation
 ------------
 
