@@ -103,7 +103,7 @@ plot_event <- function(
        cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
   axis(1, at=seq(1, N, by=1), labels = FALSE)
   text(seq(1, N, by=1),
-       par("usr")[3] - 3.5,
+       par("usr")[3] - 4.9,
        labels = colnames(psi),
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
 
@@ -155,6 +155,6 @@ plot_event <- function(
 #' print(make_title(rownames(f)[1]))
 make_title <- function(x) {
   event <- strsplit(x, split = "\\|")[[1]]
-  sprintf("%s (position = %s, length = %s, type = %s)",
+  sprintf("%s\n(position = %s, length = %s, type = %s)",
                    event[2], event[3], event[4], event[1])
 }
