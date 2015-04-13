@@ -24,6 +24,6 @@ draw_group_means <- function(reordered) {
     legend_position <- ifelse(reordered$data[ncol(reordered$data)] > 50,
                               "bottomright", "topright")
     legend(legend_position, legend = seen, lty = 1, col = reordered$group.col,
-           title = "Group Means", cex = 0.7, ncol = 2)
+           title = "Group Means", cex = 0.6, ncol = 2)
   }
 }
