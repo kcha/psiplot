@@ -98,16 +98,15 @@ plot_expr <- function(
        labels = colnames(crpkm),
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
 
-
-  # Draw horizontal lines for groups
-  if (!is.null(config) && groupmean) {
-    draw_group_means(reordered)
-  }
-
   # Draw grid lines
   if (gridlines) {
     abline(v=1:N, col="grey", lwd=0.5, lty=2)
     abline(h=seq(0,ylim[2],5), col="grey", lwd=0.5, lty=2)
+  }
+
+  # Draw horizontal lines for groups
+  if (!is.null(config) && groupmean) {
+    draw_group_means(reordered)
   }
 
   # Draw line

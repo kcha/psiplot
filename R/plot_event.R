@@ -108,6 +108,12 @@ plot_event <- function(
        srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
 
 
+  # Draw grid lines
+  if (gridlines) {
+    abline(v=1:N, col="grey", lwd=0.5, lty=2)
+    abline(h=seq(0,100,10), col="grey", lwd=0.5, lty=2)
+  }
+
   # Draw error bars
   if (errorbar) {
     ci <- get_beta_ci(reordered$qual)
@@ -123,12 +129,6 @@ plot_event <- function(
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
     draw_group_means(reordered)
-  }
-
-  # Draw grid lines
-  if (gridlines) {
-    abline(v=1:N, col="grey", lwd=0.5, lty=2)
-    abline(h=seq(0,100,10), col="grey", lwd=0.5, lty=2)
   }
 
   # Draw line
