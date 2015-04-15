@@ -164,6 +164,6 @@ plot_event <- function(
 #' print(make_title(rownames(f)[1]))
 make_title <- function(x) {
   event <- strsplit(x, split = "\\|")[[1]]
-  sprintf("%s\n(position = %s, length = %s, type = %s)",
+  sprintf("%s\n(%s, %s bp, type %s)",
                    event[2], event[3], event[4], event[1])
 }
