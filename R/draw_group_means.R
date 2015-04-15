@@ -10,7 +10,7 @@
 #' @return ggplot2 object
 #' @seealso \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
 #' \code{\link{plot_expr}}
-draw_group_means <- function(gp, reordered, offset = 2) {
+draw_group_means <- function(gp, reordered, offset = 3) {
   groups <- names(reordered$group.index)
   for (t in 1:length(groups)) {
     if (groups[t] %in% names(reordered$group.index)) {
