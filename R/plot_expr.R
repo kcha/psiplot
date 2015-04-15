@@ -27,13 +27,15 @@
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
 #' @param ylim Range of y-axis
-#' @param cex.main Plot title size
-#' @param cex.yaxis Y-axis font size
-#' @param cex.xaxis X-axis font size (i.e. the sample names)
+#' @param cex.main Plot title size (pts)
+#' @param cex.yaxis Y-axis font size (pts)
+#' @param cex.xaxis X-axis font size (i.e. the sample names) (pts)
 #' @param pch Point symbol
 #' @param cex.pch Size of datapoints
-#' @param lines Draw a connecting line between points for an event
+#' @param plot logical. If \code{TRUE} (default), the plot is printed.
 #' @param gridlines Logical indicating whether grid lines should be drawn
+#' @param lines (deprecated) Draw a connecting line between points for an event
+#' @return ggplot2 object
 #' @seealso
 #' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
 #'
@@ -41,6 +43,8 @@
 #' \code{config}
 #'
 #' @export
+#' @import ggplot2
+#' @importFrom reshape2 melt
 #' @examples
 #' \dontrun{
 #' plot_expr(crpkm[1,])
@@ -58,8 +62,12 @@ plot_expr <- function(
   x, config = NULL,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
-  cex.main = 0.9, cex.yaxis = 0.8, cex.xaxis = 0.6,
-  pch = 20, cex.pch = 1, lines = FALSE, gridlines = TRUE) {
+  cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
+  pch = 20, cex.pch = 5, plot = TRUE, lines = FALSE, gridlines = TRUE) {
+  if (lines) {
+    warning("The option 'lines' has been deprecated")
+  }
+
   if (nrow(x) != 1) {
     stop("Too many rows!")
   }
@@ -86,35 +94,32 @@ plot_expr <- function(
     ylim <- c(0, round(max(x)) + 1)
   }
 
-  # Set up plot
-  plot(NA,
-       main=title,
-       ylim = ylim, xlim = c(1, N),
-       ylab=ylab, xlab=xlab, xaxt="n",
-       cex.main=cex.main, cex.axis=cex.yaxis, las = 1)
-  axis(1, at=seq(1, N, by=1), labels = FALSE)
-  text(seq(1, N, by=1),
-       par("usr")[3] - 0.2,
-       labels = colnames(crpkm),
-       srt = 45, adj=c(1,1), xpd = TRUE, cex=cex.xaxis)
+  mdata <- suppressMessages(melt(crpkm, variable.name = "sample", value.name = "crpkm"))
 
-  # Draw grid lines
-  if (gridlines) {
-    abline(v=1:N, col="grey", lwd=0.5, lty=2)
-    abline(h=seq(0,ylim[2],5), col="grey", lwd=0.5, lty=2)
-  }
+  gp <- ggplot(mdata, aes(x = sample, y = crpkm)) +
+    geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
+    ylab("PSI") +
+    xlab("") +
+    ylim(ylim) +
+    ggtitle(title) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1, size = cex.xaxis),
+          axis.text.y = element_text(size = cex.yaxis),
+          axis.title.y = element_text(size = cex.yaxis),
+          title = element_text(size = cex.main))
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
-    draw_group_means(reordered)
+    gp <- draw_group_means(gp, reordered, offset = 1)
   }
 
-  # Draw line
-  if (lines) {
-    lines(1:N, as.numeric(crpkm), col = "black")
+  if (!gridlines) {
+    gp <- gp + theme(panel.grid = element_blank())
   }
 
-  # Draw crpkm
-  points(1:N, as.numeric(crpkm), col=as.character(reordered$col),
-         pch=pch, cex = cex.pch)
+
+  if (plot) {
+    print(gp)
+  }
+  return(gp)
 }

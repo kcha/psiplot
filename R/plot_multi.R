@@ -1,4 +1,4 @@
-#' Plot multiple events or genes as a heatmap
+#' Plot multiple events or genes as a heatmap (experimental)
 #'
 #' Visualize multiple PSI or cRPKM values in a single plot.
 #'
@@ -43,7 +43,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
 
   reordered$data$id <- rownames(reordered$data)
 
-  m <- melt(reordered$data)
+  m <- suppressMessages(melt(reordered$data))
   m$variable <- factor(m$variable, levels = colnames(reordered$data),
                        ordered = TRUE)
   m$id <- factor(m$id, levels = reordered$data$id, ordered = TRUE)
@@ -51,7 +51,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
   gp <- ggplot(m, aes(x = variable, y = id)) +
     geom_tile(aes(fill = value)) +
     theme_bw() +
-    theme(axis.text.x = element_text(angle= 45, hjust = 0.5, vjust = 0, size = 9),
+    theme(axis.text.x = element_text(angle= 45, hjust = 1, size = 9),
           axis.text.y = element_text(size = 8)) +
     xlab(xlab) + ylab(ylab) + ggtitle(title) +
     coord_fixed(ratio = 1)
