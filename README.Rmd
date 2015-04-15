@@ -21,11 +21,8 @@ library(psiplot)
 psiplot is an R package for generating plots of percent spliced-in (PSI) values of 
 alternatively-spliced exons that were computed by 
 [VAST-TOOLS](https://github.com/vastgroup/vast-tools), an RNA-Seq pipeline for 
-alternative splicing analysis. The functions are derived from the `vast-tools plot` tool. 
+alternative splicing analysis. The plots are generated using `ggplot2`.
 
-Currently, the plot code for VAST-TOOLS and psiplot are maintained separately, 
-even though they are technically identical. Future work is planned to integrate 
-psiplot into the vast-tools `plot` code.
 
 For a demo of psiplot, take a look at the companion Shiny app here: http://kcha.shinyapps.io/psiplotter-app.
 
