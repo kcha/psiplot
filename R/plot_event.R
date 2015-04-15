@@ -54,6 +54,7 @@
 #' \code{config}
 #'
 #' @export
+#' @import methods
 #' @import ggplot2
 #' @importFrom reshape2 melt
 #' @examples
