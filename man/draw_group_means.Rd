@@ -4,7 +4,7 @@
 \alias{draw_group_means}
 \title{Draw group means as horizontal lines}
 \usage{
-draw_group_means(gp, values, cfg, group.col, offset = 3)
+draw_group_means(gp, values, cfg, group.col)
 }
 \arguments{
 \item{gp}{ggplot2 object}
@@ -14,11 +14,6 @@ draw_group_means(gp, values, cfg, group.col, offset = 3)
 \item{cfg}{configuration as data frame}
 
 \item{group.col}{group colours as computed from the \code{group.col} attribute returned by \code{\link{preprocess_sample_colors}}}
-
-\item{offset}{an integer indicating the offset to print group label from line}
-
-\item{reordered}{a list containing input data and plot configuration. Produced
-by \code{\link{preprocess_sample_colors}}}
 }
 \value{
 ggplot2 object
