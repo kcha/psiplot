@@ -59,6 +59,7 @@
 #'  \item{col}{vector of colors corresponding to the re-ordered columns}
 #'  \item{group.index}{list of column indices corresponding to each \code{GroupName}}
 #'  \item{group.col}{vector of colors corresponding to each \code{GroupName}}
+#'  \item{config}{config data frame}
 #'  }
 #' @seealso \code{\link{plot_event}}
 #' @export
@@ -151,7 +152,8 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     R <- list(data=data.new,
               qual=qual.new,
               col=mycols,
-              group.index=mygroups, group.col=mygroupcol)
+              group.index=mygroups, group.col=mygroupcol,
+              config=config)
   }
 
   return(R)

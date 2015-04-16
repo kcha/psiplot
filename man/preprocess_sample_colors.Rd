@@ -28,6 +28,7 @@ A list containing:
  \item{col}{vector of colors corresponding to the re-ordered columns}
  \item{group.index}{list of column indices corresponding to each \code{GroupName}}
  \item{group.col}{vector of colors corresponding to each \code{GroupName}}
+ \item{config}{config data frame}
  }
 }
 \description{
