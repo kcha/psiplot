@@ -19,7 +19,7 @@ draw_group_means <- function(gp, reordered, offset = 3) {
         na.rm=TRUE)
       gp <- gp + geom_hline(yintercept = mu,
                    colour = reordered$group.col[groups[t]]) +
-        annotate("text", 1, min(100, mu + offset),
+        annotate("text", 1.2, min(100, mu + offset),
                  label = paste(groups[t], "Avg"),
                  size = 3,
                  color = reordered$group.col[groups[t]])
