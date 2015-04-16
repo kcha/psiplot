@@ -103,7 +103,7 @@ plot_event <- function(
     title <- make_title(rownames(x))
   }
 
-  mdata <- suppressMessages(melt(psi, variable.name = "sample", value.name = "psi"))
+  mdata <- suppressMessages(melt(psi, variable.name = "SampleName"))
 
   if (errorbar) {
     ci <- as.data.frame(get_beta_ci(reordered$qual))
@@ -112,7 +112,7 @@ plot_event <- function(
     mdata <- cbind(mdata, ci)
   }
 
-  gp <- ggplot(mdata, aes(x = sample, y = psi)) +
+  gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
     geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
     ylab("PSI") +
     xlab("") +
@@ -133,7 +133,14 @@ plot_event <- function(
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
-    gp <- draw_group_means(gp, reordered)
+#     mdata <- join(mdata, reordered$config)
+#     msum <- ddply(mdata, .(GroupName), summarize,
+#                   mu = mean(value, na.rm=TRUE))
+#     gp <- gp + geom_hline(data = msum,
+#                           aes(yintercept = mu, colour = GroupName),
+#                           show_guide = TRUE) +
+#       scale_colour_manual("", values = reordered$group.col)
+    gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
   }
 
   gp <- gp + theme_bw() +
