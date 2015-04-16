@@ -15,7 +15,7 @@
 #' @seealso \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
 #' \code{\link{plot_expr}}
 draw_group_means <- function(gp, values, cfg, group.col, offset = 3) {
-  m <- join(values, cfg)
+  m <- suppressMessages(join(values, cfg))
   msum <- ddply(m, .(GroupName), summarize, mu = mean(value, na.rm=TRUE))
   gp <- gp + geom_hline(data = msum, aes(yintercept = mu, colour = GroupName),
                   show_guide = TRUE) +
