@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 library(psiplot)
 ```
 
+[![Build Status](https://travis-ci.org/kcha/psiplot.svg?branch=master)](https://travis-ci.org/kcha/psiplot)
+
 # psiplot
 
 psiplot is an R package for generating plots of percent spliced-in (PSI) values of 
