@@ -8,13 +8,12 @@
 #' @param cfg configuration as data frame
 #' @param group.col group colours as computed from the \code{group.col} attribute returned by \code{\link{preprocess_sample_colors}}
 #' @return ggplot2 object
-#' @import plyr
 #' @seealso \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
 #' \code{\link{plot_expr}}
 draw_group_means <- function(gp, values, cfg, group.col) {
   m <- suppressMessages(join(values, cfg))
-  msum <- ddply(m, .(GroupName), summarize, mu = mean(value, na.rm=TRUE))
-  gp <- gp + geom_hline(data = msum, aes(yintercept = mu, colour = GroupName),
+  msum <- aggregate(value ~ GroupName, data = m, FUN=mean, na.rm=TRUE)
+  gp <- gp + geom_hline(data = msum, aes(yintercept = value, colour = GroupName),
                   show_guide = TRUE) +
     scale_colour_manual("", values = group.col)
   return(gp)
