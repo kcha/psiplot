@@ -14,7 +14,7 @@ Installation
 See [Releases](https://github.com/kcha/psiplot/releases) for the latest release or get the most up-to-date development version via devtools:
 
 ``` r
-install.packages("devtools")
+if (!require("devtools")) install.packages("devtools")
 devtools::install_github("kcha/psiplot")
 ```
 

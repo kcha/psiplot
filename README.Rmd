@@ -33,7 +33,7 @@ For a demo of psiplot, take a look at the companion Shiny app here: http://kcha.
 See [Releases](https://github.com/kcha/psiplot/releases) for the latest release
 or get the most up-to-date development version via devtools:
 ```{r eval=FALSE}
-install.packages("devtools")
+if (!require("devtools")) install.packages("devtools")
 devtools::install_github("kcha/psiplot")
 ```
 
