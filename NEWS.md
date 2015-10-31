@@ -1,13 +1,16 @@
 # Version 2.0.0
 
-Version 2.0.0 now uses ggplot2 to generate plots in `plot_event` and `plot_expr`. In addition to outputting a plot, a ggplot2 object is returned.
+Version 2.0.0 now uses ggplot2 to generate plots in `plot_event` and
+`plot_expr`. In addition to outputting a plot, a ggplot2 object is returned.
 
 - Printing of the plot can be suppressed with `plot = FALSE`.
-- The option `lines` in `plot_event` and `plot_expr` is deprecated (will issue warning if used).
+- The option `lines` in `plot_event` and `plot_expr` is deprecated (will issue
+  warning if used).
 - Imports plyr for calculating group means.
 
 ### NEW
-- `plot_multi`: a new experimental function that will generate a heatmap of PSI values for two or more events:
+- `plot_multi`: a new experimental function that will generate a heatmap of PSI
+  values for two or more events:
 ```r
 plot_multi(psi)
 ```
@@ -24,7 +27,8 @@ plot_multi(psi)
 
 # Version 1.1.0
 
-- `plot_expr`: psiplot can now plot cRPKMs. For example, using the new sample dataset `crpkm`:
+- `plot_expr`: psiplot can now plot cRPKMs. For example, using the new sample
+  dataset `crpkm`:
 ```r
 plot_expr(crpkm[1,], config = config)
 ``` 
