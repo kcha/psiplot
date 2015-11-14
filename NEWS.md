@@ -1,3 +1,9 @@
+# Version 2.0.1
+
+This release contains minor updates.
+
+- `plot_event`: default `ylim` changed to (0,100) from (1,100).
+
 # Version 2.0.0
 
 Version 2.0.0 now uses ggplot2 to generate plots in `plot_event` and
