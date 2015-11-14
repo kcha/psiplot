@@ -95,6 +95,8 @@ Tips:
 
 The colors and other graphical parameters can also be configured in R via arguments. `plot_events()` and `plot_expr()` provides a limited set of arguments and can be used in conjunction with a config file. See `?plot_events` and `?plot_expr` for more details on the available options.
 
+For example, the following command uses the configuration settings, sets the point symbol, and restricts the y-axis to (20, 80):
+
 ``` r
 plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 ```
@@ -108,7 +110,7 @@ Related Projects
 ----------------
 
 -   [VAST-TOOLS](https://github.com/vastgroup/vast-tools)
--   [psiplotter-app](https://github.com/kcha/psiplotter-app): A Shiny app for visualizing PSI plots
+-   [psiplotter-app](https://github.com/kcha/psiplotter-app): A companion Shiny app for visualizing PSI plots based on this package
 
 Acknowledgements
 ----------------
