@@ -138,7 +138,7 @@ plot_event <- function(
 #                   mu = mean(value, na.rm=TRUE))
 #     gp <- gp + geom_hline(data = msum,
 #                           aes(yintercept = mu, colour = GroupName),
-#                           show_guide = TRUE) +
+#                           show.legend = TRUE) +
 #       scale_colour_manual("", values = reordered$group.col)
     gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
   }

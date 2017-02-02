@@ -15,7 +15,7 @@ draw_group_means <- function(gp, values, cfg, group.col) {
   m <- suppressMessages(join(values, cfg))
   msum <- ddply(m, .(GroupName), summarize, mu = mean(value, na.rm=TRUE))
   gp <- gp + geom_hline(data = msum, aes(yintercept = mu, colour = GroupName),
-                  show_guide = TRUE) +
+                  show.legend = TRUE) +
     scale_colour_manual("", values = group.col)
   return(gp)
 }
