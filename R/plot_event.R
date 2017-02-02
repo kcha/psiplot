@@ -46,7 +46,6 @@
 #' @param cex.pch Size of datapoints
 #' @param plot logical. If \code{TRUE} (default), the plot is printed.
 #' @param gridlines Logical indicating whether grid lines should be drawn
-#' @param lines (deprecated) Draw a connecting line between points for an event
 #' @return ggplot2 object
 #' @seealso
 #' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
@@ -75,10 +74,7 @@ plot_event <- function(
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0,100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = TRUE, lines = FALSE, gridlines = TRUE) {
-  if (lines) {
-    warning("The option 'lines' has been deprecated")
-  }
+  pch = 20, cex.pch = 3, plot = TRUE, gridlines = TRUE) {
 
   if (nrow(x) != 1) {
     stop("Too many rows!")
