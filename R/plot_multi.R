@@ -40,7 +40,9 @@
 #' @examples
 #' plot_multi(psi)
 #' plot_multi(psi, config = config)
-#' plot_multi(crpkm)
+#'
+#' # Use expr = TRUE for cRPKMs
+#' plot_multi(crpkm, expr = TRUE)
 #' plot_multi(crpkm, config = config, expr = TRUE)
 #' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 #'
