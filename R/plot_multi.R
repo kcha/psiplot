@@ -115,7 +115,6 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
       # Perform heirarchical clustering of events/genes
       hr <- hclust(dist(reordered$data))
       reordered$data <- reordered$data[hr$order,]
-      event_ids <- event_ids[hr$order]
     }
 
     if (is.null(config)) {
