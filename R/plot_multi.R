@@ -57,7 +57,9 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
   match.arg(usepkg, c("gplots", "ggplot2"))
   # Format input
   formatted_df <- format_table(df, expr = expr)
-  rownames(formatted_df) <- make_title.2(df$GENE, df$EVENT)
+  if (expr == FALSE) {
+    rownames(formatted_df) <- make_title.2(df$GENE, df$EVENT)
+  }
   reordered <- preprocess_sample_colors(formatted_df, config = config, expr = expr)
 
   if (is.null(fill)) {
