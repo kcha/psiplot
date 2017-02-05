@@ -36,7 +36,6 @@
 #' @param ... Additional parameters passed to \code{\link[gplots]{heatmap.2}}
 #' @export
 #' @import ggplot2
-#' @import gplots
 #' @importFrom reshape2 melt
 #' @examples
 #' plot_multi(psi)
@@ -82,7 +81,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
     # ColSideColors -- you have to specify something or don't use it at all.
     if (!is.null(config)) {
       col_colors <- reordered$col
-      heatmap.2(as.matrix(reordered$data),
+      gplots::heatmap.2(as.matrix(reordered$data),
               Colv = cluster_cols, Rowv = cluster_rows,
               dendrogram = dendro,
               ColSideColors = col_colors,
@@ -95,7 +94,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
               ...
               )
     } else {
-      heatmap.2(as.matrix(reordered$data),
+      gplots::heatmap.2(as.matrix(reordered$data),
                 Colv = cluster_cols, Rowv = cluster_rows,
                 dendrogram = dendro,
                 col = fill,
