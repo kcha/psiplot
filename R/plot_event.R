@@ -44,7 +44,6 @@
 #' @param cex.xaxis X-axis font size (i.e. the sample names) (pts)
 #' @param pch Point symbol
 #' @param cex.pch Size of datapoints
-#' @param plot logical. If \code{TRUE} (default), the plot is printed.
 #' @param gridlines Logical indicating whether grid lines should be drawn
 #' @return ggplot2 object
 #' @seealso
@@ -74,7 +73,11 @@ plot_event <- function(
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0,100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = TRUE, gridlines = TRUE) {
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE) {
+
+  if (!missing(plot)) {
+    warning("The option 'plot' has been deprecated")
+  }
 
   if (nrow(x) != 1) {
     stop("Too many rows!")
@@ -149,9 +152,6 @@ plot_event <- function(
     gp <- gp + theme(panel.grid = element_blank())
   }
 
-  if (plot) {
-    print(gp)
-  }
   return(gp)
 }
 
@@ -187,4 +187,5 @@ make_title <- function(x) {
 make_title.2 <- function(gene, event) {
   sprintf("%s (%s)", gene, event)
 }
+
 

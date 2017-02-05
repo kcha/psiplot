@@ -42,8 +42,8 @@
 #' This function is also used for formatting cRPKM input data by setting
 #' \code{expr = TRUE}.
 #'
-#' @param data A \emph{n} x \emph{2*m} data frame of PSI and quality score values where \emph{n} is the number of AS events
-#' and \emph{m} is the number of samples.
+#' @param data A \emph{n} x \emph{2*m} data frame of PSI and quality score values
+#' where \emph{n} is the number of AS events #' and \emph{m} is the number of samples.
 #' @param config Filename of the configuration file for \code{data}. Also
 #' accepts \emph{m*} x \emph{4} data frame of the configuration file,
 #' \code{m* <= m}

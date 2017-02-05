@@ -32,7 +32,6 @@
 #' @param cex.xaxis X-axis font size (i.e. the sample names) (pts)
 #' @param pch Point symbol
 #' @param cex.pch Size of datapoints
-#' @param plot logical. If \code{TRUE} (default), the plot is printed.
 #' @param gridlines Logical indicating whether grid lines should be drawn
 #' @param lines (deprecated) Draw a connecting line between points for an event
 #' @return ggplot2 object
@@ -64,9 +63,9 @@ plot_expr <- function(
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = TRUE, lines = FALSE, gridlines = TRUE) {
-  if (lines) {
-    warning("The option 'lines' has been deprecated")
+  pch = 20, cex.pch = 3, plot = NULL, lines = FALSE, gridlines = TRUE) {
+  if (!missing(plot)) {
+    warning("The option 'plot' has been deprecated")
   }
 
   if (nrow(x) != 1) {
@@ -118,9 +117,5 @@ plot_expr <- function(
     gp <- gp + theme(panel.grid = element_blank())
   }
 
-
-  if (plot) {
-    print(gp)
-  }
   return(gp)
 }
