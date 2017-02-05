@@ -43,6 +43,8 @@ specificed, this will override the color settings specified in \code{config}.}
 
 \item{cex.pch}{Size of datapoints}
 
+\item{plot}{(deprecated) prints the plot}
+
 \item{gridlines}{Logical indicating whether grid lines should be drawn}
 }
 \value{

@@ -40,7 +40,7 @@ specificed, this will override the color settings specified in \code{config}.}
 
 \item{cex.pch}{Size of datapoints}
 
-\item{lines}{(deprecated) Draw a connecting line between points for an event}
+\item{plot}{(deprecated) prints the plot}
 
 \item{gridlines}{Logical indicating whether grid lines should be drawn}
 }

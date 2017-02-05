@@ -45,6 +45,7 @@
 #' @param pch Point symbol
 #' @param cex.pch Size of datapoints
 #' @param gridlines Logical indicating whether grid lines should be drawn
+#' @param plot (deprecated) prints the plot
 #' @return ggplot2 object
 #' @seealso
 #' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
