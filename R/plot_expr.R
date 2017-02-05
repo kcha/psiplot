@@ -63,7 +63,7 @@ plot_expr <- function(
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = NULL, lines = FALSE, gridlines = TRUE) {
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE) {
   if (!missing(plot)) {
     warning("The option 'plot' has been deprecated")
   }
