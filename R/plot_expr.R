@@ -98,7 +98,7 @@ plot_expr <- function(
 
   gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
     geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
-    ylab("PSI") +
+    ylab("cRPKM") +
     xlab("") +
     ylim(ylim) +
     ggtitle(title) +
@@ -110,7 +110,7 @@ plot_expr <- function(
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
-    gp <- draw_group_means(gp, reordered, offset = 1)
+    gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
   }
 
   if (!gridlines) {
