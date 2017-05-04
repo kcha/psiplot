@@ -103,7 +103,9 @@ plot_event <- function(
     title <- make_title(rownames(x))
   }
 
-  mdata <- suppressMessages(melt(psi, variable.name = "SampleName"))
+  mdata <- suppressMessages(melt(psi,
+                                 measure.vars = names(psi),
+                                 variable.name = "SampleName"))
 
   if (errorbar) {
     ci <- as.data.frame(get_beta_ci(reordered$qual))

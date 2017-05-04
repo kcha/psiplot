@@ -94,7 +94,9 @@ plot_expr <- function(
     ylim <- c(0, round(max(x)) + 1)
   }
 
-  mdata <- suppressMessages(melt(crpkm, variable.name = "SampleName"))
+  mdata <- suppressMessages(melt(crpkm,
+                                 measure.vars = names(crpkm),
+                                 variable.name = "SampleName"))
 
   gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
     geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
