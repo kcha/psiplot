@@ -93,7 +93,7 @@ plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 }
 \seealso{
 \code{\link{format_table}} for performing some initial conversion steps of \code{x}
-\code{\link{preprocess_sample_colors}} for pre-processing of \code{x} using
-\code{config}
+and \code{\link{preprocess_sample_colors}} for pre-processing of \code{x}
+using\code{config}
 }
 

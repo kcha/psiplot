@@ -1,3 +1,24 @@
+# Version 2.1.1
+
+Some bug fixes for `plot_expr()`
+
+# Version 2.1.0
+
+This release contains new features and some internal updates. In addition, this release now requires **R version 3.1** or higher and **ggplot2 version 2.0** or higher.
+
+- Replace `show_guides` with `show.legend` to match API of ggplot2 version 2.*.  
+- Update README
+- `plot_multi` has been further developed: 
+  - Use `heatmap.2` from gplots package to produce heatmap. To minimize dependencies, this package is optional and needs to be manually installed (`install.packages("gplots")`). In the absence of gplots, ggplot2 will be used as before.
+  - Events and samples can be clustered using options `cluster_rows` and `cluster_cols`, respectively.
+  - Add `fill` option for providing custom colours
+  - Simply format of row names
+  - See `?plot_multi` for full set of options
+- Retire warning for deprecated `lines` option
+- The option `plot` in `plot_event` and `plot_expr` is deprecated (will issue warning if used). 
+- Other documentation updates
+
+
 # Version 2.0.1
 
 This release contains minor updates.

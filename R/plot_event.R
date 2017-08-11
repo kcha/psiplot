@@ -49,8 +49,8 @@
 #' @return ggplot2 object
 #' @seealso
 #' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
-#' \code{\link{preprocess_sample_colors}} for pre-processing of \code{x} using
-#' \code{config}
+#' and \code{\link{preprocess_sample_colors}} for pre-processing of \code{x}
+#' using\code{config}
 #'
 #' @export
 #' @import methods
