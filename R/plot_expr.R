@@ -81,6 +81,8 @@ plot_expr <- function(
   reordered <- preprocess_sample_colors(x, config = config, expr = TRUE, col = col)
   crpkm <- reordered$data
 
+  subg <- "SubgroupName" %in% colnames(reordered$config)
+
   if (all(is.na(crpkm))) {
     warning("Did not find any points to plot")
   }
@@ -98,8 +100,23 @@ plot_expr <- function(
                                  measure.vars = names(crpkm),
                                  variable.name = "SampleName"))
 
-  gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
-    geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
+  if(subg){
+    sm <- suppressMessages(join(mdata,reordered$config))
+    smsum <- ddply(sm,.(SubgroupName),summarize, value=mean(value,na.rm=T))
+    smsum2 <- smsum[sapply(names(reordered$subgroup.order),
+                           function(x) which(smsum$SubgroupName==x)),]
+    smsum2$SubgroupName <- factor(smsum2$SubgroupName,smsum2$SubgroupName)
+  }
+
+  if(subg){
+    gp <- ggplot(smsum2,aes(x=SubgroupName, y=value)) +
+      geom_point(colour = reordered$subgroup.col, size = cex.pch, shape=pch)
+  } else{
+    gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
+      geom_point(colour = reordered$col, size=cex.pch, shape = pch)
+  }
+
+  gp <- gp +
     ylab("cRPKM") +
     xlab("") +
     ylim(ylim) +
