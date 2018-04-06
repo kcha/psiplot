@@ -75,8 +75,8 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     stop("The length of col does not match the number of samples")
   }
 
-  if (is.null(config)) {
-    if (is.null(col)) {
+  if (is.null(config)) { #No config
+    if (is.null(col)) { #If no colours, use default
       col <- rep("black", N)
     }
     if (expr) {
@@ -89,14 +89,22 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     R <- list(data=data.new,
               qual=qual.new,
               col=col, group.index=NULL, group.col=NULL)
-  } else {
+  } else { #Config is there
     if (is.character(config)) {
       config <- read.delim(config, stringsAsFactors=FALSE)
     }
 
-    # check input file
-    if (!all(colnames(config) == c("Order", "SampleName", "GroupName", "RColorCode"))) {
+    # check input file [changed to allow flexible config column order, and subgroups]
+    if (!all(c("Order", "SampleName", "GroupName", "RColorCode") %in% colnames(config))) {
       stop("Incorrect formatting of headers in config")
+    }
+
+    subg <- "SubgroupName" %in% colnames(config)
+    #Reorder config
+    if(subg){
+      config <- config[,c("Order","SampleName","SubgroupName","GroupName","RColorCode")]
+    } else {
+      config <- config[,c("Order","SampleName","GroupName","RColorCode")]
     }
 
     if (!is.null(col)) {
@@ -121,7 +129,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
 
     # Re-order the PSI table
     config <- config[order(config$Order),]
-    config$Order <- 1:nrow(config)
+    config$Order <- 1:nrow(config) #This fixes the config Order numbering after removing rows not in data
     new.column.idx <- sapply(config$SampleName,
                              function(x) which(colnames(data) == x))
 
@@ -141,8 +149,32 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
       mygroupcol[i] <- as.character(config[config$GroupName == groups[i],
                                            "RColorCode"][1])
     }
+
     names(mygroups) <- groups
     names(mygroupcol) <- groups
+
+    if(subg){
+      subgroups <- unique(config$SubgroupName)
+      mysubgroups <- list()
+      mysubgroupcol <- rep(NA,length(subgroups))
+      for(i in 1:length(subgroups)) {
+        mysubgroups[[i]] <- which(colnames(data.new) %in%
+                                    config[config$SubgroupName == subgroups[i],"SampleName"])
+        mysubgroupcol[[i]] <- as.character(config[config$SubgroupName == subgroups[i],
+                                                   "RColorCode"][1])
+      }
+      names(mysubgroups) <- subgroups
+      names(mysubgroupcol) <- subgroups
+
+      subgroup_order <-sort(sapply(mysubgroups,min))
+      subgroup_ordered <- seq(1:length(subgroup_order))
+      names(subgroup_ordered) <- names(subgroup_order)
+
+    } else{
+       mysubgroups <- NULL
+       mysubgroupcol <- NULL
+       subgroup_ordered <- NULL
+    }
 
     if (expr) {
       qual.new <- NULL
@@ -152,6 +184,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     R <- list(data=data.new,
               qual=qual.new,
               col=mycols,
+              subgroup.index=mysubgroups,subgroup.col=mysubgroupcol,subgroup.order=subgroup_ordered,
               group.index=mygroups, group.col=mygroupcol,
               config=config)
   }

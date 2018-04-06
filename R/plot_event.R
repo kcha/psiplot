@@ -89,6 +89,13 @@ plot_event <- function(
   reordered <- preprocess_sample_colors(x, config, col = col)
   psi <- reordered$data
 
+  subg <- "SubgroupName" %in% colnames(reordered$config)
+
+  #Temporary warning until we have a good way to plot CIs
+  if(errorbar & subg){
+    stop("Subgroups and error bar plotting incompatible at the moment")
+  }
+
   if (all(is.na(psi))) {
     warning("Did not find any points to plot")
   }
@@ -107,6 +114,14 @@ plot_event <- function(
                                  measure.vars = names(psi),
                                  variable.name = "SampleName"))
 
+  if(subg){
+    sm <- suppressMessages(join(mdata,reordered$config))
+    smsum <- ddply(sm,.(SubgroupName),summarize, value=mean(value,na.rm=T))
+    smsum2 <- smsum[sapply(names(reordered$subgroup.order),
+                           function(x) which(smsum$SubgroupName==x)),]
+    smsum2$SubgroupName <- factor(smsum2$SubgroupName,smsum2$SubgroupName)
+  }
+
   if (errorbar) {
     ci <- as.data.frame(get_beta_ci(reordered$qual))
     ci[which(is.na(psi)),] <- NA
@@ -114,8 +129,14 @@ plot_event <- function(
     mdata <- cbind(mdata, ci)
   }
 
-  gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
-    geom_point(colour = reordered$col, size=cex.pch, shape = pch) +
+  if(subg){
+    gp <- ggplot(smsum2, aes(x=SubgroupName, y = value)) +
+      geom_point(colour = reordered$subgroup.col, size = cex.pch, shape = pch)
+  } else{
+    gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
+      geom_point(colour = reordered$col, size=cex.pch, shape = pch)
+  }
+  gp <- gp +
     ylab("PSI") +
     xlab("") +
     ylim(ylim) +
