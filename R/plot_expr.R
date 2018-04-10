@@ -126,12 +126,14 @@ plot_expr <- function(
           axis.text.y = element_text(size = cex.yaxis),
           axis.title.y = element_text(size = cex.yaxis),
           title = element_text(size = cex.main))
+  
+
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
     gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
   }
-
+  
   if (!gridlines) {
     gp <- gp + theme(panel.grid = element_blank())
   }

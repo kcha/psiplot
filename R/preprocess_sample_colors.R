@@ -85,6 +85,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
     } else {
       data.new <- data[, seq(1, ncol(data), 2)]
       qual.new <- data[, seq(2, ncol(data), 2)]
+      colnames(qual.new) <- colnames(data.new)
     }
     R <- list(data=data.new,
               qual=qual.new,
@@ -163,6 +164,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
         mysubgroupcol[[i]] <- as.character(config[config$SubgroupName == subgroups[i],
                                                    "RColorCode"][1])
       }
+
       names(mysubgroups) <- subgroups
       names(mysubgroupcol) <- subgroups
 
@@ -180,6 +182,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
       qual.new <- NULL
     } else {
       qual.new <- data[,new.column.idx + 1]
+      names(qual.new) <- names(data.new)
     }
     R <- list(data=data.new,
               qual=qual.new,

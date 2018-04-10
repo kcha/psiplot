@@ -88,13 +88,9 @@ plot_event <- function(
   x <- format_table(x)
   reordered <- preprocess_sample_colors(x, config, col = col)
   psi <- reordered$data
+  qual <- reordered$qual
 
   subg <- "SubgroupName" %in% colnames(reordered$config)
-
-  #Temporary warning until we have a good way to plot CIs
-  if(errorbar & subg){
-    stop("Subgroups and error bar plotting incompatible at the moment")
-  }
 
   if (all(is.na(psi))) {
     warning("Did not find any points to plot")
@@ -113,20 +109,38 @@ plot_event <- function(
   mdata <- suppressMessages(melt(psi,
                                  measure.vars = names(psi),
                                  variable.name = "SampleName"))
+  mqual <- suppressMessages(melt(qual,
+                                 measure.vars = names(qual),
+                                 variable.name = "SampleName"))
 
   if(subg){
     sm <- suppressMessages(join(mdata,reordered$config))
+    smqual <- suppressMessages(join(mqual,reordered$config))
     smsum <- ddply(sm,.(SubgroupName),summarize, value=mean(value,na.rm=T))
+    smsum$value[is.na(smsum$value)] <- NA
     smsum2 <- smsum[sapply(names(reordered$subgroup.order),
                            function(x) which(smsum$SubgroupName==x)),]
     smsum2$SubgroupName <- factor(smsum2$SubgroupName,smsum2$SubgroupName)
   }
 
   if (errorbar) {
-    ci <- as.data.frame(get_beta_ci(reordered$qual))
-    ci[which(is.na(psi)),] <- NA
-    colnames(ci) <- c("lo", "hi")
-    mdata <- cbind(mdata, ci)
+    if(subg){
+      ci <- as.data.frame(ddply(smqual,.(SubgroupName),get_beta_ci_subg))
+      ci[,-1][which(is.na(smsum$value)),] <- NA
+      #Reorder according to smsum2
+      ci <- ci[sapply(names(reordered$subgroup.order),
+                      function(x) which(ci$SubgroupName==x)),]
+      #Remove SubgroupNames
+      ci <- ci[,-1]
+      colnames(ci) <- c("lo", "hi")
+      smsum2 <- cbind(smsum2,ci)
+
+    } else{
+      ci <- as.data.frame(get_beta_ci(reordered$qual))
+      ci[which(is.na(psi)),] <- NA
+      colnames(ci) <- c("lo", "hi")
+      mdata <- cbind(mdata, ci)
+    }
   }
 
   if(subg){
@@ -149,9 +163,15 @@ plot_event <- function(
 
   # Draw error bars
   if (errorbar) {
-    gp <- gp + geom_errorbar(aes(ymin = lo, ymax = hi),
-                             colour = reordered$col,
-                             width = 0.05)
+    if(subg){
+      gp <- gp + geom_errorbar(aes(ymin = lo, ymax = hi),
+                               colour = reordered$subgroup.col,
+                               width = 0.05)
+    } else {
+      gp <- gp + geom_errorbar(aes(ymin = lo, ymax = hi),
+                               colour = reordered$col,
+                               width = 0.05)
+    }
   }
 
   # Draw horizontal lines for groups
