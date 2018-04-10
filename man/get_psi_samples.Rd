@@ -24,4 +24,3 @@ Get samples from PSI input table
 \examples{
 get_psi_samples(psi)
 }
-

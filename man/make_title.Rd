@@ -21,4 +21,3 @@ Create a plot title using the event ID
 f <- format_table(psi)
 print(make_title(rownames(f)[1]))
 }
-

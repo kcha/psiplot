@@ -14,4 +14,3 @@ passed to \code{\link{plot_event}} or \code{\link{plot_expr}} using the
 \code{config} argument.
 }
 \keyword{datasets}
-

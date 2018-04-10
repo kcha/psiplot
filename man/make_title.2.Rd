@@ -21,4 +21,3 @@ Create a plot title using the event ID. Returns symbol and event ID.
 \examples{
 print(make_title.2(psi$GENE, psi$EVENT))
 }
-

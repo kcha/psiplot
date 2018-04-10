@@ -13,4 +13,3 @@ Contains simulated cRPKM data as produced by \code{vast-tools
 combine}.
 }
 \keyword{datasets}
-

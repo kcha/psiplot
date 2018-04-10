@@ -13,4 +13,3 @@ Contains simulated PSI and quality score data as produced by \code{vast-tools
 combine}.
 }
 \keyword{datasets}
-
