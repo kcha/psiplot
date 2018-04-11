@@ -58,8 +58,13 @@ get_beta_ci_subg <- function(q) {
   CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
                                                                   parameters[2,j]))
   CIpool <- do.call("c",CIsamples)
-  fittedparams <- fitdist(CIpool,"beta")
-  newCIs <- rbeta(5000,parameters[1,1],parameters[2,1])
+  fittedparams <- suppressWarnings(fitdistr(CIpool,
+                                            "beta",
+                                            list(shape1=mean(parameters[1,],
+                                                             na.rm = T),
+                                                 shape2=mean(parameters[2,],
+                                                             na.rm=T))))
+  newCIs <- rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
   ci <- betaCI(newCIs) * 100
   return(ci)
 }
