@@ -23,13 +23,17 @@
 #'
 #' # For cRPKM
 #' format_table(crpkm, expr = TRUE)
-format_table <- function(x, expr = FALSE) {
+format_table <- function(x, expr = FALSE, counts = FALSE) {
   if (expr) {
     if (!grepl("^ID$", colnames(x)[1])) {
       stop("Invalid column names. Does your input file contain the correct header?")
     }
     id <- paste(x$NAME,"|",x$ID)
-    r <- x[,3:ncol(x)]
+    if (counts) {
+      r <- x[,seq(3,ncol(x),by=2)]
+    } else {
+      r <- x[,3:ncol(x)]
+    }
     rownames(r) <- id
     return(r)
   }

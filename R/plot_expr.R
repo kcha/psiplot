@@ -60,7 +60,7 @@
 #' }
 plot_expr <- function(
   x, config = NULL,
-  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), counts= FALSE, col = NULL,
   title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
   pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE) {
@@ -77,7 +77,7 @@ plot_expr <- function(
     stop("Need two or more samples!")
   }
 
-  x <- format_table(x, expr = TRUE)
+  x <- format_table(x, expr = TRUE, counts=counts)
   reordered <- preprocess_sample_colors(x, config = config, expr = TRUE, col = col)
   crpkm <- reordered$data
 
