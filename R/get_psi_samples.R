@@ -9,7 +9,9 @@
 #' @return If \code{value = TRUE}, A character vector consisting of sample names.
 #' Otherwise, a numeric vector of indices.
 #' @examples
+#' \dontrun{
 #' get_psi_samples(psi)
+#' }
 get_psi_samples <- function(df, configdf = NULL, value = TRUE) {
   ix <- seq(7, ncol(df), 2)
   samples <- colnames(df)[ix]

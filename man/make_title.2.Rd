@@ -19,5 +19,7 @@ A character with a human-friendly title with format:
 Create a plot title using the event ID. Returns symbol and event ID.
 }
 \examples{
+\dontrun{
 print(make_title.2(psi$GENE, psi$EVENT))
+}
 }

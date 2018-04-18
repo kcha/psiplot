@@ -27,12 +27,14 @@ This function is also used for formatting cRPKM input data by setting
 \code{expr = TRUE}.
 }
 \examples{
+\dontrun{
 # For example input, see:
 psi
 format_table(psi)
 
 # For cRPKM
 format_table(crpkm, expr = TRUE)
+}
 }
 \seealso{
 \code{\link{convert_psi}}

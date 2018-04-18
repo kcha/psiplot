@@ -16,12 +16,14 @@
 #' concatenation of exon metadata delimited by |.
 #' @seealso \code{\link{convert_psi}}
 #' @examples
+#' \dontrun{
 #' # For example input, see:
 #' psi
 #' format_table(psi)
 #'
 #' # For cRPKM
 #' format_table(crpkm, expr = TRUE)
+#' }
 format_table <- function(x, expr = FALSE) {
   if (expr) {
     if (!grepl("^ID$", colnames(x)[1])) {

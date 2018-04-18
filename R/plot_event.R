@@ -167,8 +167,10 @@ plot_event <- function(
 #' @return A character with a human-friendly title with
 #' event type, gene symbol, event coordinates, and length
 #' @examples
+#' \dontrun{
 #' f <- format_table(psi)
 #' print(make_title(rownames(f)[1]))
+#' }
 make_title <- function(x) {
   event <- strsplit(x, split = "\\|")[[1]]
   sprintf("%s\n(%s, %s bp, type %s)",
@@ -184,7 +186,9 @@ make_title <- function(x) {
 #' @return A character with a human-friendly title with format:
 #' \code{GENE (EVENT ID)}
 #' @examples
+#' \dontrun{
 #' print(make_title.2(psi$GENE, psi$EVENT))
+#' }
 make_title.2 <- function(gene, event) {
   sprintf("%s (%s)", gene, event)
 }
