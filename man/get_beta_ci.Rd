@@ -20,4 +20,3 @@ provided by Tim Sterne-Weiler.
 \author{
 Tim Sterne-Weiler, Kevin Ha
 }
-

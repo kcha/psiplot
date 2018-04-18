@@ -15,7 +15,6 @@
 #' @return Data frame with PSI and quality scores. Rownames set as a
 #' concatenation of exon metadata delimited by |.
 #' @seealso \code{\link{convert_psi}}
-#' @export
 #' @examples
 #' # For example input, see:
 #' psi

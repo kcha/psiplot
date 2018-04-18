@@ -8,7 +8,6 @@
 #' the indices.
 #' @return If \code{value = TRUE}, A character vector consisting of sample names.
 #' Otherwise, a numeric vector of indices.
-#' @export
 #' @examples
 #' get_psi_samples(psi)
 get_psi_samples <- function(df, configdf = NULL, value = TRUE) {

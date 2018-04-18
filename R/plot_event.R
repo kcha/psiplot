@@ -166,7 +166,6 @@ plot_event <- function(
 #' "\code{S|TSPAN6|chrX:99885756-99885863|108}"
 #' @return A character with a human-friendly title with
 #' event type, gene symbol, event coordinates, and length
-#' @export
 #' @examples
 #' f <- format_table(psi)
 #' print(make_title(rownames(f)[1]))
@@ -184,7 +183,6 @@ make_title <- function(x) {
 #' @param event A vector or character string with same size as \code{gene}
 #' @return A character with a human-friendly title with format:
 #' \code{GENE (EVENT ID)}
-#' @export
 #' @examples
 #' print(make_title.2(psi$GENE, psi$EVENT))
 make_title.2 <- function(gene, event) {

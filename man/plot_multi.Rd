@@ -67,4 +67,3 @@ plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 # To use ggplot2 (or if gplots is not installed)
 plot_multi(psi, config = config, usepkg = "ggplot2")
 }
-

@@ -83,4 +83,3 @@ plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 \code{\link{preprocess_sample_colors}} for pre-processing of \code{x} using
 \code{config}
 }
-

@@ -26,4 +26,3 @@ as horizontal lines. For internal use only.
 \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
 \code{\link{plot_expr}}
 }
-

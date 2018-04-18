@@ -37,4 +37,3 @@ format_table(crpkm, expr = TRUE)
 \seealso{
 \code{\link{convert_psi}}
 }
-

@@ -82,4 +82,3 @@ reorderedcrpkm <- preprocess_sample_colors(crpkm, config = config, expr = TRUE)
 \seealso{
 \code{\link{plot_event}}
 }
-

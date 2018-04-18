@@ -1,3 +1,9 @@
+# Version 2.1.2
+
+- Fixed bug that occurs when dealing with columns that are all NA
+- Added CITATION
+- Converted some internally-used functions to be non-exported
+
 # Version 2.1.1
 
 Some bug fixes for `plot_expr()`
