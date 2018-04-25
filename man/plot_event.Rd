@@ -7,7 +7,7 @@
 plot_event(x, config = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
-  cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
+  cex.main = 12, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
   cex.pch = 3, plot = NULL, gridlines = TRUE)
 }
 \arguments{

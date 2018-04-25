@@ -25,6 +25,7 @@
 #' format_table(crpkm, expr = TRUE)
 #' }
 format_table <- function(x, expr = FALSE) {
+  x <- as.data.frame(x)
   if (expr) {
     if (!grepl("^ID$", colnames(x)[1])) {
       stop("Invalid column names. Does your input file contain the correct header?")

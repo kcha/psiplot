@@ -6,7 +6,7 @@
 \usage{
 plot_expr(x, config = NULL, groupmean = ifelse(is.null(config), FALSE,
   TRUE), col = NULL, title = NULL, xlab = "", ylab = "Expression",
-  ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
+  ylim = NULL, cex.main = 12, cex.yaxis = 12, cex.xaxis = 12,
   pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE)
 }
 \arguments{

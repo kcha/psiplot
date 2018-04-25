@@ -3,10 +3,11 @@
 #' Visualize multiple PSI or cRPKM values in a single plot.
 #'
 #' @details
-#' If \code{gplots} package is installed (optional), the function
-#' \code{\link[gplots]{heatmap.2}} will be called to generate a heatmap.
-#' Otherwise, \code{\link[ggplot2]{geom_tile}} is used and a \code{ggplot2}
-#' object is returned.
+#' By default, \code{\link[ggplot2]{geom_tile}} is used to generate a heatmap
+#' and a \code{ggplot2} object is returned. Alternatively, other heatmap
+#' packages are supported including:  \code{\link[pheatmap]{pheatmap}}
+#' (use  \code{usepkgs = "pheatmap"}) and
+#' \code{\link[gplots]{heatmap.2}} (use \code{usepkgs = "gplots"}).
 #'
 #' Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
 #'
@@ -31,13 +32,16 @@
 #' @param cluster_cols Logical to cluster columns using heirarchical clustering
 #' @param fill A vector of colours. e.g. from \code{colorRampPalette}.
 #' Default is \code{NULL}, which will choose the palette automatically.
-#' @param usepkg Default is \code{gplots}, which calls \code{\link[gplots]{heatmap.2}}.
-#' Otherwise, use \code{ggplot2} to create a heatmap using \code{\link[ggplot2]{geom_tile}}.
-#' @param ... Additional parameters passed to \code{\link[gplots]{heatmap.2}}
+#' @param usepkg Default is \code{pheatmap}, which calls \code{\link[pheatmap]{pheatmap}}.
+#' Other methods are also supported: \code{\link[gplots]{heatmap.2}} and
+#' \code{\link[ggplot2]{geom_tile}}.
+#' @param ... Additional parameters passed to \code{\link[pheatmap]{pheatmap}}
+#' or \code{\link[gplots]{heatmap.2}}
 #' @export
 #' @import ggplot2
 #' @importFrom reshape2 melt
 #' @examples
+#' # Uses ggplot2 by default
 #' plot_multi(psi)
 #' plot_multi(psi, config = config)
 #'
@@ -46,15 +50,13 @@
 #' plot_multi(crpkm, config = config, expr = TRUE)
 #' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 #'
-#' # To use ggplot2 (or if gplots is not installed)
-#' plot_multi(psi, config = config, usepkg = "ggplot2")
+#' # To use pheatmap or gplots for plotting, set usepgk option
+#' plot_multi(psi, config = config, usepkg = "pheatmap")
 plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
            title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
-           fill = NULL, usepkg = "gplots", ...
+           fill = NULL, usepkg = "ggplot2", ...
            ) {
-  message(paste("plot_multi() is under active development.",
-                "Please report bugs or feedback to https://github.com/kcha/psiplot/issues."))
-  match.arg(usepkg, c("gplots", "ggplot2"))
+  match.arg(usepkg, c("gplots", "ggplot2", "pheatmap"))
   # Format input
   formatted_df <- format_table(df, expr = expr)
   if (expr == FALSE) {
@@ -90,7 +92,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
               dendrogram = dendro,
               ColSideColors = col_colors,
               col = fill,
-              margins = c(10, 25),
+              margins = c(10, 35),
               trace = "none",
               key.xlab = ifelse(expr, "cRPKM", "PSI"),
               xlab = xlab, ylab = ylab,
@@ -102,7 +104,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
                 Colv = cluster_cols, Rowv = cluster_rows,
                 dendrogram = dendro,
                 col = fill,
-                margins = c(10, 25),
+                margins = c(10, 35),
                 trace = "none",
                 key.xlab = ifelse(expr, "cRPKM", "PSI"),
                 xlab = xlab, ylab = ylab,
@@ -110,6 +112,26 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
                 ...
       )
     }
+  } else if (usepkg == "pheatmap" && requireNamespace("pheatmap", quietly = TRUE)) {
+    if (!is.null(config)) {
+      col_colors <- reordered$col
+      anno_colors <- list(Group = reordered$group.col)
+      anno_col <- data.frame(Group = reordered$config$GroupName)
+      rownames(anno_col) <- reordered$config$SampleName
+    } else {
+      col_colors <- NA
+      anno_colors <- NA
+      anno_col <- NA
+    }
+    pheatmap::pheatmap(as.matrix(reordered$data),
+                       cluster_row = cluster_rows,
+                       clsuter_col = cluster_cols,
+                       main = title,
+                       col = fill,
+                       annotation_colors = anno_colors,
+                       annotation_col = anno_col,
+                       ...
+    )
   } else {
     if (cluster_rows) {
       # Perform heirarchical clustering of events/genes

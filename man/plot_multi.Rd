@@ -6,7 +6,7 @@
 \usage{
 plot_multi(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
   title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config),
-  TRUE, FALSE), fill = NULL, usepkg = "gplots", ...)
+  TRUE, FALSE), fill = NULL, usepkg = "ggplot2", ...)
 }
 \arguments{
 \item{df}{A data frame of input values (PSI or cRPKM). If the latter, need to
@@ -31,19 +31,22 @@ file.}
 \item{fill}{A vector of colours. e.g. from \code{colorRampPalette}.
 Default is \code{NULL}, which will choose the palette automatically.}
 
-\item{usepkg}{Default is \code{gplots}, which calls \code{\link[gplots]{heatmap.2}}.
-Otherwise, use \code{ggplot2} to create a heatmap using \code{\link[ggplot2]{geom_tile}}.}
+\item{usepkg}{Default is \code{pheatmap}, which calls \code{\link[pheatmap]{pheatmap}}.
+Other methods are also supported: \code{\link[gplots]{heatmap.2}} and
+\code{\link[ggplot2]{geom_tile}}.}
 
-\item{...}{Additional parameters passed to \code{\link[gplots]{heatmap.2}}}
+\item{...}{Additional parameters passed to \code{\link[pheatmap]{pheatmap}}
+or \code{\link[gplots]{heatmap.2}}}
 }
 \description{
 Visualize multiple PSI or cRPKM values in a single plot.
 }
 \details{
-If \code{gplots} package is installed (optional), the function
-\code{\link[gplots]{heatmap.2}} will be called to generate a heatmap.
-Otherwise, \code{\link[ggplot2]{geom_tile}} is used and a \code{ggplot2}
-object is returned.
+By default, \code{\link[ggplot2]{geom_tile}} is used to generate a heatmap
+and a \code{ggplot2} object is returned. Alternatively, other heatmap
+packages are supported including:  \code{\link[pheatmap]{pheatmap}}
+(use  \code{usepkgs = "pheatmap"}) and
+\code{\link[gplots]{heatmap.2}} (use \code{usepkgs = "gplots"}).
 
 Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
 
@@ -56,6 +59,7 @@ By default (\code{fill=NULL}), PSI uses a yellow/blue gradient, while cRPKMs
 uses the "YlOrRd" color brewer palette.
 }
 \examples{
+# Uses ggplot2 by default
 plot_multi(psi)
 plot_multi(psi, config = config)
 
@@ -64,6 +68,6 @@ plot_multi(crpkm, expr = TRUE)
 plot_multi(crpkm, config = config, expr = TRUE)
 plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 
-# To use ggplot2 (or if gplots is not installed)
-plot_multi(psi, config = config, usepkg = "ggplot2")
+# To use pheatmap or gplots for plotting, set usepgk option
+plot_multi(psi, config = config, usepkg = "pheatmap")
 }

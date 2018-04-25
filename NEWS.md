@@ -3,6 +3,8 @@
 - Fixed bug that occurs when dealing with columns that are all NA
 - Added CITATION
 - Converted some internally-used functions to be non-exported
+- `plot_multi()` now supports `pheatmap`
+- The `test_data` folder is now `inst/extdata`
 
 # Version 2.1.1
 
