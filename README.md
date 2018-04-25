@@ -83,12 +83,12 @@ plot_expr(crpkm[1,], config = config)
 #### Multiple events
 
 The function `plot_multi` generates a heatmap of multiple events using
-`geom_tile` (*this is currently an experimental feature and not fully
-tested*). Alternatively, if you have the R package `pheatmap` or
+`geom_tile`. Alternatively, if you have the R package `pheatmap` or
 `gplots` installed, you can set `usepkgs = 'pheatmap'` or
-`usepkgs = 'gplots'` to perform hierarchical clustering and generate a
-heatmap. Another benefit of using one of these optional packages is the
-ability to include group annotations from the config file:
+`usepkgs = 'gplots'` to generate a heatmap. By default, rows and columns
+will be ordered by hierarchical clustering. One benefit of using
+`pheatmap` or `gplots` is the ability to include group annotations from
+the config file:
 
 ``` r
 # example using pheatmap
