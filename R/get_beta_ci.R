@@ -82,13 +82,16 @@ get_beta_ci_subg <- function(q) {
                                                                   parameters[2,j]))
   CIpool <- do.call("c",CIsamples)
 
-  fittedparams <- tryCatch(SuppressWarnings(fitdistr(CIpool,
-                                            "beta",
-                                            list(shape1=mean(parameters[1,],
-                                                             na.rm = T),
-                                                 shape2=mean(parameters[2,],
-                                                             na.rm=T)))),
-                            error=function(e) return(list("estimate"=c(NA,NA))))
+  smean <- mean(CIpool,na.rm = T)
+  svar <- var(CIpool,na.rm = T)
+  const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
+  a_mom <- smean*const_mom #alpha estimate with method of moments
+  b_mom <- (1-smean)*const_mom #beta estimate with method of moments
+
+  fittedparams <- tryCatch(
+   fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
+   error= function(e) list("estimate"=c(NA,NA)))
+
 
   newCIs <- rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
   ci <- betaCI(newCIs) * 100
