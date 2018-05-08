@@ -4,18 +4,28 @@
 \alias{plot_event}
 \title{Plot PSI values of a given alternative splicing event}
 \usage{
-plot_event(x, config = NULL, errorbar = TRUE,
-  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
-  title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
+plot_event(x, trim_colnames = NULL, config = NULL, subg = TRUE,
+  errorbar = TRUE, groupmean = ifelse(is.null(config), FALSE, TRUE),
+  col = NULL, title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
   cex.pch = 3, plot = NULL, gridlines = TRUE)
 }
 \arguments{
-\item{x}{A 1-row data frame containing PSI values to be plotted}
+\item{x}{A 1-row data frame containing PSI values to be plotted.}
+
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x.}
 
 \item{config}{Optional configuration settings for \code{plot_event}. Can be
-a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 file. Use the latter option if you are calling \code{plot_event} multiple times.}
+
+\item{subg}{Logical indicating whether samples should be subgrouped for plotting.
+This is useful when plotting many samples. Subgroups are decided based on the
+\code{SubgroupName} column of the \code{.config} file or data frame. The average
+of all samples in a subgruoup is plotted as a single data point. Error bars
+are estimated for subgroups by fitting all PSIs in the subgroup to a joint
+beta distribution.}
 
 \item{errorbar}{Logical indicating whether error bars should be drawn}
 

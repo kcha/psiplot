@@ -16,11 +16,21 @@
 #' cRPKM values that have \emph{NA} value are omitted and not plotted.
 #'
 #' @param x A 1-row data frame containing cRPKM values to be plotted
+#' @param trim_colnames String that must be searched for and trimmed at the end
+#' of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+#' tables.
 #' @param config Optional configuration settings for \code{plot_expr}. Can be
 #' a path to the \code{.config} file, or 4-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_expr} multiple times.
+#' @param subg Logical indicating whether samples should be subgrouped for plotting.
+#' #' This is useful when plotting many samples. Subgroups are decided based on the
+#' \code{SubgroupName} column of the \code{.config} file or data frame. The average
+#' of all samples in a subgruoup is plotted as a single data point.
 #' @param groupmean Logical indicating whether grouped means should be drawn.
 #' Requires \code{config}.
+#' @param counts Logical indicating whether the data frame contains read counts.
+#' Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+#' counts), otherwise leave as \code{FALSE} (default).
 #' @param col Vector of colors with length matching the number of samples. If
 #' specificed, this will override the color settings specified in \code{config}.
 #' @param title Title of the plot
@@ -59,7 +69,7 @@
 #' plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 plot_expr <- function(
-  x, config = NULL,
+  x, trim_colnames = NULL, config = NULL, subg = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), counts= FALSE, col = NULL,
   title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -77,7 +87,7 @@ plot_expr <- function(
     stop("Need two or more samples!")
   }
 
-  x <- format_table(x, expr = TRUE, counts=counts)
+  x <- format_table(x, expr = TRUE, counts=counts, trim_colnames=trim_colnames)
   reordered <- preprocess_sample_colors(x, config = config, expr = TRUE, col = col)
   crpkm <- reordered$data
 
@@ -126,14 +136,14 @@ plot_expr <- function(
           axis.text.y = element_text(size = cex.yaxis),
           axis.title.y = element_text(size = cex.yaxis),
           title = element_text(size = cex.main))
-  
+
 
 
   # Draw horizontal lines for groups
   if (!is.null(config) && groupmean) {
     gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
   }
-  
+
   if (!gridlines) {
     gp <- gp + theme(panel.grid = element_blank())
   }

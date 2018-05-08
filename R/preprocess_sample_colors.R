@@ -92,7 +92,7 @@ preprocess_sample_colors <- function(data, config, expr = FALSE, col = NULL) {
               col=col, group.index=NULL, group.col=NULL)
   } else { #Config is there
     if (is.character(config)) {
-      config <- read.delim(config, stringsAsFactors=FALSE)
+      config <- utils::read.delim(config, stringsAsFactors=FALSE)
     }
 
     # check input file [changed to allow flexible config column order, and subgroups]

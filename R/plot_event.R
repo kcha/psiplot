@@ -26,10 +26,18 @@
 #' Error bars based on the confidence interval of the PSI estimation can be
 #' shown by setting \code{errorbar=TRUE}.
 #'
-#' @param x A 1-row data frame containing PSI values to be plotted
+#' @param x A 1-row data frame containing PSI values to be plotted.
+#' @param trim_colnames String that must be searched for and trimmed at the end
+#' of every sample column in x.
 #' @param config Optional configuration settings for \code{plot_event}. Can be
-#' a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+#' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_event} multiple times.
+#' @param subg Logical indicating whether samples should be subgrouped for plotting.
+#' This is useful when plotting many samples. Subgroups are decided based on the
+#' \code{SubgroupName} column of the \code{.config} file or data frame. The average
+#' of all samples in a subgruoup is plotted as a single data point. Error bars
+#' are estimated for subgroups by fitting all PSIs in the subgroup to a joint
+#' beta distribution.
 #' @param errorbar Logical indicating whether error bars should be drawn
 #' @param groupmean Logical indicating whether grouped means should be drawn.
 #' Requires \code{config}.
@@ -70,7 +78,7 @@
 #' plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 plot_event <- function(
-  x, config = NULL, errorbar = TRUE,
+  x, trim_colnames = NULL, config = NULL, subg = TRUE, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0,100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -85,12 +93,12 @@ plot_event <- function(
   }
 
   # Format input
-  x <- format_table(x)
+  x <- format_table(x, trim_colnames=trim_colnames)
   reordered <- preprocess_sample_colors(x, config, col = col)
   psi <- reordered$data
   qual <- reordered$qual
 
-  subg <- "SubgroupName" %in% colnames(reordered$config)
+  subg <- all(c(subg==TRUE, "SubgroupName" %in% colnames(reordered$config)))
 
   if (all(is.na(psi))) {
     warning("Did not find any points to plot")

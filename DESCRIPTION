@@ -15,7 +15,11 @@ Imports:
     ggplot2 (>= 2.2.1),
     reshape2 (>= 1.4),
     plyr (>= 1.8.1),
-    methods
+    methods,
+    MASS,
+    stats,
+    grDevices,
+    utils
 Suggests:
     testthat,
     gplots

@@ -37,6 +37,7 @@
 #' @export
 #' @import ggplot2
 #' @importFrom reshape2 melt
+#' @importFrom grDevices colorRampPalette
 #' @examples
 #' plot_multi(psi)
 #' plot_multi(psi, config = config)

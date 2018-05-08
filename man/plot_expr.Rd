@@ -4,20 +4,34 @@
 \alias{plot_expr}
 \title{Plot cRPKM values of a given gene}
 \usage{
-plot_expr(x, config = NULL, groupmean = ifelse(is.null(config), FALSE,
-  TRUE), col = NULL, title = NULL, xlab = "", ylab = "Expression",
+plot_expr(x, trim_colnames = NULL, config = NULL, subg = TRUE,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), counts = FALSE,
+  col = NULL, title = NULL, xlab = "", ylab = "Expression",
   ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
   pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing cRPKM values to be plotted}
 
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+tables.}
+
 \item{config}{Optional configuration settings for \code{plot_expr}. Can be
 a path to the \code{.config} file, or 4-column data frame of the \code{.config}
 file. Use the latter option if you are calling \code{plot_expr} multiple times.}
 
+\item{subg}{Logical indicating whether samples should be subgrouped for plotting.
+#' This is useful when plotting many samples. Subgroups are decided based on the
+\code{SubgroupName} column of the \code{.config} file or data frame. The average
+of all samples in a subgruoup is plotted as a single data point.}
+
 \item{groupmean}{Logical indicating whether grouped means should be drawn.
 Requires \code{config}.}
+
+\item{counts}{Logical indicating whether the data frame contains read counts.
+Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+counts), otherwise leave as \code{FALSE} (default).}
 
 \item{col}{Vector of colors with length matching the number of samples. If
 specificed, this will override the color settings specified in \code{config}.}

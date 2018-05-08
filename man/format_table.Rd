@@ -4,15 +4,23 @@
 \alias{format_table}
 \title{Format input event data}
 \usage{
-format_table(x, expr = FALSE)
+format_table(x, expr = FALSE, counts = FALSE, trim_colnames = NULL)
 }
 \arguments{
 \item{x}{A data frame of event data as outputted by
 \code{vast-tools combine}. e.g. each row is an event containing exon
 metadata, PSI and quality scores values. If \code{expr = TRUE}, then each row
-is a gene containing two columns of metadata, and cRPKM values.}
+is a gene containing two columns of metadata, one column of cRPKM per sample,
+and, optionally, a second column per sample with read counts.}
 
 \item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise, \code{FALSE}.}
+
+\item{counts}{Set to \code{TRUE} if the cRPKM table has read counts. Otherwise,
+\code{FALSE}.}
+
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+tables.}
 }
 \value{
 Data frame with PSI and quality scores. Rownames set as a
