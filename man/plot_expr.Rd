@@ -4,7 +4,7 @@
 \alias{plot_expr}
 \title{Plot cRPKM values of a given gene}
 \usage{
-plot_expr(x, trim_colnames = NULL, config = NULL, subg = TRUE,
+plot_expr(x, config = NULL, subg = TRUE, trim_colnames = NULL,
   counts = FALSE, groupmean = ifelse(is.null(config), FALSE, TRUE),
   col = NULL, title = NULL, xlab = "", ylab = "Expression (cRPKM)",
   ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -14,10 +14,6 @@ plot_expr(x, trim_colnames = NULL, config = NULL, subg = TRUE,
 \arguments{
 \item{x}{A 1-row data frame containing cRPKM values to be plotted}
 
-\item{trim_colnames}{String that must be searched for and trimmed at the end
-of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-tables. If no string must be trimmed, leave as \code{FALSE}.}
-
 \item{config}{Optional configuration settings for \code{plot_expr}. Can be
 a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 file. Use the latter option if you are calling \code{plot_expr} multiple times.}
@@ -26,6 +22,10 @@ file. Use the latter option if you are calling \code{plot_expr} multiple times.}
 The average of all samples in a subgroup is plotted as a single data point.
 See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for more
 details on subgrouping.}
+
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+tables. If no string must be trimmed, leave as \code{FALSE}.}
 
 \item{counts}{Logical indicating whether the data frame contains read counts.
 Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
@@ -92,7 +92,7 @@ config
 plot_expr(crpkm[1,], config = config, groupmean=TRUE)
 plot_expr(crpkm[1,], config = "/path/to/config")
 
-# Plot using custom configuration, changing point sympol, and y-axis
+# Plot using custom configuration, changing point symbol, and y-axis
 # scale
 plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 }
@@ -102,7 +102,7 @@ plot_expr(crpkm[1,], config=config, subg=TRUE)
 
 # Plot directly from a table with suffixes and read counts
 crpkm_counts
-plot_expr(crpkm_counts[1,], trim_colnames = "-cRPKM", config = config, counts = TRUE)
+plot_expr(crpkm_counts[1,], config = config, trim_colnames = "-cRPKM", counts = TRUE)
 
 }
 \seealso{

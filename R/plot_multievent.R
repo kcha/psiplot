@@ -91,7 +91,7 @@
 #' }
 #'
 plot_multievent <- function(
-  x, trim_colnames = NULL, config = NULL, subg = TRUE, errorbar = TRUE,
+  x, config = NULL,  subg = TRUE, trim_colnames = NULL, errorbar = TRUE,
   col = NULL,  event_col = NULL, title = "MULTI EVENT PLOT", xlab = "",
   ylab = "PSI", ylim = c(0,100), cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
   pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE, lwd=0.5,

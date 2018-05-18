@@ -117,7 +117,7 @@
 #' plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 plot_event <- function(
-  x, trim_colnames = NULL, config = NULL, subg = TRUE, errorbar = TRUE,
+  x, config = NULL, subg = TRUE, trim_colnames = NULL, errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0,100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,

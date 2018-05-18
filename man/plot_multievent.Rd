@@ -4,7 +4,7 @@
 \alias{plot_multievent}
 \title{Plot PSI values of multiple alternative splicing events}
 \usage{
-plot_multievent(x, trim_colnames = NULL, config = NULL, subg = TRUE,
+plot_multievent(x, config = NULL, subg = TRUE, trim_colnames = NULL,
   errorbar = TRUE, col = NULL, event_col = NULL,
   title = "MULTI EVENT PLOT", xlab = "", ylab = "PSI", ylim = c(0, 100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
@@ -14,14 +14,14 @@ plot_multievent(x, trim_colnames = NULL, config = NULL, subg = TRUE,
 \arguments{
 \item{x}{A data frame containing PSI values to be plotted.}
 
-\item{trim_colnames}{String that must be searched for and trimmed at the end
-of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.}
-
 \item{config}{Optional configuration settings for \code{plot_event}. Can be
 a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 file. Use the latter option if you are calling \code{plot_event} multiple times.}
 
 \item{subg}{Logical indicating whether samples should be subgrouped for plotting.}
+
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.}
 
 \item{errorbar}{Logical indicating whether error bars should be drawn}
 

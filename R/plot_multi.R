@@ -70,10 +70,10 @@
 #' plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
 #'
 #' # Working with expression tables with read counts and suffixes
-#' plot_multi(crpkm_counts, config = config, expr = TRUE, counts = TRUE, trim_colnames = "-cRPKM")
-plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE, counts = FALSE,
-                       trim_colnames = FALSE, xlab = "", ylab = "", title = "",
-                       cluster_rows = TRUE,
+#' plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
+plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE,
+                       trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
+                       title = "", cluster_rows = TRUE,
                        cluster_cols = ifelse(is.null(config), TRUE, FALSE),
                        fill = NULL, usepkg = c("ggplot2","gplots","pheatmap"),
                        ... ) {

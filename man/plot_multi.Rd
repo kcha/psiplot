@@ -4,10 +4,11 @@
 \alias{plot_multi}
 \title{Plot multiple events or genes as a heatmap (experimental)}
 \usage{
-plot_multi(df, config = NULL, subg = TRUE, expr = FALSE, counts = FALSE,
-  trim_colnames = FALSE, xlab = "", ylab = "", title = "",
-  cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
-  fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"), ...)
+plot_multi(df, config = NULL, subg = TRUE, expr = FALSE,
+  trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
+  title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config),
+  TRUE, FALSE), fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"),
+  ...)
 }
 \arguments{
 \item{df}{A data frame of input values (PSI or cRPKM). If the latter, need to
@@ -21,13 +22,13 @@ file.}
 
 \item{expr}{Logical - \code{TRUE} if plotting cRPKMs, \code{FALSE} otherwise}
 
-\item{counts}{Logical indicating whether the data frame contains read counts.
-Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
-counts), otherwise leave as \code{FALSE} (default).}
-
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
 tables. If no string must be trimmed, leave as \code{FALSE}.}
+
+\item{counts}{Logical indicating whether the data frame contains read counts.
+Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+counts), otherwise leave as \code{FALSE} (default).}
 
 \item{xlab}{The x-axis label}
 
@@ -86,5 +87,5 @@ plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE, cluster_rows = TRU
 plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
 
 # Working with expression tables with read counts and suffixes
-plot_multi(crpkm_counts, config = config, expr = TRUE, counts = TRUE, trim_colnames = "-cRPKM")
+plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
 }

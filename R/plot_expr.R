@@ -71,7 +71,7 @@
 #' plot_expr(crpkm[1,], config = config, groupmean=TRUE)
 #' plot_expr(crpkm[1,], config = "/path/to/config")
 #'
-#' # Plot using custom configuration, changing point sympol, and y-axis
+#' # Plot using custom configuration, changing point symbol, and y-axis
 #' # scale
 #' plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
@@ -81,10 +81,10 @@
 #'
 #' # Plot directly from a table with suffixes and read counts
 #' crpkm_counts
-#' plot_expr(crpkm_counts[1,], trim_colnames = "-cRPKM", config = config, counts = TRUE)
+#' plot_expr(crpkm_counts[1,], config = config, trim_colnames = "-cRPKM", counts = TRUE)
 #'
 plot_expr <- function(
-  x, trim_colnames = NULL, config = NULL, subg = TRUE, counts= FALSE,
+  x, config = NULL, subg = TRUE, trim_colnames = NULL, counts= FALSE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -102,11 +102,11 @@ plot_expr <- function(
                     short_ids= FALSE)
 
   reordered <- preprocess_sample_colors(x,
-                                      expr=T,
-                                      config = config,
-                                      col = col,
-                                      subg = subg,
-                                      multi_col = NULL)
+                                        expr=T,
+                                        config = config,
+                                        col = col,
+                                        subg = subg,
+                                        multi_col = NULL)
   crpkm <- reordered$data
 
   subg <- all(subg=TRUE,
