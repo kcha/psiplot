@@ -5,46 +5,50 @@
 #' \href{https://www.github.com/vastgroup/vast-tools}{vast-tools} pipeline.
 #'
 #' @details
-#' Like \code{\link{plot_event}}, plots can be customized via the \code{config}
-#' option. Either a data frame or
+#' Like \code{\link{plot_event}} and \code{\link{plot_multievent}}, plots can be
+#' customized via the \code{config} option. Either a data frame or
 #' the filepath to the config file can be used. Alternatively, plots can be
 #' customized using a limited set of graphical parameters as described above.
 #'
-#' See Details of \code{\link{plot_event}} for more information on costumizing
-#' plots.
+#' See Details of \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
+#' for more information on customizing plots. Note that the \code{errorbar}
+#' argument is not available for cRPKMs.
 #'
 #' cRPKM values that have \emph{NA} value are omitted and not plotted.
 #'
 #' @param x A 1-row data frame containing cRPKM values to be plotted
 #' @param trim_colnames String that must be searched for and trimmed at the end
 #' of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-#' tables.
+#' tables. If no string must be trimmed, leave as \code{FALSE}.
 #' @param config Optional configuration settings for \code{plot_expr}. Can be
-#' a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+#' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_expr} multiple times.
 #' @param subg Logical indicating whether samples should be subgrouped for plotting.
-#' #' This is useful when plotting many samples. Subgroups are decided based on the
-#' \code{SubgroupName} column of the \code{.config} file or data frame. The average
-#' of all samples in a subgruoup is plotted as a single data point.
-#' @param groupmean Logical indicating whether grouped means should be drawn.
-#' Requires \code{config}.
+#' The average of all samples in a subgroup is plotted as a single data point.
+#' See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for more
+#' details on subgrouping.
 #' @param counts Logical indicating whether the data frame contains read counts.
 #' Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
 #' counts), otherwise leave as \code{FALSE} (default).
+#' @param groupmean Logical indicating whether grouped means should be drawn.
+#' Requires \code{config}.
 #' @param col Vector of colors with length matching the number of samples. If
-#' specificed, this will override the color settings specified in \code{config}.
-#' @param title Title of the plot
-#' @param xlab The x-axis label
-#' @param ylab The y-axis label
-#' @param ylim Range of y-axis
-#' @param cex.main Plot title size (pts)
-#' @param cex.yaxis Y-axis font size (pts)
-#' @param cex.xaxis X-axis font size (i.e. the sample names) (pts)
-#' @param pch Point symbol
-#' @param cex.pch Size of datapoints
-#' @param gridlines Logical indicating whether grid lines should be drawn
-#' @param plot (deprecated) prints the plot
-#' @return ggplot2 object
+#' specified, this will override the color settings specified in \code{config}.
+#' @param title Title of the plot. If \code{NULL} (default), the title will be
+#' the content of the \code{ID} column in \code{x}.
+#' @param xlab The x-axis label.
+#' @param ylab The y-axis label.
+#' @param ylim Range of y-axis.
+#' @param cex.main Plot title size (pts).
+#' @param cex.yaxis Y-axis font size (pts).
+#' @param cex.xaxis X-axis font size (i.e. the sample names) (pts).
+#' @param pch Point symbol.
+#' @param cex.pch Size of datapoints.
+#' @param gridlines Logical indicating whether grid lines should be drawn.
+#' @param plot (deprecated) prints the plot.
+#' @param show_group_legend Set to FALSE to avoid showing a legend with the sample
+#' groups and their colors.
+#' @return ggplot2 object.
 #' @seealso
 #' \code{\link{format_table}} for performing some initial conversion steps of \code{x}
 #'
@@ -54,7 +58,10 @@
 #' @export
 #' @import methods
 #' @import ggplot2
-#' @importFrom reshape2 melt
+#' @import dplyr
+#' @import tidyr
+#' @import purrr
+#' @import magrittr
 #' @examples
 #' \dontrun{
 #' plot_expr(crpkm[1,])
@@ -69,11 +76,12 @@
 #' plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 plot_expr <- function(
-  x, trim_colnames = NULL, config = NULL, subg = TRUE,
-  groupmean = ifelse(is.null(config), FALSE, TRUE), counts= FALSE, col = NULL,
-  title = NULL, xlab = "", ylab = "Expression", ylim = NULL,
+  x, trim_colnames = NULL, config = NULL, subg = TRUE, counts= FALSE,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
+  title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE) {
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE, show_group_legend = TRUE) {
+
   if (!missing(plot)) {
     warning("The option 'plot' has been deprecated")
   }
@@ -82,53 +90,99 @@ plot_expr <- function(
     stop("Too many rows!")
   }
 
-  N <- ncol(x) - 2
-  if (N < 2) {
-    stop("Need two or more samples!")
-  }
+  x <- format_table(x, expr = TRUE, counts=counts, trim_colnames=trim_colnames,
+                    short_ids= FALSE)
 
-  x <- format_table(x, expr = TRUE, counts=counts, trim_colnames=trim_colnames)
-  reordered <- preprocess_sample_colors(x, config = config, expr = TRUE, col = col)
+  reordered <- preprocess_sample_colors(x,
+                                      expr=T,
+                                      config = config,
+                                      col = col,
+                                      subg = subg,
+                                      multi_col = NULL)
   crpkm <- reordered$data
 
-  subg <- "SubgroupName" %in% colnames(reordered$config)
+  subg <- all(subg=TRUE,
+              "SubgroupName" %in% colnames(reordered$original_config))
 
   if (all(is.na(crpkm))) {
     warning("Did not find any points to plot")
   }
 
+  N <- ifelse(is.null(ncol(crpkm)),1,ncol(crpkm))
+  if (N < 2) {
+    stop("Need two or more samples!")
+  }
+
   # Set plot title
   if (is.null(title)) {
-    title <- rownames(x)
+    title <- x$ID
   }
 
   if (is.null(ylim)) {
-    ylim <- c(0, round(max(x)) + 1)
+    ylim <- c(0, round(max(x[,-1])) + 1)
   }
 
-  mdata <- suppressMessages(melt(crpkm,
-                                 measure.vars = names(crpkm),
-                                 variable.name = "SampleName"))
+  mdata <- suppressMessages(gather(crpkm,
+                                 key = "SampleName",
+                                 value = "value"))
+
+  #Here the only difference between subg==T and subg==F is that samples need to
+  #be pooled for cRPKM calculations. The rest is just the same (error bars are)
+  #not an option for expression at the moment
+
+  sm <- left_join(mdata,reordered$subgroup,by="SampleName")
 
   if(subg){
-    sm <- suppressMessages(join(mdata,reordered$config))
-    smsum <- ddply(sm,.(SubgroupName),summarize, value=mean(value,na.rm=T))
-    smsum2 <- smsum[sapply(names(reordered$subgroup.order),
-                           function(x) which(smsum$SubgroupName==x)),]
-    smsum2$SubgroupName <- factor(smsum2$SubgroupName,smsum2$SubgroupName)
+
+    smsum <- sm %>%
+      dplyr::group_by(SubgroupName) %>%
+      dplyr::summarise(value=mean(value,na.rm=T)) %>%
+      mutate(value=replace(value,is.na(value),NA))
+
+    } else {
+
+      smsum <- sm
+
+    }
+
+  smsum <- smsum %>%
+    dplyr::select(SubgroupName,value)
+
+  smsum <- left_join(reordered$subgroup_order,smsum,by="SubgroupName") %>%
+    dplyr::arrange(SubgroupOrder)
+
+  smsum <- left_join(smsum,reordered$group,by="SubgroupName") %>%
+    left_join(reordered$group_order,by="GroupName") %>%
+    arrange(SubgroupOrder) %>%
+    mutate(SubgroupName=factor(SubgroupName,levels=unique(SubgroupName))) %>%
+    arrange(GroupOrder) %>%
+    mutate(GroupName=factor(GroupName,levels=unique(GroupName))) %>%
+    dplyr::select(Order=SubgroupOrder,
+                  Sample=SubgroupName,
+                  value,
+                  GroupName,
+                  RColorCode)
+
+  gp <- ggplot(data=smsum) +
+    geom_blank(data=smsum,
+               aes(x=Sample,
+                   y=value))
+
+  gp <- gp + geom_point(aes(x=Sample,
+                            y=value,
+                            colour=GroupName),
+                        size=cex.pch,
+                        shape=pch,
+                        show.legend=show_group_legend) +
+    scale_colour_manual("Sample Group", values=reordered$group_order$RColorCode)
+
+  if(!is.null(config) && groupmean) {
+    gp <- draw_group_means(gp,
+                           mdata,
+                           reordered)
   }
 
-  if(subg){
-    gp <- ggplot(smsum2,aes(x=SubgroupName, y=value)) +
-      geom_point(colour = reordered$subgroup.col, size = cex.pch, shape=pch)
-  } else{
-    gp <- ggplot(mdata, aes(x = SampleName, y = value)) +
-      geom_point(colour = reordered$col, size=cex.pch, shape = pch)
-  }
-
-  gp <- gp +
-    ylab("cRPKM") +
-    xlab("") +
+  gp <- gp + ylab(ylab) +
     ylim(ylim) +
     ggtitle(title) +
     theme_bw() +
@@ -136,13 +190,6 @@ plot_expr <- function(
           axis.text.y = element_text(size = cex.yaxis),
           axis.title.y = element_text(size = cex.yaxis),
           title = element_text(size = cex.main))
-
-
-
-  # Draw horizontal lines for groups
-  if (!is.null(config) && groupmean) {
-    gp <- draw_group_means(gp, mdata, reordered$config, reordered$group.col)
-  }
 
   if (!gridlines) {
     gp <- gp + theme(panel.grid = element_blank())

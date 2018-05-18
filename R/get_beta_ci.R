@@ -21,6 +21,11 @@ parseQual <- function(qual, prior_alpha=1, prior_beta=1) {
 #' @param percentile A vector with the two percentiles that will be returned.
 #' Defaults to 0.05 and 0.95, to give 90\% confidence intervals.
 #' @import stats
+#' @examples
+#' betasample <- rbeta(n=10000, 2, 2)
+#' psiplot:::betaCI(betasample)
+#' @return A named vector with the desired percentiles.
+#'
 betaCI <- function(betaDist, percentile = c(0.05, 0.95)) {
   quantile(betaDist, p=percentile, na.rm = T)
 }
@@ -53,11 +58,10 @@ betaCISample <- function(alpha, beta, n = 5000) {
 #' @export
 #'
 get_beta_ci <- function(q) {
-  parameters <- sapply(q, function(x) parseQual(as.character(x)))
-  ci <- lapply(1:ncol(parameters), function(j) betaCISample(parameters[1,j],
-                                                            parameters[2,j]))
-  ci <- lapply(ci,betaCI)
-  ci <- do.call("rbind", ci) * 100
+  parameters <- parseQual(q)
+  ci <- betaCISample(alpha=parameters[1],beta=parameters[2])
+  ci <- betaCI(ci)
+  ci <- ci * 100
   return(ci)
 }
 
@@ -72,12 +76,10 @@ get_beta_ci <- function(q) {
 #' confidence intervals for the subgroup.
 #'
 #' @param q Data frame with quality scores of an event
-#' @import MASS
 #' @import stats
 #' @export
 get_beta_ci_subg <- function(q) {
-  parameters <- sapply(q$value, function(x) parseQual(as.character(x)),USE.NAMES = F)
-  names(parameters) <- q$SampleName
+  parameters <- sapply(q, function(x) parseQual(as.character(x)),USE.NAMES = F)
   CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
                                                                   parameters[2,j]))
   CIpool <- do.call("c",CIsamples)
@@ -89,7 +91,7 @@ get_beta_ci_subg <- function(q) {
   b_mom <- (1-smean)*const_mom #beta estimate with method of moments
 
   fittedparams <- tryCatch(
-   fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
+   MASS::fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
    error= function(e) list("estimate"=c(NA,NA)))
 
 

@@ -3,13 +3,12 @@
 \docType{data}
 \name{crpkm}
 \alias{crpkm}
-\title{Sample genes with simulated cRPKM data}
-\format{A 5 x 6 data frame}
+\title{Sample genes with cRPKM data}
+\format{A 6 x 10 data frame}
 \usage{
 crpkm
 }
 \description{
-Contains simulated cRPKM data as produced by \code{vast-tools
-combine}.
+Contains sample cRPKM data as produced by \code{vast-tools combine}.
 }
 \keyword{datasets}

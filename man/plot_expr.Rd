@@ -5,61 +5,66 @@
 \title{Plot cRPKM values of a given gene}
 \usage{
 plot_expr(x, trim_colnames = NULL, config = NULL, subg = TRUE,
-  groupmean = ifelse(is.null(config), FALSE, TRUE), counts = FALSE,
-  col = NULL, title = NULL, xlab = "", ylab = "Expression",
+  counts = FALSE, groupmean = ifelse(is.null(config), FALSE, TRUE),
+  col = NULL, title = NULL, xlab = "", ylab = "Expression (cRPKM)",
   ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE)
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE,
+  show_group_legend = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing cRPKM values to be plotted}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-tables.}
+tables. If no string must be trimmed, leave as \code{FALSE}.}
 
 \item{config}{Optional configuration settings for \code{plot_expr}. Can be
-a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 file. Use the latter option if you are calling \code{plot_expr} multiple times.}
 
 \item{subg}{Logical indicating whether samples should be subgrouped for plotting.
-#' This is useful when plotting many samples. Subgroups are decided based on the
-\code{SubgroupName} column of the \code{.config} file or data frame. The average
-of all samples in a subgruoup is plotted as a single data point.}
-
-\item{groupmean}{Logical indicating whether grouped means should be drawn.
-Requires \code{config}.}
+The average of all samples in a subgroup is plotted as a single data point.
+See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for more
+details on subgrouping.}
 
 \item{counts}{Logical indicating whether the data frame contains read counts.
 Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
 counts), otherwise leave as \code{FALSE} (default).}
 
+\item{groupmean}{Logical indicating whether grouped means should be drawn.
+Requires \code{config}.}
+
 \item{col}{Vector of colors with length matching the number of samples. If
-specificed, this will override the color settings specified in \code{config}.}
+specified, this will override the color settings specified in \code{config}.}
 
-\item{title}{Title of the plot}
+\item{title}{Title of the plot. If \code{NULL} (default), the title will be
+the content of the \code{ID} column in \code{x}.}
 
-\item{xlab}{The x-axis label}
+\item{xlab}{The x-axis label.}
 
-\item{ylab}{The y-axis label}
+\item{ylab}{The y-axis label.}
 
-\item{ylim}{Range of y-axis}
+\item{ylim}{Range of y-axis.}
 
-\item{cex.main}{Plot title size (pts)}
+\item{cex.main}{Plot title size (pts).}
 
-\item{cex.yaxis}{Y-axis font size (pts)}
+\item{cex.yaxis}{Y-axis font size (pts).}
 
-\item{cex.xaxis}{X-axis font size (i.e. the sample names) (pts)}
+\item{cex.xaxis}{X-axis font size (i.e. the sample names) (pts).}
 
-\item{pch}{Point symbol}
+\item{pch}{Point symbol.}
 
-\item{cex.pch}{Size of datapoints}
+\item{cex.pch}{Size of datapoints.}
 
-\item{plot}{(deprecated) prints the plot}
+\item{plot}{(deprecated) prints the plot.}
 
-\item{gridlines}{Logical indicating whether grid lines should be drawn}
+\item{gridlines}{Logical indicating whether grid lines should be drawn.}
+
+\item{show_group_legend}{Set to FALSE to avoid showing a legend with the sample
+groups and their colors.}
 }
 \value{
-ggplot2 object
+ggplot2 object.
 }
 \description{
 Generate a plot of cRPKM values for a given gene. The cRPKM values are
@@ -67,13 +72,14 @@ obtained from the
 \href{https://www.github.com/vastgroup/vast-tools}{vast-tools} pipeline.
 }
 \details{
-Like \code{\link{plot_event}}, plots can be customized via the \code{config}
-option. Either a data frame or
+Like \code{\link{plot_event}} and \code{\link{plot_multievent}}, plots can be
+customized via the \code{config} option. Either a data frame or
 the filepath to the config file can be used. Alternatively, plots can be
 customized using a limited set of graphical parameters as described above.
 
-See Details of \code{\link{plot_event}} for more information on costumizing
-plots.
+See Details of \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
+for more information on customizing plots. Note that the \code{errorbar}
+argument is not available for cRPKMs.
 
 cRPKM values that have \emph{NA} value are omitted and not plotted.
 }

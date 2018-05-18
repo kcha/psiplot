@@ -4,35 +4,41 @@
 \alias{format_table}
 \title{Format input event data}
 \usage{
-format_table(x, expr = FALSE, counts = FALSE, trim_colnames = NULL)
+format_table(x, expr = FALSE, counts = FALSE, trim_colnames = NULL,
+  short_ids = FALSE)
 }
 \arguments{
-\item{x}{A data frame of event data as outputted by
-\code{vast-tools combine}. e.g. each row is an event containing exon
-metadata, PSI and quality scores values. If \code{expr = TRUE}, then each row
-is a gene containing two columns of metadata, one column of cRPKM per sample,
-and, optionally, a second column per sample with read counts.}
+\item{x}{A data frame of event data as outputted by \code{vast-tools combine}.
+e.g. each row is an event containing exon metadata, PSI and quality scores
+values. If \code{expr = TRUE}, then each row is a gene containing two columns
+of metadata, one column of cRPKM per sample, and, optionally, a second column
+per sample with read counts.}
 
-\item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise, \code{FALSE}.}
+\item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise,
+\code{FALSE}.}
 
 \item{counts}{Set to \code{TRUE} if the cRPKM table has read counts. Otherwise,
 \code{FALSE}.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-tables.}
+tables. If no string must be trimmed, leave as \code{FALSE}.}
+
+\item{short_ids}{Set to \code{TRUE} to make the metadata column shorter in the
+output, by including only the event ID (for events) or the gene ID (if run
+with \code{expr==TRUE}).}
 }
 \value{
-Data frame with PSI and quality scores. Rownames set as a
-concatenation of exon metadata delimited by |.
+A data frame. If run with \code{expr=FALSE} (default), each row is an
+event, the first column (\code{ID}) contains a concatenation of the event
+metadata delimited by |, and there are two more columns per sample, with PSI
+and quality scores values. If run with (\code{expr=TRUE}), each row is a gene,
+the \code{ID} column contains the gene metadata, and there is one more column
+per sample with the cRPKM value.
 }
 \description{
-Convert low/bad quality PSI values and convert event metadata as rownames.
-Prepares input event data for plotting. Calls \code{\link{convert_psi}}.
-}
-\details{
-This function is also used for formatting cRPKM input data by setting
-\code{expr = TRUE}.
+Convert low/bad quality PSI values and convert event metadata as a first ID
+column. Prepares input event/GE data for plotting. Calls \code{\link{convert_psi}}.
 }
 \examples{
 # For example input, see:
@@ -41,6 +47,7 @@ format_table(psi)
 
 # For cRPKM
 format_table(crpkm, expr = TRUE)
+
 }
 \seealso{
 \code{\link{convert_psi}}

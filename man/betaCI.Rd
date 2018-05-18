@@ -12,6 +12,13 @@ betaCI(betaDist, percentile = c(0.05, 0.95))
 \item{percentile}{A vector with the two percentiles that will be returned.
 Defaults to 0.05 and 0.95, to give 90\% confidence intervals.}
 }
+\value{
+A named vector with the desired percentiles.
+}
 \description{
 Obtain CIs from the sampled values
+}
+\examples{
+betasample <- rbeta(n=10000, 2, 2)
+psiplot:::betaCI(betasample)
 }
