@@ -27,14 +27,24 @@
 #' @seealso \code{\link{convert_psi}}
 #' @export
 #' @import dplyr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
+#' @importFrom stats setNames
 #' @examples
 #' # For example input, see:
 #' psi
 #' format_table(psi)
 #'
 #' # For cRPKM
+#' crpkm
 #' format_table(crpkm, expr = TRUE)
+#'
+#' # For cRPKM with read counts and the "-cRPKM" suffix in sample columns:
+#' crpkm_counts
+#' format_table(crpkm_counts, expr = TRUE, counts = TRUE, trim_colnames = "-cRPKM")
+#'
+#' # To keep only event IDs/gene IDs as metadata:
+#' psi
+#' format_table(psi,short_ids = TRUE)
 #'
 format_table <- function(x,
                          expr = FALSE,
@@ -48,7 +58,7 @@ format_table <- function(x,
 
     #Use only the ID column as gene ID if short_ids==T. Else, paste all metadata
     if(short_ids==FALSE){
-      r <- x %>% mutate(ID=paste(ID,NAME,sep="|"))
+      r <- x %>% mutate(ID=paste(NAME,ID,sep="|"))
     } else{
       r <- x
     }
@@ -63,6 +73,7 @@ format_table <- function(x,
       str_to_trim <- paste(trim_colnames,"$",sep="") #Regexp for end of line
       r <- setNames(r,
                     c(colnames(r)[1],gsub(str_to_trim,"",colnames(r)[-1])))
+
     }
     return(r)
   }
@@ -82,6 +93,9 @@ format_table <- function(x,
 
   # Extract PSIs
   r <- convert_psi(x[,7:ncol(x)])
-  r <- cbind("ID"=id,r)
+
+  r <- r %>% mutate(ID=id) %>%
+    select(ID,colnames(r))
+
   return(r)
 }

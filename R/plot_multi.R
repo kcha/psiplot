@@ -52,18 +52,25 @@
 #' @import ggplot2
 #' @import dplyr
 #' @import tidyr
+#' @import pheatmap
 #' @importFrom grDevices colorRampPalette
+#' @importFrom magrittr "%>%"
+#' @importFrom stats dist
+#' @importFrom stats hclust
 #' @examples
 #' plot_multi(psi)
-#' plot_multi(psi, config = config)
+#' plot_multi(psi, config = config, subg = FALSE)
 #'
 #' # Use expr = TRUE for cRPKMs
-#' plot_multi(crpkm, expr = TRUE)
-#' plot_multi(crpkm, config = config, expr = TRUE)
-#' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
+#' plot_multi(crpkm, subg = FALSE, expr = TRUE)
+#' plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE)
+#' plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE, cluster_rows = TRUE)
 #'
 #' # To use ggplot2 (or if gplots is not installed)
-#' plot_multi(psi, config = config, usepkg = "ggplot2")
+#' plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
+#'
+#' # Working with expression tables with read counts and suffixes
+#' plot_multi(crpkm_counts, config = config, expr = TRUE, counts = TRUE, trim_colnames = "-cRPKM")
 plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE, counts = FALSE,
                        trim_colnames = FALSE, xlab = "", ylab = "", title = "",
                        cluster_rows = TRUE,

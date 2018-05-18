@@ -110,11 +110,20 @@
 #' @export
 #' @import dplyr
 #' @import readr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @examples
-#' reorderedpsi <- preprocess_sample_colors(psi, config = config)
+#' #Tables from vast-tools need formatting before using this function
+#' a <- format_table(psi)
+#' reorderedpsi <- preprocess_sample_colors(a, config = config)
 #'
-#' reorderedcrpkm <- preprocess_sample_colors(crpkm, config = config, expr = TRUE)
+#' b <- format_table(crpkm,expr=TRUE)
+#' reorderedcrpkm <- preprocess_sample_colors(b, config = config, expr = TRUE)
+#'
+#' # Subgroups can be avoided even if the config file has them
+#' reorderedpsi <- preprocess_sample_colors(a, config = config, subg = FALSE)
+#'
+#' # Mapping colours to events (e.g. for plotting with plot_multievent)
+#' reorderedpsi <- preprocess_sample_colors(a[1:2,], config = config, multi_col = c("red","blue"))
 preprocess_sample_colors <- function(data,
                                      config,
                                      subg = TRUE,
@@ -137,7 +146,7 @@ preprocess_sample_colors <- function(data,
   if(length(unique(data$ID)) < length(data$ID)){
     warning("More than one row with the same ID detected. Plotting only one row per ID")
     multi_col <- multi_col[!duplicated(data$ID)]
-    data %<>% filter(!duplicated(data$ID))
+    data <- data %>% filter(!duplicated(data$ID))
   }
 
   #Defining event colours

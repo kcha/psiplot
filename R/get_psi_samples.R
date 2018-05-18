@@ -10,7 +10,9 @@
 #' Otherwise, a numeric vector of indices.
 #' @export
 #' @examples
-#' get_psi_samples(psi)
+#' \dontrun{
+#' #' get_psi_samples(psi)
+#' }
 get_psi_samples <- function(df, configdf = NULL, value = TRUE) {
   ix <- seq(7, ncol(df), 2)
   samples <- colnames(df)[ix]

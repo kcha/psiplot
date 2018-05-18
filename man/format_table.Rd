@@ -46,7 +46,16 @@ psi
 format_table(psi)
 
 # For cRPKM
+crpkm
 format_table(crpkm, expr = TRUE)
+
+# For cRPKM with read counts and the "-cRPKM" suffix in sample columns:
+crpkm_counts
+format_table(crpkm_counts, expr = TRUE, counts = TRUE, trim_colnames = "-cRPKM")
+
+# To keep only event IDs/gene IDs as metadata:
+psi
+format_table(psi,short_ids = TRUE)
 
 }
 \seealso{

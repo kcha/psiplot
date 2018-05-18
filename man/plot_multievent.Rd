@@ -94,10 +94,23 @@ for some subgroups, especially for events with low coverage and PSI values near
 for subgrouped samples).
 }
 \examples{
-plot_multievent(mypsi, config, subg=F,errorbar = T,
-event_col = c("red","white","yellow","cyan","green","black","orange"),
-show_event_legend = T,
-show_group_legend = T)
+plot_multievent(psi, config = config, subg = FALSE, errorbar = FALSE)
+
+# Example with subgrouped samples and custom title
+plot_multievent(psi, config = config, subg = TRUE, errorbar = FALSE, title = "Highlighted events")
+
+# Legends can be hidden separately
+plot_multievent(psi, config = config, errorbar = FALSE, show_event_legend = FALSE)
+plot_multievent(psi, config = config, errorbar = FALSE, show_group_legend = FALSE)
+
+# Custom colors
+plot_multievent(psi[1:3,], config = config, errorbar = FALSE, event_col=c("red","black","orange"))
+
+# Use of errobar = TRUE and subg = TRUE is experimental and computationally expensive
+\dontrun{
+plot_multievent(psi, config = config)
+}
+
 }
 \seealso{
 \code{\link{format_table}} for performing some initial conversion steps of

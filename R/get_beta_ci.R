@@ -20,28 +20,22 @@ parseQual <- function(qual, prior_alpha=1, prior_beta=1) {
 #' @param betaDist A vector with the values sampled from the distribution
 #' @param percentile A vector with the two percentiles that will be returned.
 #' Defaults to 0.05 and 0.95, to give 90\% confidence intervals.
-#' @import stats
 #' @examples
 #' betasample <- rbeta(n=10000, 2, 2)
 #' psiplot:::betaCI(betasample)
 #' @return A named vector with the desired percentiles.
 #'
 betaCI <- function(betaDist, percentile = c(0.05, 0.95)) {
-  quantile(betaDist, p=percentile, na.rm = T)
+  stats::quantile(betaDist, p=percentile, na.rm = T)
 }
 
-#' Sample from the beta distributions
-#'
-#' @param alpha,beta Numeric values with the two shape parameters of the
-#' distribution
-#' @param n Number of points to be sampled
-#' @import stats
+#Sample from a beta distribution given the shape parameters
 betaCISample <- function(alpha, beta, n = 5000) {
   if (is.na(alpha) || is.na(beta)) {
     sample <- NA
   } else {
     set.seed(79)
-    sample <- rbeta(n, alpha, beta)
+    sample <- stats::rbeta(n, alpha, beta)
   }
   return(sample)
 }
@@ -55,7 +49,6 @@ betaCISample <- function(alpha, beta, n = 5000) {
 #' @param q a data frame of PSI and corresponding quality values
 #' @return Confidence intevals of PSI values
 #' @author Tim Sterne-Weiler, Kevin Ha
-#' @export
 #'
 get_beta_ci <- function(q) {
   parameters <- parseQual(q)
@@ -76,8 +69,6 @@ get_beta_ci <- function(q) {
 #' confidence intervals for the subgroup.
 #'
 #' @param q Data frame with quality scores of an event
-#' @import stats
-#' @export
 get_beta_ci_subg <- function(q) {
   parameters <- sapply(q, function(x) parseQual(as.character(x)),USE.NAMES = F)
   CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
@@ -85,7 +76,7 @@ get_beta_ci_subg <- function(q) {
   CIpool <- do.call("c",CIsamples)
 
   smean <- mean(CIpool,na.rm = T)
-  svar <- var(CIpool,na.rm = T)
+  svar <- stats::var(CIpool,na.rm = T)
   const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
   a_mom <- smean*const_mom #alpha estimate with method of moments
   b_mom <- (1-smean)*const_mom #beta estimate with method of moments
@@ -95,7 +86,7 @@ get_beta_ci_subg <- function(q) {
    error= function(e) list("estimate"=c(NA,NA)))
 
 
-  newCIs <- rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
+  newCIs <- stats::rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
   ci <- betaCI(newCIs) * 100
   return(ci)
 }

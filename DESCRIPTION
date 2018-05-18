@@ -17,16 +17,16 @@ BugReports: https://github.com/kcha/psiplot/issues
 Imports:
     MASS,
     stats,
+    methods,
+    grDevices,
+    utils,
     dplyr,
     tidyr,
     purrr,
     readr,
     magrittr,
-    methods,
-    grDevices,
-    utils,
-    reshape2,
-    ggplot2
+    ggplot2,
+    pheatmap
 Suggests:
     testthat,
     gplots

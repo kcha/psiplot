@@ -96,6 +96,14 @@ plot_expr(crpkm[1,], config = "/path/to/config")
 # scale
 plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 }
+
+#' # Plot with subgrouped samples
+plot_expr(crpkm[1,], config=config, subg=TRUE)
+
+# Plot directly from a table with suffixes and read counts
+crpkm_counts
+plot_expr(crpkm_counts[1,], trim_colnames = "-cRPKM", config = config, counts = TRUE)
+
 }
 \seealso{
 \code{\link{format_table}} for performing some initial conversion steps of \code{x}

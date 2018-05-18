@@ -70,13 +70,26 @@
 #' @import dplyr
 #' @import tidyr
 #' @import purrr
-#' @import magrittr
 #' @import ggplot2
+#' @importFrom magrittr "%>%"
 #' @examples
-#' plot_multievent(mypsi, config, subg=F,errorbar = T,
-#' event_col = c("red","white","yellow","cyan","green","black","orange"),
-#' show_event_legend = T,
-#' show_group_legend = T)
+#' plot_multievent(psi, config = config, subg = FALSE, errorbar = FALSE)
+#'
+#' # Example with subgrouped samples and custom title
+#' plot_multievent(psi, config = config, subg = TRUE, errorbar = FALSE, title = "Highlighted events")
+#'
+#' # Legends can be hidden separately
+#' plot_multievent(psi, config = config, errorbar = FALSE, show_event_legend = FALSE)
+#' plot_multievent(psi, config = config, errorbar = FALSE, show_group_legend = FALSE)
+#'
+#' # Custom colors
+#' plot_multievent(psi[1:3,], config = config, errorbar = FALSE, event_col=c("red","black","orange"))
+#'
+#' # Use of errobar = TRUE and subg = TRUE is experimental and computationally expensive
+#' \dontrun{
+#' plot_multievent(psi, config = config)
+#' }
+#'
 plot_multievent <- function(
   x, trim_colnames = NULL, config = NULL, subg = TRUE, errorbar = TRUE,
   col = NULL,  event_col = NULL, title = "MULTI EVENT PLOT", xlab = "",

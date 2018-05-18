@@ -61,7 +61,7 @@
 #' @import dplyr
 #' @import tidyr
 #' @import purrr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @examples
 #' \dontrun{
 #' plot_expr(crpkm[1,])
@@ -75,6 +75,14 @@
 #' # scale
 #' plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
+#'
+#' #' # Plot with subgrouped samples
+#' plot_expr(crpkm[1,], config=config, subg=TRUE)
+#'
+#' # Plot directly from a table with suffixes and read counts
+#' crpkm_counts
+#' plot_expr(crpkm_counts[1,], trim_colnames = "-cRPKM", config = config, counts = TRUE)
+#'
 plot_expr <- function(
   x, trim_colnames = NULL, config = NULL, subg = TRUE, counts= FALSE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,

@@ -119,7 +119,16 @@ config
 plot_event(psi[1,], config = config, groupmean=TRUE)
 plot_event(psi[1,], config = "/path/to/config")
 
-# Plot using custom configuration, changing point sympol, and y-axis
+# Plot with subgrouped samples
+config
+plot_event(psi[1,], config = config, subg = TRUE, errorbar = FALSE)
+
+# Plot with subroups and error bars (slow, experimental feature)
+\dontrun{
+plot_event(psi[1,], config = config, subg = TRUE, errorbar = TRUE)
+}
+
+# Plot using custom configuration, changing point symbol, and y-axis
 # scale
 plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 }

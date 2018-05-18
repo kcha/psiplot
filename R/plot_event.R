@@ -92,7 +92,7 @@
 #' @import dplyr
 #' @import tidyr
 #' @import purrr
-#' @import magrittr
+#' @importFrom magrittr "%>%"
 #' @import ggplot2
 #' @examples
 #' \dontrun{
@@ -103,7 +103,16 @@
 #' plot_event(psi[1,], config = config, groupmean=TRUE)
 #' plot_event(psi[1,], config = "/path/to/config")
 #'
-#' # Plot using custom configuration, changing point sympol, and y-axis
+#' # Plot with subgrouped samples
+#' config
+#' plot_event(psi[1,], config = config, subg = TRUE, errorbar = FALSE)
+#'
+#' # Plot with subroups and error bars (slow, experimental feature)
+#' \dontrun{
+#' plot_event(psi[1,], config = config, subg = TRUE, errorbar = TRUE)
+#' }
+#'
+#' # Plot using custom configuration, changing point symbol, and y-axis
 #' # scale
 #' plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
@@ -290,9 +299,9 @@ plot_event <- function(
 #' @export
 #' @examples
 #' f <- format_table(psi)
-#' print(make_title(rownames(f)[1]))
+#' print(make_title(f$ID[1]))
 make_title <- function(x) {
-  event <- strsplit(x, split = "\\|")[[1]]
+  event <- strsplit(as.character(x), split = "\\|")[[1]]
   sprintf("%s\n(%s, %s bp, type %s)",
                    event[2], event[3], event[4], event[1])
 }

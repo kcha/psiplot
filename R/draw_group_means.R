@@ -10,9 +10,10 @@
 #' Usually comes from \code{\link{preprocess_sample_colors}}.
 #' @return ggplot2 object
 #' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @seealso \code{\link{preprocess_sample_colors}}, \code{\link{plot_event}},
 #' \code{\link{plot_expr}}
-
+#'
 draw_group_means <- function(gp,mdata,reordered) {
 
   m <- mdata %>%

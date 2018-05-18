@@ -122,9 +122,18 @@ This function is also used for formatting cRPKM input data by setting
 \code{expr = TRUE}.
 }
 \examples{
-reorderedpsi <- preprocess_sample_colors(psi, config = config)
+#Tables from vast-tools need formatting before using this function
+a <- format_table(psi)
+reorderedpsi <- preprocess_sample_colors(a, config = config)
 
-reorderedcrpkm <- preprocess_sample_colors(crpkm, config = config, expr = TRUE)
+b <- format_table(crpkm,expr=TRUE)
+reorderedcrpkm <- preprocess_sample_colors(b, config = config, expr = TRUE)
+
+# Subgroups can be avoided even if the config file has them
+reorderedpsi <- preprocess_sample_colors(a, config = config, subg = FALSE)
+
+# Mapping colours to events (e.g. for plotting with plot_multievent)
+reorderedpsi <- preprocess_sample_colors(a[1:2,], config = config, multi_col = c("red","blue"))
 }
 \seealso{
 \code{\link{plot_event}}, \code{\link{plot_expr}},

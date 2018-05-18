@@ -22,5 +22,7 @@ Otherwise, a numeric vector of indices.
 Get samples from PSI input table
 }
 \examples{
-get_psi_samples(psi)
+\dontrun{
+#' get_psi_samples(psi)
+}
 }
