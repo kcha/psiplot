@@ -22,6 +22,6 @@ For internal use. Called by \code{\link{format_table}}.
 }
 \examples{
 \dontrun{
-convert_psi(psi[,7:ncol(psi)])
+psiplot:::convert_psi(psi[,7:ncol(psi)])
 }
 }

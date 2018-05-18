@@ -3,13 +3,13 @@
 \docType{data}
 \name{psi}
 \alias{psi}
-\title{Sample genes with simulated PSI data}
-\format{A 5 x 14 data frame}
+\title{Sample events with PSI data}
+\format{A 5 x 22 data frame}
 \usage{
 psi
 }
 \description{
-Contains simulated PSI and quality score data as produced by \code{vast-tools
+Contains sample PSI and quality score data as produced by \code{vast-tools
 combine}.
 }
 \keyword{datasets}

@@ -4,13 +4,13 @@
 \name{config}
 \alias{config}
 \title{Sample psiplot configuration settings for datasets \code{psi} and \code{crpkm}}
-\format{A 4 x 4 data frame}
+\format{A 8 x 5 data frame}
 \usage{
 config
 }
 \description{
 Example of how a psiplot configuration file should be formatted. This can be
-passed to \code{\link{plot_event}} or \code{\link{plot_expr}} using the
-\code{config} argument.
+passed to \code{\link{plot_event}}, \code{\link{plot_multievent}} or
+\code{\link{plot_expr}} using the \code{config} argument.
 }
 \keyword{datasets}

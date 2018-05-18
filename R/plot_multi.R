@@ -9,9 +9,13 @@
 #' (use  \code{usepkgs = "pheatmap"}) and
 #' \code{\link[gplots]{heatmap.2}} (use \code{usepkgs = "gplots"}).
 #'
-#' Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
+#' Input is similar to \code{\link{plot_event}}, \code{\link{plot_expr}}, or
+#' \code{\link{plot_multievent}}. Subgrouping of samples is also supported (see
+#' \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for details
+#' on subgrouping). The PSI for each subgroup is taken as the average of all the
+#' samples in the subgroup.
 #'
-#' If \code{cluster_rows = TRUE}, then a heirarchical clustering using \code{hclust}
+#' If \code{cluster_rows = TRUE}, then a hierarchical clustering using \code{hclust}
 #' will be performed on a distance matrix computed by \code{dist}. If \code{config}
 #' is not specified, then the samples will also be clustered.
 #'
@@ -22,47 +26,137 @@
 #' @param df A data frame of input values (PSI or cRPKM). If the latter, need to
 #' set \code{expr = TRUE}.
 #' @param config Optional configuration settings. Can be
-#' a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+#' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file.
+#' @param subg Logical indicating whether samples should be subgrouped for plotting.
 #' @param expr Logical - \code{TRUE} if plotting cRPKMs, \code{FALSE} otherwise
+#' @param counts Logical indicating whether the data frame contains read counts.
+#' Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+#' counts), otherwise leave as \code{FALSE} (default).
+#' @param trim_colnames String that must be searched for and trimmed at the end
+#' of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+#' tables. If no string must be trimmed, leave as \code{FALSE}.
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
 #' @param title Title of the plot
-#' @param cluster_rows Logical to cluster rows using heirarchical clustering
-#' @param cluster_cols Logical to cluster columns using heirarchical clustering
+#' @param cluster_rows Logical to cluster rows using hierarchical clustering
+#' @param cluster_cols Logical to cluster columns using hierarchical clustering
 #' @param fill A vector of colours. e.g. from \code{colorRampPalette}.
 #' Default is \code{NULL}, which will choose the palette automatically.
-#' @param usepkg Default is \code{pheatmap}, which calls \code{\link[pheatmap]{pheatmap}}.
-#' Other methods are also supported: \code{\link[gplots]{heatmap.2}} and
-#' \code{\link[ggplot2]{geom_tile}}.
-#' @param ... Additional parameters passed to \code{\link[pheatmap]{pheatmap}}
-#' or \code{\link[gplots]{heatmap.2}}
+#' @param usepkg Default is \code{ggplot2}, which creates the heatmap using
+#' \code{\link[ggplot2]{geom_tile}}. Otherwise, use \code{gplots}, which calls
+#' \code{\link[gplots]{heatmap.2}}.
+#' @param ... Additional parameters passed to \code{\link[gplots]{heatmap.2}} or
+#' \code{\link[pheatmap]{pheatmap}}.
 #' @export
 #' @import ggplot2
-#' @importFrom reshape2 melt
+#' @import dplyr
+#' @import tidyr
+#' @importFrom grDevices colorRampPalette
+#' @importFrom magrittr "%>%"
+#' @importFrom stats dist
+#' @importFrom stats hclust
 #' @examples
 #' # Uses ggplot2 by default
 #' plot_multi(psi)
-#' plot_multi(psi, config = config)
+#' plot_multi(psi, config = config, subg = FALSE)
 #'
 #' # Use expr = TRUE for cRPKMs
-#' plot_multi(crpkm, expr = TRUE)
-#' plot_multi(crpkm, config = config, expr = TRUE)
-#' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
+#' plot_multi(crpkm, subg = FALSE, expr = TRUE)
+#' plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE)
+#' plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE, cluster_rows = TRUE)
 #'
-#' # To use pheatmap or gplots for plotting, set usepgk option
-#' plot_multi(psi, config = config, usepkg = "pheatmap")
-plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
-           title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
-           fill = NULL, usepkg = "ggplot2", ...
-           ) {
-  match.arg(usepkg, c("gplots", "ggplot2", "pheatmap"))
+#' # To use ggplot2 (or if gplots is not installed)
+#' plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
+#'
+#' # Working with expression tables with read counts and suffixes
+#' plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
+plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE,
+                       trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
+                       title = "", cluster_rows = TRUE,
+                       cluster_cols = ifelse(is.null(config), TRUE, FALSE),
+                       fill = NULL, usepkg = c("ggplot2","gplots","pheatmap"),
+                       ... ) {
+
+  message(paste("plot_multi() is under active development.",
+                "Please report bugs or feedback to https://github.com/kcha/psiplot/issues."))
+  match.arg(usepkg)
+
   # Format input
-  formatted_df <- format_table(df, expr = expr)
+  formatted_df <- format_table(df,
+                               expr = expr,
+                               counts = counts,
+                               trim_colnames = trim_colnames,
+                               short_ids = FALSE)
+
   if (expr == FALSE) {
-    rownames(formatted_df) <- make_title.2(df$GENE, df$EVENT)
+    formatted_df$ID <- make_title.2(df$GENE, df$EVENT)
   }
-  reordered <- preprocess_sample_colors(formatted_df, config = config, expr = expr)
+
+  reordered <- preprocess_sample_colors(formatted_df,
+                                        config = config,
+                                        subg = subg,
+                                        expr = expr)
+
+  psi <- reordered$data %>%
+    mutate(ID=formatted_df$ID) %>%
+    dplyr::select(ID,colnames(reordered$data))
+
+  mdata <- psi %>%
+    group_by(ID) %>%
+    gather(key="SampleName",
+           -ID,
+           value="value")
+
+
+  #Determine if samples must be subgrouped
+    subg <- all(c(subg==TRUE,
+                "SubgroupName" %in% colnames(reordered$original_config)))
+
+  #Do subgroups if subg==T, use the samples as subgroups if subg==FALSE.
+  #This part could be a separate function, called also from plot_multievent.
+
+  if(subg){
+    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
+    smsum <- sm %>%
+      dplyr::group_by(ID,SubgroupName) %>%
+      dplyr::summarise(value=mean(value,na.rm=T)) %>%
+      mutate(value=replace(value,is.na(value),NA)) %>%
+      dplyr::select(ID,SubgroupName,value)
+
+  } else{
+
+    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
+
+    smsum <- sm %>%
+      dplyr::select(ID,SubgroupName,value)
+
+  }
+
+  smsum <- left_join(reordered$subgroup_order,smsum,by="SubgroupName") %>%
+    dplyr::arrange(ID,SubgroupOrder)
+
+  smsum <- left_join(smsum,reordered$group,by="SubgroupName") %>%
+    left_join(reordered$group_order,by="GroupName") %>%
+    arrange(ID,SubgroupOrder) %>%
+    group_by(ID) %>%
+    mutate(SubgroupName=factor(SubgroupName,levels=unique(SubgroupName))) %>%
+    arrange(ID,GroupOrder) %>%
+    mutate(GroupName=factor(GroupName,levels=unique(GroupName))) %>%
+    dplyr::select(ID,
+                  Order=SubgroupOrder,
+                  Sample=SubgroupName,
+                  colnames(smsum),
+                  GroupName,
+                  RColorCode)
+
+  heatmap_data  <- smsum %>%
+    dplyr::select(ID,Sample,value) %>%
+    spread(key=Sample,value=value) %>%
+    as.data.frame()
+
+  rownames(heatmap_data) <- heatmap_data$ID
+  heatmap_data <- subset(heatmap_data, select=(-ID))
 
   if (is.null(fill)) {
     if (expr) {
@@ -73,7 +167,16 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
     }
   }
 
+
   if (usepkg == "gplots" && requireNamespace("gplots", quietly = TRUE)) {
+    #Make heatmap with gplots
+
+    #Preformat data for gplots::heatmap.2
+    col_colors <- smsum %>%
+      ungroup() %>%
+      dplyr::filter(ID==smsum$ID[1]) %>%
+      pull(RColorCode)
+
     dendro <- "none"
     if (cluster_cols && cluster_rows) {
       dendro <- "both"
@@ -85,9 +188,8 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
     # Not ideal, but need two function calls if we want option to have
     # ColSideColors or not. Seems like heatmap.2 can't take an empty
     # ColSideColors -- you have to specify something or don't use it at all.
-    if (!is.null(config)) {
-      col_colors <- reordered$col
-      gplots::heatmap.2(as.matrix(reordered$data),
+    if (!is.null(reordered$original_config)) {
+      gplots::heatmap.2(as.matrix(heatmap_data),
               Colv = cluster_cols, Rowv = cluster_rows,
               dendrogram = dendro,
               ColSideColors = col_colors,
@@ -99,6 +201,7 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
               main = title,
               ...
               )
+
     } else {
       gplots::heatmap.2(as.matrix(reordered$data),
                 Colv = cluster_cols, Rowv = cluster_rows,
@@ -113,19 +216,30 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
       )
     }
   } else if (usepkg == "pheatmap" && requireNamespace("pheatmap", quietly = TRUE)) {
-    if (!is.null(config)) {
-      col_colors <- reordered$col
-      anno_colors <- list(Group = reordered$group.col)
-      anno_col <- data.frame(Group = reordered$config$GroupName)
-      rownames(anno_col) <- reordered$config$SampleName
-    } else {
+    if(!is.null(reordered$original_config)){
+      smsum1 <- smsum %>%
+        ungroup() %>%
+        dplyr::filter(ID==smsum$ID[1])
+
+      col_colors <- smsum1 %>% pull(RColorCode)
+      names(col_colors) <- smsum1 %>% pull(Sample)
+
+      anno_colors <- reordered$group_order %>% pull(RColorCode)
+      names(anno_colors) <- reordered$group_order %>% pull(GroupName)
+      anno_colors <- list(Group=anno_colors)
+
+      anno_col <- smsum1 %>% select(Group=GroupName) %>% as.data.frame()
+      rownames(anno_col) <- smsum1 %>% pull(Sample)
+
+    } else{
       col_colors <- NA
       anno_colors <- NA
       anno_col <- NA
     }
-    pheatmap::pheatmap(as.matrix(reordered$data),
-                       cluster_row = cluster_rows,
-                       clsuter_col = cluster_cols,
+
+    pheatmap::pheatmap(as.matrix(heatmap_data),
+                       cluster_rows = cluster_rows,
+                       cluster_cols = cluster_cols,
                        main = title,
                        col = fill,
                        annotation_colors = anno_colors,
@@ -133,21 +247,25 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
                        ...
     )
   } else {
+
+    #We go with ggplot2
+
     if (cluster_rows) {
-      # Perform heirarchical clustering of events/genes
-      hr <- hclust(dist(reordered$data))
-      reordered$data <- reordered$data[hr$order,]
+      # Perform hierarchical clustering of events/genes
+      hr <- hclust(dist(heatmap_data))
+      heatmap_data <- heatmap_data[hr$order,]
     }
 
-    if (is.null(config)) {
-      hc <- hclust(dist(t(reordered$data)))
-      reordered$data <- reordered$data[,hc$order]
+    if (is.null(reordered$original_config)) {
+      hc <- hclust(dist(t(heatmap_data)))
+      heatmap_data <- heatmap_data[,hc$order]
     }
 
-    reordered$data$id <- rownames(reordered$data)
+    heatmap_data$id <- rownames(heatmap_data)
+    m <- gather(heatmap_data,key="variable",value="value",-id)
 
-    m <- suppressMessages(melt(reordered$data))
-    m$variable <- factor(m$variable, levels = colnames(reordered$data),
+    m$variable <- factor(m$variable,
+                         levels = colnames(subset(heatmap_data, select = -id)),
                          ordered = TRUE)
 
     m$id <- factor(m$id, levels = unique(m$id), ordered = TRUE)
@@ -162,8 +280,10 @@ plot_multi <- function(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
       xlab(xlab) + ylab(ylab) + ggtitle(title) +
       coord_fixed(ratio = 1)
 
+    gp <- gp + scale_fill_gradientn(colours = fill, na.value = "white",
+                                    name = ifelse(expr == FALSE, "PSI", "cRPKM"))
 
-    return(gp + scale_fill_gradientn(colours = fill, na.value = "white",
-                                     name = ifelse(expr == FALSE, "PSI", "cRPKM")))
+
+    return(gp)
   }
 }

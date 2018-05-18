@@ -20,6 +20,6 @@ Create a plot title using the event ID
 \examples{
 \dontrun{
 f <- format_table(psi)
-print(make_title(rownames(f)[1]))
+print(make_title(f$ID[1]))
 }
 }
