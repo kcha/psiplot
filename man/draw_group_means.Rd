@@ -4,16 +4,16 @@
 \alias{draw_group_means}
 \title{Draw group means as horizontal lines}
 \usage{
-draw_group_means(gp, values, cfg, group.col)
+draw_group_means(gp, mdata, reordered)
 }
 \arguments{
 \item{gp}{ggplot2 object}
 
-\item{values}{a melted data frame of PSI/cRPKM values. Usually comes from \code{\link{plot_event}} or \code{\link{plot_expr}}.}
+\item{mdata}{a gathered data frame of PSI/cRPKM values. Usually comes from
+\code{\link{plot_event}} or \code{\link{plot_expr}}.}
 
-\item{cfg}{configuration as data frame}
-
-\item{group.col}{group colours as computed from the \code{group.col} attribute returned by \code{\link{preprocess_sample_colors}}}
+\item{reordered}{a list with the subgroup and group structure of the samples.
+Usually comes from \code{\link{preprocess_sample_colors}}.}
 }
 \value{
 ggplot2 object

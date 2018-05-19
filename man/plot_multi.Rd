@@ -4,19 +4,31 @@
 \alias{plot_multi}
 \title{Plot multiple events or genes as a heatmap (experimental)}
 \usage{
-plot_multi(df, config = NULL, expr = FALSE, xlab = "", ylab = "",
+plot_multi(df, config = NULL, subg = TRUE, expr = FALSE,
+  trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
   title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config),
-  TRUE, FALSE), fill = NULL, usepkg = "ggplot2", ...)
+  TRUE, FALSE), fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"),
+  ...)
 }
 \arguments{
 \item{df}{A data frame of input values (PSI or cRPKM). If the latter, need to
 set \code{expr = TRUE}.}
 
 \item{config}{Optional configuration settings. Can be
-a path to the \code{.config} file, or 4-column data frame of the \code{.config}
+a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 file.}
 
+\item{subg}{Logical indicating whether samples should be subgrouped for plotting.}
+
 \item{expr}{Logical - \code{TRUE} if plotting cRPKMs, \code{FALSE} otherwise}
+
+\item{trim_colnames}{String that must be searched for and trimmed at the end
+of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
+tables. If no string must be trimmed, leave as \code{FALSE}.}
+
+\item{counts}{Logical indicating whether the data frame contains read counts.
+Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+counts), otherwise leave as \code{FALSE} (default).}
 
 \item{xlab}{The x-axis label}
 
@@ -24,19 +36,19 @@ file.}
 
 \item{title}{Title of the plot}
 
-\item{cluster_rows}{Logical to cluster rows using heirarchical clustering}
+\item{cluster_rows}{Logical to cluster rows using hierarchical clustering}
 
-\item{cluster_cols}{Logical to cluster columns using heirarchical clustering}
+\item{cluster_cols}{Logical to cluster columns using hierarchical clustering}
 
 \item{fill}{A vector of colours. e.g. from \code{colorRampPalette}.
 Default is \code{NULL}, which will choose the palette automatically.}
 
-\item{usepkg}{Default is \code{pheatmap}, which calls \code{\link[pheatmap]{pheatmap}}.
-Other methods are also supported: \code{\link[gplots]{heatmap.2}} and
-\code{\link[ggplot2]{geom_tile}}.}
+\item{usepkg}{Default is \code{ggplot2}, which creates the heatmap using
+\code{\link[ggplot2]{geom_tile}}. Otherwise, use \code{gplots}, which calls
+\code{\link[gplots]{heatmap.2}}.}
 
-\item{...}{Additional parameters passed to \code{\link[pheatmap]{pheatmap}}
-or \code{\link[gplots]{heatmap.2}}}
+\item{...}{Additional parameters passed to \code{\link[gplots]{heatmap.2}} or
+\code{\link[pheatmap]{pheatmap}}.}
 }
 \description{
 Visualize multiple PSI or cRPKM values in a single plot.
@@ -48,9 +60,13 @@ packages are supported including:  \code{\link[pheatmap]{pheatmap}}
 (use  \code{usepkgs = "pheatmap"}) and
 \code{\link[gplots]{heatmap.2}} (use \code{usepkgs = "gplots"}).
 
-Input is similar to \code{\link{plot_event}} or \code{\link{plot_expr}}.
+Input is similar to \code{\link{plot_event}}, \code{\link{plot_expr}}, or
+\code{\link{plot_multievent}}. Subgrouping of samples is also supported (see
+\code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for details
+on subgrouping). The PSI for each subgroup is taken as the average of all the
+samples in the subgroup.
 
-If \code{cluster_rows = TRUE}, then a heirarchical clustering using \code{hclust}
+If \code{cluster_rows = TRUE}, then a hierarchical clustering using \code{hclust}
 will be performed on a distance matrix computed by \code{dist}. If \code{config}
 is not specified, then the samples will also be clustered.
 
@@ -61,13 +77,16 @@ uses the "YlOrRd" color brewer palette.
 \examples{
 # Uses ggplot2 by default
 plot_multi(psi)
-plot_multi(psi, config = config)
+plot_multi(psi, config = config, subg = FALSE)
 
 # Use expr = TRUE for cRPKMs
-plot_multi(crpkm, expr = TRUE)
-plot_multi(crpkm, config = config, expr = TRUE)
-plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
+plot_multi(crpkm, subg = FALSE, expr = TRUE)
+plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE)
+plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE, cluster_rows = TRUE)
 
-# To use pheatmap or gplots for plotting, set usepgk option
-plot_multi(psi, config = config, usepkg = "pheatmap")
+# To use ggplot2 (or if gplots is not installed)
+plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
+
+# Working with expression tables with read counts and suffixes
+plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
 }

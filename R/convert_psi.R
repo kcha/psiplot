@@ -11,7 +11,7 @@
 #' SI values converted to \code{NA}
 #' @examples
 #' \dontrun{
-#' convert_psi(psi[,7:ncol(psi)])
+#' psiplot:::convert_psi(psi[,7:ncol(psi)])
 #' }
 convert_psi <- function(t) {
   stopifnot(ncol(t) %% 2 == 0)
