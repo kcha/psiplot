@@ -4,10 +4,12 @@
 \alias{get_beta_ci_subg}
 \title{Calculate conficence intervals for error bars of subgrouped samples.}
 \usage{
-get_beta_ci_subg(q)
+get_beta_ci_subg(v, q)
 }
 \arguments{
-\item{q}{Data frame with quality scores of an event}
+\item{v}{Numeric vector with PSI values of samples in a subgroup.}
+
+\item{q}{Character vector with the quality scores string of samples in a subgroup.}
 }
 \description{
 Helper function to filter and return confidence intervals based

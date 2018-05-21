@@ -67,13 +67,11 @@ get_beta_ci <- function(q) {
 #' new joint beta distribution. The joint beta is then sampled again to obtain
 #' confidence intervals for the subgroup.
 #'
-#' @param q Data frame with quality scores of an event
+#' @param v Numeric vector with PSI values of samples in a subgroup.
+#' @param q Character vector with the quality scores string of samples in a subgroup.
 get_beta_ci_subg <- function(v,q) {
-  print(v)
-  print(q)
   parameters <- sapply(q, function(x) parseQual(as.character(x)),USE.NAMES = F)
   parameters[,is.na(v)] <- NA
-  print(parameters)
 
   if(ncol(parameters) == 1){
     newCIs <- betaCISample(alpha = parameters[1,], beta = parameters[2,])
@@ -100,26 +98,5 @@ get_beta_ci_subg <- function(v,q) {
   }
 
   newcis <- list(betaCI(newCIs) * 100)
-  print(newcis)
   return(newcis)
-
-  # browser()
-  # CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
-  #                                                                 parameters[2,j]))
-  # CIpool <- do.call("c",CIsamples)
-  #
-  # smean <- mean(CIpool,na.rm = T)
-  # svar <- stats::var(CIpool,na.rm = T)
-  # const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
-  # a_mom <- smean*const_mom #alpha estimate with method of moments
-  # b_mom <- (1-smean)*const_mom #beta estimate with method of moments
-  #
-  # fittedparams <- tryCatch(
-  #  MASS::fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
-  #  error= function(e) list("estimate"=c(NA,NA)))
-  #
-  #
-  # newCIs <- stats::rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
-  # ci <- betaCI(newCIs) * 100
-  # return(ci)
 }

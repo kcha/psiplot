@@ -10,8 +10,10 @@ convert_psi(t, qual = c("VLOW", "N", "LOW", "OK", "SOK"))
 \item{t}{Original PSI plus quality scores data frame WITHOUT the exon
 metadata columns}
 
-\item{qual}{String indicating the minimun vast-tools quality score for the PSI
-to be accepted. Defaults to \code{'VLOW'}.}
+\item{qual}{String indicating the minimun \emph{vast-tools} quality score
+for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+\href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+documentation} for details.}
 }
 \value{
 Data frame with the same dimensions as \emph{t} and low/bad quality P

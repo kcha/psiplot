@@ -107,13 +107,11 @@ plot_multievent <- function(
   }
 
   # Format input
-  browser()
   x <- format_table(x,
                     qual = qual,
                     trim_colnames = trim_colnames,
                     short_ids = T)
 
-  browser()
   reordered <- preprocess_sample_colors(x,
                                         config,
                                         subg = subg,
@@ -298,7 +296,6 @@ plot_multievent <- function(
     gp <- gp + guides(colour=show_event_legend)
   }
 
-  browser()
   return(gp)
 
 }

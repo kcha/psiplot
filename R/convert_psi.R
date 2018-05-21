@@ -28,7 +28,7 @@ convert_psi <- function(t,qual = c("VLOW","N","LOW","OK","SOK")) {
   min_qual <- which(qual_vector==qual)
 
   for (i in seq(1, ncol(psi), 2)) {
-    cov <- apply(psi[,i+1],
+    cov <- apply(as.matrix(psi[,i+1]),
                  1,
                  function(x) unlist(strsplit(x,split=",",fixed = T))[[1]])
     cov <- match(cov,qual_vector)

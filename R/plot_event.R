@@ -247,7 +247,7 @@ plot_event <- function(
                                  ymin=lo,
                                  ymax=hi,
                                  colour=GroupName),
-                             width=0.05,
+                             width=0.1,
                              show.legend = F)
   }
 
