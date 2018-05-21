@@ -272,7 +272,6 @@ plot_event <- function(
     gp <- gp + theme(panel.grid = element_blank())
   }
 
-  browser()
   return(gp)
 }
 
