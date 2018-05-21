@@ -107,11 +107,13 @@ plot_multievent <- function(
   }
 
   # Format input
+  browser()
   x <- format_table(x,
                     qual = qual,
                     trim_colnames = trim_colnames,
                     short_ids = T)
 
+  browser()
   reordered <- preprocess_sample_colors(x,
                                         config,
                                         subg = subg,
@@ -153,59 +155,39 @@ plot_multievent <- function(
     group_by(ID) %>%
     gather(key="SampleName",
            -ID,
-           value="value")
+           value="qual")
 
-  if(subg) {
 
-    #Pool samples according to subgroups in reordered
-    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
-    smqual <- left_join(mqual,reordered$subgroup,by="SampleName")
+  #Pool samples according to subgroups in reordered
+  sm <- left_join(mdata,mqual,by=c("ID","SampleName")) %>%
+    left_join(reordered$subgroup,by="SampleName")
 
-    smsum <- sm %>%
-      dplyr::group_by(ID,SubgroupName) %>%
-      dplyr::summarise(value=mean(value,na.rm=T)) %>%
-      mutate(value=replace(value,is.na(value),NA)) %>%
-      dplyr::select(ID,SubgroupName,value)
+  smsum <- sm %>%
+    dplyr::group_by(ID,SubgroupName)
 
-    if(errorbar){
-      smsumqual <- smqual %>%
-        dplyr::group_by(ID,SubgroupName) %>%
-        do(ci=get_beta_ci_subg(.$value)) %>%
-        ungroup() %>%
-        mutate("lo"=map_dbl(ci,1),
-               "hi"=map_dbl(ci,2)) %>%
-        dplyr::select(ID,SubgroupName,lo,hi)
-
-      smsum <- left_join(smsum,
-                         smsumqual,
-                         by=c("ID","SubgroupName")) %>%
-        mutate(lo = replace(lo,is.na(value),NA),
-               hi = replace(hi,is.na(value),NA))
-
-    }
-
-  } else{
-    #Do not pool samples, but come up with a similar data frame as if there were
-    #subgroups
-    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
-    smqual <- left_join(mqual,reordered$subgroup,by="SampleName")
-
-    smsum <- sm %>%
-      dplyr::select(ID,SubgroupName,value)
-
-    smsumqual <- smqual %>%
-      group_by_all() %>%
-      do(ci=get_beta_ci(.$value)) %>%
+  if(errorbar){
+    smsum <- smsum %>%
+      do(m_psi = mean(.$value,na.rm=T),
+         ci = get_beta_ci_subg(.$value,.$qual)) %>%
       ungroup() %>%
-      mutate("lo"=map_dbl(ci,1),
-             "hi"=map_dbl(ci,2)) %>%
-      dplyr::select(ID,SubgroupName,lo,hi)
-
-    smsum <- left_join(smsum,
-                       smsumqual,
-                       by=c("ID","SubgroupName")) %>%
-      mutate(lo = replace(lo,is.na(value),NA),
-             hi = replace(hi,is.na(value),NA))
+      mutate(m_psi = map_dbl(m_psi,1),
+             ci = map(ci,1),
+             lo = map_dbl(ci,1),
+             hi = map_dbl(ci,2)) %>%
+      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+      select(ID,
+             SubgroupName,
+             value = m_psi,
+             lo,hi)
+  } else {
+    smsum <- smsum %>%
+      do(m_psi = mean(.$value,na.rm=T)) %>%
+      ungroup() %>%
+      mutate(m_psi = map_dbl(m_psi,1)) %>%
+      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+      select(ID,
+             SubgroupName,
+             value = m_psi)
   }
 
 
@@ -316,6 +298,7 @@ plot_multievent <- function(
     gp <- gp + guides(colour=show_event_legend)
   }
 
+  browser()
   return(gp)
 
 }

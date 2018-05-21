@@ -32,7 +32,7 @@ betaCI <- function(betaDist, percentile = c(0.05, 0.95)) {
 #Sample from a beta distribution given the shape parameters
 betaCISample <- function(alpha, beta, n = 5000) {
   if (is.na(alpha) || is.na(beta)) {
-    sample <- NA
+    sample <- c(NA,NA)
   } else {
     set.seed(79)
     sample <- stats::rbeta(n, alpha, beta)
@@ -68,24 +68,58 @@ get_beta_ci <- function(q) {
 #' confidence intervals for the subgroup.
 #'
 #' @param q Data frame with quality scores of an event
-get_beta_ci_subg <- function(q) {
+get_beta_ci_subg <- function(v,q) {
+  print(v)
+  print(q)
   parameters <- sapply(q, function(x) parseQual(as.character(x)),USE.NAMES = F)
-  CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
-                                                                  parameters[2,j]))
-  CIpool <- do.call("c",CIsamples)
+  parameters[,is.na(v)] <- NA
+  print(parameters)
 
-  smean <- mean(CIpool,na.rm = T)
-  svar <- stats::var(CIpool,na.rm = T)
-  const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
-  a_mom <- smean*const_mom #alpha estimate with method of moments
-  b_mom <- (1-smean)*const_mom #beta estimate with method of moments
+  if(ncol(parameters) == 1){
+    newCIs <- betaCISample(alpha = parameters[1,], beta = parameters[2,])
+  } else {
+    CIsamples <- lapply(1:ncol(parameters),
+                        function(j) betaCISample(parameters[1,j],
+                                                 parameters[2,j]))
+    CIpool <- do.call("c",CIsamples)
+    CIpool <- CIpool[is.na(CIpool)]
 
-  fittedparams <- tryCatch(
-   MASS::fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
-   error= function(e) list("estimate"=c(NA,NA)))
+    smean <- mean(CIpool,na.rm = T)
+    svar <- stats::var(CIpool,na.rm = T)
+    const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
+    a_mom <- smean*const_mom #alpha estimate with method of moments
+    b_mom <- (1-smean)*const_mom #beta estimate with method of moments
 
+    fittedparams <- tryCatch(
+      MASS::fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
+      error= function(e) list("estimate"=c(NA,NA)))
 
-  newCIs <- stats::rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
-  ci <- betaCI(newCIs) * 100
-  return(ci)
+    newCIs <- betaCISample(alpha = fittedparams$estimate[1],
+                           beta = fittedparams$estimate[2])
+
+  }
+
+  newcis <- list(betaCI(newCIs) * 100)
+  print(newcis)
+  return(newcis)
+
+  # browser()
+  # CIsamples <- lapply(1:ncol(parameters),function(j) betaCISample(parameters[1,j],
+  #                                                                 parameters[2,j]))
+  # CIpool <- do.call("c",CIsamples)
+  #
+  # smean <- mean(CIpool,na.rm = T)
+  # svar <- stats::var(CIpool,na.rm = T)
+  # const_mom <- smean*(1-smean)/(svar^2) - 1 #constant part of alpha and beta estimates
+  # a_mom <- smean*const_mom #alpha estimate with method of moments
+  # b_mom <- (1-smean)*const_mom #beta estimate with method of moments
+  #
+  # fittedparams <- tryCatch(
+  #  MASS::fitdistr(CIpool,"beta",list(shape1=a_mom, shape2=b_mom)),
+  #  error= function(e) list("estimate"=c(NA,NA)))
+  #
+  #
+  # newCIs <- stats::rbeta(5000,fittedparams$estimate[1],fittedparams$estimate[2])
+  # ci <- betaCI(newCIs) * 100
+  # return(ci)
 }

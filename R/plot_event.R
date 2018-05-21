@@ -178,61 +178,40 @@ plot_event <- function(
                                  value = "value"))
   mqual <- suppressMessages(gather(qual,
                                  key = "SampleName",
-                                 value = "value"))
+                                 value = "qual"))
 
 
-  if(subg){
-    #Pool samples according to subgroups using the info in reordered
-    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
-    smqual <- left_join(mqual,reordered$subgroup,by="SampleName")
+  # Pool samples according to subgroups using the info in reordered
+  # (Subgroups equal to samples if subg == F anyway)
+  sm <- left_join(mdata,mqual,by="SampleName") %>%
+    left_join(reordered$subgroup,by="SampleName")
 
-    smsum <- sm %>%
-      dplyr::group_by(SubgroupName) %>%
-      dplyr::summarise(value=mean(value,na.rm=T)) %>%
-      mutate(value=replace(value,is.na(value),NA)) %>%
-      dplyr::select(SubgroupName,value)
 
-    if (errorbar) {
-      smsumqual <- smqual %>%
-        dplyr::group_by(SubgroupName) %>%
-        do(ci=get_beta_ci_subg(.$value)) %>%
-        ungroup() %>%
-        mutate("lo"=map_dbl(ci,1),
-               "hi"=map_dbl(ci,2)) %>%
-        dplyr::select(SubgroupName,lo,hi)
+  smsum <- sm %>%
+    dplyr::group_by(SubgroupName)
 
-      smsum <- left_join(smsum,
-                         smsumqual,
-                         by="SubgroupName") %>%
-        mutate(lo = replace(lo,is.na(value),NA),
-               hi = replace(hi,is.na(value),NA))
-
-      }
-
-  } else{
-    #Do not pool the samples, but come up with a similar data frame as if
-    #there were subgroups
-    sm <- left_join(mdata,reordered$subgroup,by="SampleName")
-    smqual <- left_join(mqual,reordered$subgroup,by="SampleName")
-
-    smsum <- sm %>%
-      dplyr::select(SubgroupName,value)
-
-    smsumqual <- smqual %>%
-      group_by_all() %>%
-      do(ci=get_beta_ci(.$value)) %>%
+  if(errorbar){
+    smsum <- smsum %>%
+      do(m_psi = mean(.$value,na.rm=T),
+         ci = get_beta_ci_subg(.$value,.$qual)) %>%
       ungroup() %>%
-      mutate("lo"=map_dbl(ci,1),
-             "hi"=map_dbl(ci,2)) %>%
-      dplyr::select(SubgroupName,lo,hi)
-
-    smsum <- left_join(smsum,
-                       smsumqual,
-                       by="SubgroupName") %>%
-      mutate(lo = replace(lo,is.na(value),NA),
-             hi = replace(hi,is.na(value),NA))
-
-  }
+      mutate(m_psi = map_dbl(m_psi,1),
+             ci = map(ci,1),
+             lo = map_dbl(ci,1),
+             hi = map_dbl(ci,2)) %>%
+      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+      select(SubgroupName,
+             value = m_psi,
+             lo,hi)
+  } else {
+    smsum <- smsum %>%
+      do(m_psi = mean(.$value,na.rm=T)) %>%
+      ungroup() %>%
+      mutate(m_psi = map_dbl(m_psi,1)) %>%
+      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+      select(SubgroupName,
+             value = m_psi)
+    }
 
   smsum <- left_join(reordered$subgroup_order,smsum,by="SubgroupName") %>%
     dplyr::arrange(SubgroupOrder)
@@ -293,6 +272,7 @@ plot_event <- function(
     gp <- gp + theme(panel.grid = element_blank())
   }
 
+  browser()
   return(gp)
 }
 

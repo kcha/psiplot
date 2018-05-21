@@ -97,6 +97,7 @@ format_table <- function(x,
   }
 
   # Extract PSIs
+
   r <- convert_psi(x[,7:ncol(x)],qual=qual)
 
   r <- r %>% mutate(ID=id) %>%

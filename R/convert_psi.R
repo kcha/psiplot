@@ -13,6 +13,8 @@
 #' documentation} for details.
 #' @return Data frame with the same dimensions as \emph{t} and low/bad quality P
 #' SI values converted to \code{NA}
+#' @import dplyr
+#' @importFrom magrittr "%>%"
 #' @examples
 #' \dontrun{
 #' psiplot:::convert_psi(psi[,7:ncol(psi)])
@@ -26,10 +28,10 @@ convert_psi <- function(t,qual = c("VLOW","N","LOW","OK","SOK")) {
   min_qual <- which(qual_vector==qual)
 
   for (i in seq(1, ncol(psi), 2)) {
-    cov <- strsplit(as.character(psi[,i+1]), split = ",")
-    cov <- sapply(cov, "[", 1)
+    cov <- apply(psi[,i+1],
+                 1,
+                 function(x) unlist(strsplit(x,split=",",fixed = T))[[1]])
     cov <- match(cov,qual_vector)
-
     na <- which(cov < min_qual)
     if (length(na) > 0)
       psi[na, i] <- NA
