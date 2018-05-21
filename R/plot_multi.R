@@ -36,6 +36,10 @@
 #' @param trim_colnames String that must be searched for and trimmed at the end
 #' of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
 #' tables. If no string must be trimmed, leave as \code{FALSE}.
+#' @param qual String indicating the minimun \emph{vast-tools} quality score
+#' for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+#' \href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+#' documentation} for details.
 #' @param xlab The x-axis label
 #' @param ylab The y-axis label
 #' @param title Title of the plot
@@ -72,7 +76,8 @@
 #' # Working with expression tables with read counts and suffixes
 #' plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
 plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE,
-                       trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
+                       trim_colnames = FALSE, qual = c("VLOW","N","LOW","OK","SOK"),
+                       counts = FALSE, xlab = "", ylab = "",
                        title = "", cluster_rows = TRUE,
                        cluster_cols = ifelse(is.null(config), TRUE, FALSE),
                        fill = NULL, usepkg = c("ggplot2","gplots","pheatmap"),
@@ -84,6 +89,7 @@ plot_multi <- function(df, config = NULL, subg = TRUE, expr = FALSE,
 
   # Format input
   formatted_df <- format_table(df,
+                               qual = qual,
                                expr = expr,
                                counts = counts,
                                trim_colnames = trim_colnames,

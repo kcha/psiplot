@@ -4,11 +4,14 @@
 \alias{convert_psi}
 \title{Convert low/bad quality PSI values to NA}
 \usage{
-convert_psi(t)
+convert_psi(t, qual = c("VLOW", "N", "LOW", "OK", "SOK"))
 }
 \arguments{
 \item{t}{Original PSI plus quality scores data frame WITHOUT the exon
 metadata columns}
+
+\item{qual}{String indicating the minimun vast-tools quality score for the PSI
+to be accepted. Defaults to \code{'VLOW'}.}
 }
 \value{
 Data frame with the same dimensions as \emph{t} and low/bad quality P

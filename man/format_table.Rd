@@ -4,8 +4,8 @@
 \alias{format_table}
 \title{Format input event data}
 \usage{
-format_table(x, expr = FALSE, counts = FALSE, trim_colnames = NULL,
-  short_ids = FALSE)
+format_table(x, qual = c("VLOW", "N", "LOW", "OK", "SOK"), expr = FALSE,
+  counts = FALSE, trim_colnames = NULL, short_ids = FALSE)
 }
 \arguments{
 \item{x}{A data frame of event data as outputted by \code{vast-tools combine}.
@@ -13,6 +13,11 @@ e.g. each row is an event containing exon metadata, PSI and quality scores
 values. If \code{expr = TRUE}, then each row is a gene containing two columns
 of metadata, one column of cRPKM per sample, and, optionally, a second column
 per sample with read counts.}
+
+\item{qual}{String indicating the minimun \emph{vast-tools} quality score
+for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+\href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+documentation} for details.}
 
 \item{expr}{Set to \code{TRUE} if formatting a cRPKM table. Otherwise,
 \code{FALSE}.}

@@ -5,10 +5,10 @@
 \title{Plot multiple events or genes as a heatmap (experimental)}
 \usage{
 plot_multi(df, config = NULL, subg = TRUE, expr = FALSE,
-  trim_colnames = FALSE, counts = FALSE, xlab = "", ylab = "",
-  title = "", cluster_rows = TRUE, cluster_cols = ifelse(is.null(config),
-  TRUE, FALSE), fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"),
-  ...)
+  trim_colnames = FALSE, qual = c("VLOW", "N", "LOW", "OK", "SOK"),
+  counts = FALSE, xlab = "", ylab = "", title = "",
+  cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
+  fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"), ...)
 }
 \arguments{
 \item{df}{A data frame of input values (PSI or cRPKM). If the latter, need to
@@ -25,6 +25,11 @@ file.}
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
 tables. If no string must be trimmed, leave as \code{FALSE}.}
+
+\item{qual}{String indicating the minimun \emph{vast-tools} quality score
+for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+\href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+documentation} for details.}
 
 \item{counts}{Logical indicating whether the data frame contains read counts.
 Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and

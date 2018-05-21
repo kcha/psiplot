@@ -34,6 +34,10 @@
 #' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_event} multiple times.
 #' @param subg Logical indicating whether samples should be subgrouped for plotting.
+#' @param qual String indicating the minimun \emph{vast-tools} quality score
+#' for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+#' \href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+#' documentation} for details.
 #' @param errorbar Logical indicating whether error bars should be drawn
 #' @param col Vector of colors with length matching the number of samples. If
 #' specified, this will override the color settings specified in \code{config}.
@@ -91,7 +95,8 @@
 #' }
 #'
 plot_multievent <- function(
-  x, config = NULL,  subg = TRUE, trim_colnames = NULL, errorbar = TRUE,
+  x, config = NULL,  subg = TRUE, trim_colnames = NULL,
+  qual = c("VLOW","N","LOW","OK","SOK"), errorbar = TRUE,
   col = NULL,  event_col = NULL, title = "MULTI EVENT PLOT", xlab = "",
   ylab = "PSI", ylim = c(0,100), cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
   pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE, lwd=0.5,
@@ -102,7 +107,10 @@ plot_multievent <- function(
   }
 
   # Format input
-  x <- format_table(x,trim_colnames = trim_colnames,short_ids = T)
+  x <- format_table(x,
+                    qual = qual,
+                    trim_colnames = trim_colnames,
+                    short_ids = T)
 
   reordered <- preprocess_sample_colors(x,
                                         config,

@@ -5,10 +5,10 @@
 \title{Plot PSI values of multiple alternative splicing events}
 \usage{
 plot_multievent(x, config = NULL, subg = TRUE, trim_colnames = NULL,
-  errorbar = TRUE, col = NULL, event_col = NULL,
-  title = "MULTI EVENT PLOT", xlab = "", ylab = "PSI", ylim = c(0, 100),
-  cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
-  cex.pch = 3, plot = NULL, gridlines = TRUE, lwd = 0.5,
+  qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE, col = NULL,
+  event_col = NULL, title = "MULTI EVENT PLOT", xlab = "", ylab = "PSI",
+  ylim = c(0, 100), cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE, lwd = 0.5,
   show_event_legend = T, show_group_legend = T)
 }
 \arguments{
@@ -22,6 +22,11 @@ file. Use the latter option if you are calling \code{plot_event} multiple times.
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.}
+
+\item{qual}{String indicating the minimun \emph{vast-tools} quality score
+for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+\href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+documentation} for details.}
 
 \item{errorbar}{Logical indicating whether error bars should be drawn}
 

@@ -8,6 +8,10 @@
 #' values. If \code{expr = TRUE}, then each row is a gene containing two columns
 #' of metadata, one column of cRPKM per sample, and, optionally, a second column
 #' per sample with read counts.
+#' @param qual String indicating the minimun \emph{vast-tools} quality score
+#' for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
+#' \href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
+#' documentation} for details.
 #' @param expr Set to \code{TRUE} if formatting a cRPKM table. Otherwise,
 #' \code{FALSE}.
 #' @param counts Set to \code{TRUE} if the cRPKM table has read counts. Otherwise,
@@ -46,10 +50,12 @@
 #' format_table(psi,short_ids = TRUE)
 #'
 format_table <- function(x,
+                         qual = c("VLOW","N","LOW","OK","SOK"),
                          expr = FALSE,
                          counts = FALSE,
                          trim_colnames = NULL,
                          short_ids = FALSE) {
+
   if (expr) {
     if (!grepl("^ID$", colnames(x)[1])) {
       stop("Invalid column names. Does your input file contain the correct header?")
@@ -91,7 +97,7 @@ format_table <- function(x,
   }
 
   # Extract PSIs
-  r <- convert_psi(x[,7:ncol(x)])
+  r <- convert_psi(x[,7:ncol(x)],qual=qual)
 
   r <- r %>% mutate(ID=id) %>%
     select(ID,colnames(r))
