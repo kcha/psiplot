@@ -145,7 +145,7 @@ config
 
 -   **Order**: The ordering of the samples from left to right.
 -   **SampleName**: Name of the sample. MUST match sample name in input table.
--   **SubgroupName (Optional)**: Subgroup name. Use for plotting the average PSI of samples belonging to the same subgroup INSTEAD of the individual samples (disable by setting `subg=FALSE`, or using config files without this column). See \[Sample subgroups\] for more details.
+-   **SubgroupName (Optional)**: Subgroup name. Use for plotting the average PSI of samples belonging to the same subgroup INSTEAD of the individual samples (disable by setting `subg=FALSE`, or using config files without this column). See [Subgrouping samples](#subgrouping-samples) for more details.
 -   **GroupName**: Group name. Use for plotting the average PSI of samples belonging to the same group (enable by setting `groupmean=TRUE`).
 -   **RColorCode**: An R color specification:
     1.  color name (as specified by `colors()`).
