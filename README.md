@@ -186,7 +186,7 @@ The possible values for this score are, from worse to better: `N`, `VLOW`, `LOW`
 
 #### Subgrouping samples
 
-The `subg` argument allows pooling samples into subgroups if there is a **SubgroupName** column included in the supplied `config` file (see [Customizing plots](#customizing-plots)). The PSI of a subgroup is the mean of the PSIs of its individual samples, after filtering out the samples with quality score below the threshold indicated by `qual` (see \[Filter samples by quality score\]).
+The `subg` argument allows pooling samples into subgroups if there is a **SubgroupName** column included in the supplied `config` file (see [Customizing plots](#customizing-plots)). The PSI of a subgroup is the mean of the PSIs of its individual samples, after filtering out the samples with quality score below the threshold indicated by `qual` (see [Filtering samples by quality score](#filtering-samples-by-quality-score)).
 
 ``` r
 plot_event(psi[1,], config = config, subg = TRUE)

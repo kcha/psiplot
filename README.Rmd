@@ -222,7 +222,7 @@ The `subg` argument allows pooling samples into subgroups if there is a **Subgro
 column included in the supplied `config` file (see [Customizing plots]). The PSI
 of a subgroup is the mean of the PSIs of its individual samples, after filtering
 out the samples with quality score below the threshold indicated by `qual`
-(see [Filter samples by quality score]).
+(see [Filtering samples by quality score]).
 
 ```{r plot_event_subg, eval=TRUE, warning=FALSE}
 plot_event(psi[1,], config = config, subg = TRUE)
