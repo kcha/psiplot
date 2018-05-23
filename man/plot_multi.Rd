@@ -4,7 +4,7 @@
 \alias{plot_multi}
 \title{Plot multiple events or genes as a heatmap (experimental)}
 \usage{
-plot_multi(df, config = NULL, subg = TRUE, expr = FALSE,
+plot_multi(df, config = NULL, subg = FALSE, expr = FALSE,
   trim_colnames = FALSE, qual = c("VLOW", "N", "LOW", "OK", "SOK"),
   counts = FALSE, xlab = "", ylab = "", title = "",
   cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
@@ -68,8 +68,8 @@ packages are supported including:  \code{\link[pheatmap]{pheatmap}}
 Input is similar to \code{\link{plot_event}}, \code{\link{plot_expr}}, or
 \code{\link{plot_multievent}}. Subgrouping of samples is also supported (see
 \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for details
-on subgrouping). The PSI for each subgroup is taken as the average of all the
-samples in the subgroup.
+on subgrouping). If subgroups are activated, the PSI for each subgroup is taken
+as the average of all the samples in the subgroup.
 
 If \code{cluster_rows = TRUE}, then a hierarchical clustering using \code{hclust}
 will be performed on a distance matrix computed by \code{dist}. If \code{config}
@@ -82,16 +82,19 @@ uses the "YlOrRd" color brewer palette.
 \examples{
 # Uses ggplot2 by default
 plot_multi(psi)
-plot_multi(psi, config = config, subg = FALSE)
+plot_multi(psi, config = config)
 
 # Use expr = TRUE for cRPKMs
-plot_multi(crpkm, subg = FALSE, expr = TRUE)
-plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE)
-plot_multi(crpkm, config = config, subg = FALSE, expr = TRUE, cluster_rows = TRUE)
+plot_multi(crpkm, expr = TRUE)
+plot_multi(crpkm, config = config, expr = TRUE)
+plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 
 # To use ggplot2 (or if gplots is not installed)
-plot_multi(psi, config = config, subg = FALSE, usepkg = "ggplot2")
+plot_multi(psi, config = config, usepkg = "ggplot2")
 
-# Working with expression tables with read counts and suffixes
+# To enable sample subgroups, set subg = TRUE
+plot_multi(psi, config = config, subg = TRUE)
+
+# Working with expression tables with read counts and suffixes, enabling subgroups
 plot_multi(crpkm_counts, config = config, expr = TRUE, trim_colnames = "-cRPKM", counts = TRUE)
 }

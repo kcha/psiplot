@@ -4,7 +4,7 @@
 \alias{plot_event}
 \title{Plot PSI values of a given alternative splicing event}
 \usage{
-plot_event(x, config = NULL, subg = TRUE, trim_colnames = NULL,
+plot_event(x, config = NULL, subg = FALSE, trim_colnames = NULL,
   qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
@@ -96,8 +96,8 @@ If subgroups are defined in \code{config} and \code{subg=TRUE}:
   samples, and assigned to the first group to which they are matched.}
   }
 
-If no subgroups are defined in \code{config}, or \code{subg=FALSE}, a subgroup
-will be defined for each sample, preserving their name and order.
+If no subgroups are defined in \code{config}, or \code{subg=FALSE} (default),
+a subgroup will be defined for each sample, preserving their name and order.
 
 If groups and colors are defined in \code{config}, all the samples in a group
 will be colored with the first color assigned to the group. Else, all

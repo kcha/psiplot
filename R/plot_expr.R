@@ -24,9 +24,9 @@
 #' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_expr} multiple times.
 #' @param subg Logical indicating whether samples should be subgrouped for plotting.
-#' The average of all samples in a subgroup is plotted as a single data point.
-#' See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for more
-#' details on subgrouping.
+#' If \code{TRUE}, the average of all samples in a subgroup is plotted as a single
+#' data point. See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
+#' for more details on subgrouping.
 #' @param counts Logical indicating whether the data frame contains read counts.
 #' Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
 #' counts), otherwise leave as \code{FALSE} (default).
@@ -84,7 +84,7 @@
 #' plot_expr(crpkm_counts[1,], config = config, trim_colnames = "-cRPKM", counts = TRUE)
 #'
 plot_expr <- function(
-  x, config = NULL, subg = TRUE, trim_colnames = NULL, counts= FALSE,
+  x, config = NULL, subg = FALSE, trim_colnames = NULL, counts= FALSE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,

@@ -4,7 +4,7 @@
 \alias{plot_multievent}
 \title{Plot PSI values of multiple alternative splicing events}
 \usage{
-plot_multievent(x, config = NULL, subg = TRUE, trim_colnames = NULL,
+plot_multievent(x, config = NULL, subg = FALSE, trim_colnames = NULL,
   qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE, col = NULL,
   event_col = NULL, title = "MULTI EVENT PLOT", xlab = "", ylab = "PSI",
   ylim = c(0, 100), cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -85,7 +85,7 @@ See Details of \code{\link{plot_event}} and
 \code{\link{preprocess_sample_colors}} for more information on the usage of
 the \code{config}, \code{subg}, and \code{errorbar} arguments.
 
-However, unlike in \code{\link{plot_event}} and \code{\link{plot_expr}},
+Unlike in \code{\link{plot_event}} and \code{\link{plot_expr}},
 sample colors in \code{config} or \code{col} are now shown only in the
 background, as the point colors are now used to differentiate PSI values from
 different events. In addition, a line connects the points from each event, to
@@ -99,21 +99,21 @@ for some subgroups, especially for events with low coverage and PSI values near
 for subgrouped samples).
 }
 \examples{
-plot_multievent(psi, config = config, subg = FALSE, errorbar = FALSE)
+plot_multievent(psi, config = config)
 
-# Example with subgrouped samples and custom title
+# Example with subgrouped samples, custom title and no error bars
 plot_multievent(psi, config = config, subg = TRUE, errorbar = FALSE, title = "Highlighted events")
 
 # Legends can be hidden separately
-plot_multievent(psi, config = config, errorbar = FALSE, show_event_legend = FALSE)
-plot_multievent(psi, config = config, errorbar = FALSE, show_group_legend = FALSE)
+plot_multievent(psi, config = config, show_event_legend = FALSE)
+plot_multievent(psi, config = config, show_group_legend = FALSE)
 
-# Custom colors
-plot_multievent(psi[1:3,], config = config, errorbar = FALSE, event_col=c("red","black","orange"))
+# Custom event colors
+plot_multievent(psi[1:3,], config = config, event_col=c("red","black","orange"))
 
 # Use of errobar = TRUE and subg = TRUE is experimental and computationally expensive
 \dontrun{
-plot_multievent(psi, config = config)
+plot_multievent(psi, config = config, subg = TRUE, errorbar = TRUE)
 }
 
 }

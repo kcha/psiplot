@@ -4,7 +4,7 @@
 \alias{plot_expr}
 \title{Plot cRPKM values of a given gene}
 \usage{
-plot_expr(x, config = NULL, subg = TRUE, trim_colnames = NULL,
+plot_expr(x, config = NULL, subg = FALSE, trim_colnames = NULL,
   counts = FALSE, groupmean = ifelse(is.null(config), FALSE, TRUE),
   col = NULL, title = NULL, xlab = "", ylab = "Expression (cRPKM)",
   ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -19,9 +19,9 @@ a path to the \code{.config} file, or 4/5-column data frame of the \code{.config
 file. Use the latter option if you are calling \code{plot_expr} multiple times.}
 
 \item{subg}{Logical indicating whether samples should be subgrouped for plotting.
-The average of all samples in a subgroup is plotted as a single data point.
-See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}} for more
-details on subgrouping.}
+If \code{TRUE}, the average of all samples in a subgroup is plotted as a single
+data point. See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
+for more details on subgrouping.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
