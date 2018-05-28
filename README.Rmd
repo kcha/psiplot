@@ -52,7 +52,7 @@ psi <- read.table("INCLUSION_LEVELS_FULL-Mmu53.tab", header = TRUE, sep = "\t",
 ```
 
 To plot a single splicing event, use the command `plot_event`. In this example,
-we use the provided sample dataset `psi` and optional sample [configuration](https://htmlpreview.github.io/?https://github.com/kcha/psiplot/r/blob/master/vignettes/psiplot-usage.html#customizing-plots) table `config`:
+we use the provided sample dataset `psi` and optional sample [configuration](https://htmlpreview.github.io/?https://github.com/kcha/psiplot/blob/master/vignettes/psiplot-usage.html#customizing-plots) table `config`:
 
 ```{r plot_event}
 library(psiplot)
@@ -69,7 +69,7 @@ plot_multievent(psi[c(1,2),], config = config, event_col = c("black", "red"))
 
 ### Vignette
 
-See this [vignette](https://htmlpreview.github.io/?https://github.com/kcha/psiplot/r/blob/master/vignettes/psiplot-usage.html) for more detailed usage, including how to customize psiplots
+See this [vignette](https://htmlpreview.github.io/?https://github.com/kcha/psiplot/blob/master/vignettes/psiplot-usage.html) for more detailed usage, including how to customize psiplots
 using a configuration file.
 
 ## Issues
