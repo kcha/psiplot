@@ -1,3 +1,13 @@
+# Version 2.2.0
+
+- Support for sample subgroups in all plot functions, through the config files. PSIs of samples in a subgroup are averaged and displayed as a single data point. Confidence intervals are computed by fitting a joint beta distribution to a population of points sampled from beta distributions coming from the individual samples, and then applying the same method as for single samples.
+- Support for plotting multiple events in the same PSI plot, with events identified with different colours, and samples identified by the color background.
+- Support for sample columns containing suffixes (e.g. "Sample1-cRPKM", while the config says only "Sample1").
+- Support for gene expression tables containing both cRPKM and raw read counts (similar to the PSI and QC columns for events).
+- Big changes in the preprocess_sample_colors function and its output, to allow for all this.
+- Use of dplyr (and tidyverse in general) instead of plyr.
+- README contents moved to vignette
+
 # Version 2.1.2
 
 - Fixed bug that occurs when dealing with columns that are all NA

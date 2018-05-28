@@ -70,8 +70,8 @@
 #' plot_multi(crpkm, config = config, expr = TRUE)
 #' plot_multi(crpkm, config = config, expr = TRUE, cluster_rows = TRUE)
 #'
-#' # To use ggplot2 (or if gplots is not installed)
-#' plot_multi(psi, config = config, usepkg = "ggplot2")
+#' # To use pheatmap or gplots for plotting, set usepgk option
+#' plot_multi(psi, config = config, usepkg = "pheatmap")
 #'
 #' # To enable sample subgroups, set subg = TRUE
 #' plot_multi(psi, config = config, subg = TRUE)
@@ -85,9 +85,6 @@ plot_multi <- function(df, config = NULL, subg = FALSE, expr = FALSE,
                        cluster_cols = ifelse(is.null(config), TRUE, FALSE),
                        fill = NULL, usepkg = c("ggplot2","gplots","pheatmap"),
                        ... ) {
-
-  message(paste("plot_multi() is under active development.",
-                "Please report bugs or feedback to https://github.com/kcha/psiplot/issues."))
   match.arg(usepkg)
 
   # Format input
