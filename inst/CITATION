@@ -18,7 +18,7 @@ citEntry(entry = "article",
     as.person("Teresa Ray\u00F3n"),
     as.person("Miguel Manzanares"),
     as.person("Julia Ponomarenko"),
-    as.person("Benjamin Blencowe"),
+    as.person("Benjamin J. Blencowe"),
     as.person("Manuel Irimia")
   ),
   title = "An atlas of alternative splicing profiles and functional associations reveals new regulatory programs and genes that simultaneously express multiple major isoforms",
@@ -26,7 +26,7 @@ citEntry(entry = "article",
   year = 2017,
   volume = "27",
   number = "10",
-  pages = "1759-1756",
+  pages = "1759-1768",
   doi = "10.1101/gr.220962.117",
   textVersion = "Tapial, J., Ha, K.C.H., Sterne-Weiler, T., Gohr, A., Braunschweig, U., Hermoso-Pulido, A., Quesnel-Valli\u00E8res, M., Permanyer, J., Sodaei, R., Marquez, Y., Cozzuto, L., Wang, X., G\u00F3mez-Vel\u00E1zquez, M., Ray\u00F3n, M., Manzanares, M., Ponomarenko, J., Blencowe, B.J., Irimia, M. (2017). An Alternative Splicing Atlas Reveals New Regulatory Programs and Genes Simultaneously Expressing Multiple Major Isoforms in Vertebrates. Genome Res, 27(10):1759-1768"
 )
