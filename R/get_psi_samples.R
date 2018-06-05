@@ -8,6 +8,7 @@
 #' the indices.
 #' @return If \code{value = TRUE}, A character vector consisting of sample names.
 #' Otherwise, a numeric vector of indices.
+#' @export
 #' @examples
 #' \dontrun{
 #' get_psi_samples(psi)
