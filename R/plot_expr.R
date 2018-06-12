@@ -109,7 +109,7 @@ plot_expr <- function(
                                         multi_col = NULL)
   crpkm <- reordered$data
 
-  subg <- all(subg=TRUE,
+  subg <- all(subg==TRUE,
               "SubgroupName" %in% colnames(reordered$original_config))
 
   if (all(is.na(crpkm))) {
