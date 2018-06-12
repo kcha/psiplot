@@ -53,7 +53,7 @@
 #'
 #' @param x A 1-row data frame containing PSI values to be plotted.
 #' @param trim_colnames String that must be searched for and trimmed at the end
-#' of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.
+#' of every sample column in x. If no string must be trimmed, leave as \code{NULL}.
 #' @param config Optional configuration settings for \code{plot_event}. Can be
 #' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_event} multiple times.

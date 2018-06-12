@@ -19,7 +19,7 @@
 #' @param x A 1-row data frame containing cRPKM values to be plotted
 #' @param trim_colnames String that must be searched for and trimmed at the end
 #' of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-#' tables. If no string must be trimmed, leave as \code{FALSE}.
+#' tables. If no string must be trimmed, leave as \code{NULL}.
 #' @param config Optional configuration settings for \code{plot_expr}. Can be
 #' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_expr} multiple times.
@@ -28,7 +28,7 @@
 #' data point. See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
 #' for more details on subgrouping.
 #' @param counts Logical indicating whether the data frame contains read counts.
-#' Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+#' Set to \code{TRUE} if the data frame contains two columns per sample (cRPKM and
 #' counts), otherwise leave as \code{FALSE} (default).
 #' @param groupmean Logical indicating whether grouped means should be drawn.
 #' Requires \code{config}.
