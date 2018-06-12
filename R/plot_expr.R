@@ -198,7 +198,7 @@ plot_expr <- function(
   } else if (subg && subg.show == "beeswarm") {
     gp <- smsum %>%
       ggplot(aes(x = Sample, y = value, color=GroupName)) +
-      ggbeeswarm::ggbeeswarm::geom_quasirandom()
+      ggbeeswarm::geom_quasirandom()
   } else {
     gp <- ggplot(smsum) +
       geom_point(aes(x=Sample,
