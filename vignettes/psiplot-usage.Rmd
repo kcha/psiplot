@@ -161,6 +161,7 @@ to the same group (enable by setting `groupmean=TRUE`).
 Optional:
 
 1. **Order**: A specific ordering of the samples from left to right of the plot. 
+When not specified, then the natural order of the config file will be used.
 1. **SubgroupName**: Subgroup name. Use for plotting the average PSI of
 samples belonging to the same subgroup INSTEAD of the individual samples (enable
 by setting `subg=TRUE`). See [Subgrouping samples] for more details.
@@ -177,8 +178,9 @@ file will be ignored. This may be useful for plotting only a subset of samples.
 - The column **Order** does not need to be in sorted order. Thus, you can change
 the ordering of your samples by simply changing the order number.
 - Colors specified in **RColorCode** can be overridden using the `col` option.
-- If **RColorCode** is not specified or if the entire column is set to `NA`, then a default ggplot2 color palette will be used for
-annotating sample groups. For example:
+- If **RColorCode** is not specified or if the entire column is set to `NA`, 
+then a default ggplot2 color palette will be used for annotating sample groups. 
+For example:
 
 ```{r warning=FALSE}
 config2 <- config
@@ -250,3 +252,59 @@ out the samples with quality score below the threshold indicated by `qual`
 ```{r plot_event_subg, eval=TRUE, warning=FALSE}
 plot_event(psi[1,], config = config, subg = TRUE)
 ```
+
+Alternatively, rather than plotting the average PSI, the individual values can
+be plotted by setting the option `subj.show` to "all" or "beeswarm" (default is
+"mean"). The latter
+uses [ggbeeswarm](https://github.com/eclarke/ggbeeswarm) to make beeswarm
+scatterplots. One limitation of beeswarm plots is that error bars cannot be
+plotted, at least to my knowledge. If error bars are needed, choose "all":
+
+```{r plot_event_subg_all, eval=TRUE, warning=FALSE}
+library(dplyr)
+config2 <- config %>% 
+  mutate(
+    SubgroupName = ifelse(Order <= 5, "Subgroup1", "Subgroup2")
+  )
+plot_event(psi[1,], config = config2, subg = TRUE, subg.show = "all")
+```
+
+To illustrate a subgrouped plot using beeswarm plots, we'll constrat a larger 
+PSI table with 100 samples:
+
+```{r plot_event_subg_beeswarm, eval=TRUE, warning=FALSE}
+set.seed(416)
+large_psi <- tibble(
+  GENE = "TEST",
+  EVENT = "HsaEx0000",
+  COORD = "chr1:100-200",
+  LENGTH = 100,
+  FullCO = "chr1:1,100-200,210",
+  COMPLEX = "S",
+  SampleName = paste0("Sample", sprintf("%0.3d", 1:100)),
+  PSI = c(rbeta(30, 10, 90), rbeta(30, 10, 11), rbeta(40, 9,2))*100,
+  Q = "OK,OK,OK,OK,S@50,50"  # dummy quality score - not used
+)
+psi_temp <- tidyr::spread(large_psi, SampleName, PSI) %>% 
+  select(-Q)
+qual_temp <- large_psi %>% 
+  mutate(SampleName = paste0(SampleName, "-Q")) %>% 
+  select(-PSI) %>% 
+  tidyr::spread(SampleName, Q)
+
+# Put everything together
+large_config <- tibble(
+  SampleName = large_psi$SampleName,
+  GroupName = c(rep("ESC", 30), rep("Muscle", 30), rep("Brain", 40)),
+  SubgroupName = c(rep("Subgroup1", 10), 
+                   rep("Subgroup2", 20), 
+                   rep("Subgroup3", 30),
+                   rep("Subgroup4", 40))
+)
+large_psi <- inner_join(psi_temp, qual_temp)
+large_psi <- large_psi[, c(names(large_psi)[1:6], 
+                           sort(names(large_psi)[7:ncol(large_psi)]))]
+
+plot_event(large_psi[1,], large_config, subg = T, subg.show = "beeswarm")
+```
+

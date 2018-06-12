@@ -85,7 +85,8 @@ plot_multi <- function(df, config = NULL, subg = FALSE, expr = FALSE,
                        cluster_cols = ifelse(is.null(config), TRUE, FALSE),
                        fill = NULL, usepkg = c("ggplot2","gplots","pheatmap"),
                        ... ) {
-  match.arg(usepkg)
+  qual = match.arg(qual)
+  usepkg = match.arg(usepkg)
 
   # Format input
   formatted_df <- format_table(df,

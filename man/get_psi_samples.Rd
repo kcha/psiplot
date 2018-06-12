@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_psi_samples.R
 \name{get_psi_samples}
 \alias{get_psi_samples}
-\title{Get samples}
+\title{Get samples from PSI input table}
 \usage{
-get_psi_samples(df, configdf = NULL, value = TRUE)
+get_psi_samples(df, config = NULL, value = TRUE)
 }
 \arguments{
 \item{df}{A data frame of PSI input values.}
 
-\item{configdf}{A 4-column data frame.}
+\item{config}{Config data frame}
 
 \item{value}{If \code{TRUE}, then returns the sample names. Otherwise, return
 the indices.}
@@ -20,6 +20,10 @@ Otherwise, a numeric vector of indices.
 }
 \description{
 Get samples from PSI input table
+}
+\details{
+When \code{config} is provided, then the samples from the \emph{SampleName}
+column are used to find the indices in the PSI table.
 }
 \examples{
 \dontrun{

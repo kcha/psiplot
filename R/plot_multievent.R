@@ -106,6 +106,8 @@ plot_multievent <- function(
     warning("The option 'plot' has been deprecated")
   }
 
+  qual = match.arg(qual)
+
   # Format input
   x <- format_table(x,
                     qual = qual,

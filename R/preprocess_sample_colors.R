@@ -130,6 +130,9 @@ preprocess_sample_colors <- function(data,
                                      expr = FALSE,
                                      col = NULL,
                                      multi_col = NULL) {
+  if (colnames(data)[1] != "ID") {
+    stop("Input data may be invalid. Check that format_table() was executed first.")
+  }
 
   R <- list()
   N <- ifelse(expr, ncol(data) - 1, (ncol(data) - 1) / 2)
@@ -173,7 +176,7 @@ preprocess_sample_colors <- function(data,
     }
 
     if (!"Order" %in% colnames(config)) {
-      config$Order <- seq(1:N)
+      config$Order <- seq(1:nrow(config))
     }
 
     #To use the subgroups in the config, the column must be there and subg==T
