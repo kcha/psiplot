@@ -1,10 +1,10 @@
 # Version 2.3.0
-- The columns **Order** and **RColorCode** in the configuration (e.g. `config`) is now optional.
+- The columns **Order** and **RColorCode** in the configuration file are now optional.
 Only columns **SampleName** and **GroupName** are mandatory.
 This should simplify the minimum requirements needed to create a functional config.
-  - Without **Order**, then the order defaults to 1 to N where 1 is the first row of the config
+  - Without **Order**, the order defaults to 1,2,...,N where 1 is the first row of the config
   and N is the last row.
-  - Without **RColorCode**, then the default ggplot2 color palette is used.
+  - Without **RColorCode**, the default ggplot2 color palette is used.
 - New feature for pltoting subgroups: instead of displaying the average PSI of subgroups,
 the individual point estimates are plotted.
 - Updates to vignette
