@@ -28,7 +28,17 @@
 #'   coverage and PSI values near 0 or 1.}
 #'   \item{Subgroups will be ordered by the minimum \emph{Order} value of their
 #'   samples, and assigned to the first group to which they are matched.}
-#'   }
+#'   \item{(Experimental) Instead of computing the average PSI, the individual
+#'   PSI values can be plotted for each subgroup by setting \code{subg.show}. The
+#'   default is "mean", which plots the average PSI. The other two options are
+#'   "all" or "beeswarm". For "all", the individual PSI values and error bars
+#'   are plotted for each subgroup and sorted in increasing order. For
+#'   "beeswarm", the optional
+#'   \href{https://github.com/eclarke/ggbeeswarm}{ggbeeswarm} package is used to
+#'   create beeswarm scatterplots for each subgroup (error bars are not possible).
+#'   As this is an optional feature, please manually install the package first
+#'   before using it: \code{install.packages("ggbeeswarm")}.}
+#' }
 #'
 #' If no subgroups are defined in \code{config}, or \code{subg=FALSE} (default),
 #' a subgroup will be defined for each sample, preserving their name and order.
@@ -43,8 +53,8 @@
 #' each group by \code{RColorCode} in \code{config}. A corresponding legend key
 #' will also be drawn.
 #'
-#' (See also \code{\link{preprocess_sample_colors}} to see details on how configs
-#' are used).
+#' (See also \code{\link{preprocess_sample_colors}} and \code{vignette('psiplot-usage')}
+#' for details on how to use config files).
 #'
 #' PSI values that have \emph{NA} value are omitted and not plotted.
 #'
@@ -58,6 +68,10 @@
 #' a path to the \code{.config} file, or 4/5-column data frame of the \code{.config}
 #' file. Use the latter option if you are calling \code{plot_event} multiple times.
 #' @param subg Logical indicating whether samples should be subgrouped for plotting.
+#' @param subg.show Only applies when \code{subg == TRUE}. Default is \code{mean},
+#' in which the average PSI is computed for each subgroup. If \code{all}, then
+#' individual point estimates with error bars are shown. If \code{beeswarm}, this is
+#' similar to \code{all}, but shown as a beeswarm plot and without error bars.
 #' @param qual String indicating the minimun \emph{vast-tools} quality score
 #' for the PSI to be accepted. Defaults to \code{'VLOW'}. See the
 #' \href{https://github.com/vastgroup/vast-tools/blob/master/README.md}{vast-tools
@@ -121,7 +135,9 @@
 #' plot_event(psi[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 plot_event <- function(
-  x, config = NULL, subg = FALSE, trim_colnames = NULL,
+  x, config = NULL, subg = FALSE,
+  subg.show = c("mean", "all", "beeswarm"),
+  trim_colnames = NULL,
   qual = c("VLOW","N","LOW","OK","SOK"), errorbar = TRUE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "PSI", ylim = c(0,100),
@@ -137,14 +153,27 @@ plot_event <- function(
     stop("Too many rows!")
   }
 
+  qual = match.arg(qual)
+  subg.show = match.arg(subg.show)
+
+  if (subg.show == "beeswarm") {
+    if (!requireNamespace("ggbeeswarm", quietly = TRUE)) {
+      stop(paste("Please install the package ggbeeswarm:",
+                 "install.packages(\"ggbeeswarm\")",
+                 "or use the option subg.show = \"all\" instead"))
+    } else {
+      errorbar = FALSE
+    }
+  }
+
   # Format input
   x <- format_table(x,
                     qual = qual,
                     trim_colnames=trim_colnames,
                     short_ids = FALSE)
   reordered <- preprocess_sample_colors(x,
-                                        expr=F,
                                         config,
+                                        expr=F,
                                         col = col,
                                         subg= subg,
                                         multi_col=NULL)
@@ -187,31 +216,47 @@ plot_event <- function(
     left_join(reordered$subgroup,by="SampleName")
 
 
-  smsum <- sm %>%
-    dplyr::group_by(SubgroupName)
-
-  if(errorbar){
-    smsum <- smsum %>%
-      do(m_psi = mean(.$value,na.rm=T),
-         ci = get_beta_ci_subg(.$value,.$qual)) %>%
+  if (subg && subg.show == "all") {
+    smsum <- sm %>%
+      dplyr::group_by(SampleName, SubgroupName, value) %>%
+      do(ci = get_beta_ci(.$qual)) %>%
       ungroup() %>%
-      mutate(m_psi = map_dbl(m_psi,1),
-             ci = map(ci,1),
-             lo = map_dbl(ci,1),
-             hi = map_dbl(ci,2)) %>%
-      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
-      select(SubgroupName,
-             value = m_psi,
-             lo,hi)
+      mutate(
+        lo = map_dbl(ci, 1),
+        hi = map_dbl(ci, 2)
+      ) %>%
+      select(SubgroupName, value, lo, hi)
+  } else if (subg && subg.show == "beeswarm") {
+    smsum <- select(sm, SubgroupName, value)
   } else {
-    smsum <- smsum %>%
-      do(m_psi = mean(.$value,na.rm=T)) %>%
-      ungroup() %>%
-      mutate(m_psi = map_dbl(m_psi,1)) %>%
-      mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
-      select(SubgroupName,
-             value = m_psi)
+    smsum <- sm %>%
+      dplyr::group_by(SubgroupName)
+
+    if(errorbar){
+      smsum <- smsum %>%
+        do(m_psi = mean(.$value,na.rm=T),
+           ci = get_beta_ci_subg(.$value,.$qual)) %>%
+        ungroup() %>%
+        mutate(m_psi = map_dbl(m_psi,1),
+               ci = map(ci,1),
+               lo = map_dbl(ci,1),
+               hi = map_dbl(ci,2)) %>%
+        mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+        select(SubgroupName,
+               value = m_psi,
+               lo,hi)
+    } else {
+      smsum <- smsum %>%
+        do(m_psi = mean(.$value,na.rm=T)) %>%
+        ungroup() %>%
+        mutate(m_psi = map_dbl(m_psi,1)) %>%
+        mutate(m_psi = replace(m_psi,is.na(m_psi),NA)) %>%
+        select(SubgroupName,
+               value = m_psi)
     }
+  }
+
+
 
   smsum <- left_join(reordered$subgroup_order,smsum,by="SubgroupName") %>%
     dplyr::arrange(SubgroupOrder)
@@ -228,26 +273,42 @@ plot_event <- function(
                   GroupName,
                   RColorCode)
 
-  gp <- ggplot(data=smsum) +
-    geom_blank(data=smsum,
-               aes(x=Sample,
-                   y=value))
 
-  gp <- gp + geom_point(aes(x=Sample,
-                            y=value,
-                            colour=GroupName),
-                        size = cex.pch,
-                        shape=pch,
-                        show.legend = show_group_legend) +
+
+  inherit.aes <- FALSE
+  if (subg && subg.show == "all") {
+    gp <- smsum %>%
+      group_by(Sample) %>%
+      arrange(Order, value) %>%
+      mutate(position = rank(value)) %>%
+      ggplot(aes(x = Sample, y = value, color=GroupName, group=position)) +
+      geom_point(position=position_dodge(width=.5))
+    inherit.aes <- TRUE
+  } else if (subg && subg.show == "beeswarm") {
+    gp <- smsum %>%
+      ggplot(aes(x = Sample, y = value, color=GroupName)) +
+      ggbeeswarm::geom_quasirandom()
+  } else {
+    gp <- ggplot(data=smsum) +
+      geom_point(aes(x=Sample,
+                     y=value,
+                     colour=GroupName),
+                 size = cex.pch,
+                 shape=pch,
+                 show.legend = show_group_legend)
+  }
+
+  gp <- gp +
     scale_colour_manual("Sample Group", values=reordered$group_order$RColorCode)
 
   if(errorbar){
-    gp <- gp + geom_errorbar(inherit.aes = F,
+    gp <- gp + geom_errorbar(inherit.aes = inherit.aes,
                              aes(x=Sample,
                                  ymin=lo,
                                  ymax=hi,
                                  colour=GroupName),
                              width=0.1,
+                             position=position_dodge(width=.5),
                              show.legend = F)
   }
 
@@ -259,7 +320,7 @@ plot_event <- function(
   }
 
 
-  gp <- gp + ylab(ylab) +
+  gp <- gp + ylab(ylab) + xlab(xlab) +
     ylim(ylim) +
     ggtitle(title) +
     theme_bw() +
@@ -270,6 +331,10 @@ plot_event <- function(
 
   if (!gridlines) {
     gp <- gp + theme(panel.grid = element_blank())
+  }
+
+  if (is.null(config)) {
+    gp <- gp + guides(color=FALSE)
   }
 
   return(gp)

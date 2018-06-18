@@ -7,8 +7,8 @@
 #' @details
 #' \code{preprocess_sample_colors} depends on a pre-defined "sample inventory"
 #' database file in tab-delimited format. This file is species-specific and
-#' consists of five columns: \emph{Order}, \emph{SampleName}, \emph{SubroupName}
-#' (optional), \emph{GroupName}, \emph{RColorCode}. The header is required in
+#' consists of five columns: (optional) \emph{Order}, \emph{SampleName}, \emph{SubroupName}
+#' (optional), \emph{GroupName}, (optional) \emph{RColorCode}. The header is required in
 #' the file. Order of the columns is flexible.
 #'
 #' For example:
@@ -23,7 +23,7 @@
 #'
 #' where:
 #' \itemize{
-#'  \item{Order: The ordering of the samples from left to right.}
+#'  \item{Order: A specific ordering of the samples from left to right of the plot.}
 #'  \item{SampleName: Name of the sample. MUST match sample name in input table.}
 #'  \item{SubgroupName: Use to define sample pools that will be plotted in the
 #'  same data point (see \code{plot_event}, \code{plot_expr} and
@@ -130,6 +130,9 @@ preprocess_sample_colors <- function(data,
                                      expr = FALSE,
                                      col = NULL,
                                      multi_col = NULL) {
+  if (colnames(data)[1] != "ID") {
+    stop("Input data may be invalid. Check that format_table() was executed first.")
+  }
 
   R <- list()
   N <- ifelse(expr, ncol(data) - 1, (ncol(data) - 1) / 2)
@@ -168,8 +171,12 @@ preprocess_sample_colors <- function(data,
     original_config <- config
 
     # check input file [changed to allow flexible config column order, and subgroups]
-    if (!all(c("Order", "SampleName", "GroupName", "RColorCode") %in% colnames(config))) {
+    if (!all(c("SampleName", "GroupName") %in% colnames(config))) {
       stop("Incorrect formatting of headers in config")
+    }
+
+    if (!"Order" %in% colnames(config)) {
+      config$Order <- seq(1:nrow(config))
     }
 
     #To use the subgroups in the config, the column must be there and subg==T
@@ -207,6 +214,11 @@ preprocess_sample_colors <- function(data,
 
   if (!is.null(col)) {
     config$RColorCode <- col
+  } else if (!"RColorCode" %in% colnames(config) || all(is.na(config$RColorCode))) {
+    Ngroups <- length(unique(config$GroupName))
+    col <- gg_color_hue(Ngroups)
+    names(col) <- unique(config$GroupName)
+    config$RColorCode <- col[config$GroupName]
   }
 
   # keep only tissue groups that are present in input data
@@ -311,4 +323,16 @@ preprocess_sample_colors <- function(data,
             original_config=original_config)
 
   return(R)
+}
+
+#' Simulate default ggplot2 color palette
+#'
+#' @details
+#' \url{https://stackoverflow.com/a/8197703}
+#'
+#' @param n Number of colors
+#' @return vector of colors of length n
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
 }

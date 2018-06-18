@@ -27,6 +27,10 @@
 #' If \code{TRUE}, the average of all samples in a subgroup is plotted as a single
 #' data point. See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
 #' for more details on subgrouping.
+#' @param subg.show Only applies when \code{subg == TRUE}. Default is \code{mean},
+#' in which the average PSI is computed for each subgroup. If \code{all}, then
+#' individual point estimates with error bars are shown. If \code{beeswarm}, this is
+#' similar to \code{all}, but shown as a beeswarm plot and without error bars.
 #' @param counts Logical indicating whether the data frame contains read counts.
 #' Set to \code{TRUE} if the data frame contains two columns per sample (cRPKM and
 #' counts), otherwise leave as \code{FALSE} (default).
@@ -76,7 +80,7 @@
 #' plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 #' }
 #'
-#' #' # Plot with subgrouped samples
+#' # Plot with subgrouped samples
 #' plot_expr(crpkm[1,], config=config, subg=TRUE)
 #'
 #' # Plot directly from a table with suffixes and read counts
@@ -84,7 +88,8 @@
 #' plot_expr(crpkm_counts[1,], config = config, trim_colnames = "-cRPKM", counts = TRUE)
 #'
 plot_expr <- function(
-  x, config = NULL, subg = FALSE, trim_colnames = NULL, counts= FALSE,
+  x, config = NULL, subg = FALSE,
+  subg.show = c("mean", "all", "beeswarm"), trim_colnames = NULL, counts= FALSE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
   title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
@@ -96,6 +101,18 @@ plot_expr <- function(
 
   if (nrow(x) != 1) {
     stop("Too many rows!")
+  }
+
+  subg.show = match.arg(subg.show)
+
+  if (subg.show == "beeswarm") {
+    if (!requireNamespace("ggbeeswarm", quietly = TRUE)) {
+      stop(paste("Please install the package ggbeeswarm:",
+                 "install.packages(\"ggbeeswarm\")",
+                 "or use the option subg.show = \"all\" instead"))
+    } else {
+      errorbar = FALSE
+    }
   }
 
   x <- format_table(x, expr = TRUE, counts=counts, trim_colnames=trim_colnames,
@@ -126,9 +143,9 @@ plot_expr <- function(
     title <- x$ID
   }
 
-  if (is.null(ylim)) {
-    ylim <- c(0, round(max(x[,-1])) + 1)
-  }
+  # if (is.null(ylim)) {
+  #   ylim <- c(0, round(max(x[,-1])) + 1)
+  # }
 
   mdata <- suppressMessages(gather(crpkm,
                                  key = "SampleName",
@@ -140,21 +157,20 @@ plot_expr <- function(
 
   sm <- left_join(mdata,reordered$subgroup,by="SampleName")
 
-  if(subg){
-
+  if(subg && subg.show == "mean"){
     smsum <- sm %>%
       dplyr::group_by(SubgroupName) %>%
-      dplyr::summarise(value=mean(value,na.rm=T)) %>%
-      mutate(value=replace(value,is.na(value),NA))
-
-    } else {
-
-      smsum <- sm
-
-    }
+      dplyr::summarise(sdev=sd(value,na.rm=T),
+                       value=mean(value,na.rm=T)) %>%
+      mutate(value=replace(value,is.na(value),NA),
+             lo = value - sdev,
+             hi = value + sdev)
+  } else {
+    smsum <- mutate(sm, lo = NA, hi = NA)
+  }
 
   smsum <- smsum %>%
-    dplyr::select(SubgroupName,value)
+    dplyr::select(SubgroupName,value,lo,hi)
 
   smsum <- left_join(reordered$subgroup_order,smsum,by="SubgroupName") %>%
     dplyr::arrange(SubgroupOrder)
@@ -168,21 +184,58 @@ plot_expr <- function(
     dplyr::select(Order=SubgroupOrder,
                   Sample=SubgroupName,
                   value,
+                  lo, hi,
                   GroupName,
                   RColorCode)
 
-  gp <- ggplot(data=smsum) +
-    geom_blank(data=smsum,
-               aes(x=Sample,
-                   y=value))
+  if (subg && subg.show == "all") {
+    gp <- smsum %>%
+      group_by(Sample) %>%
+      arrange(Order, value) %>%
+      mutate(position = rank(value)) %>%
+      ggplot(aes(x = Sample, y = value, color=GroupName, group=position)) +
+      geom_point(position=position_dodge(width=.5))
+  } else if (subg && subg.show == "beeswarm") {
+    gp <- smsum %>%
+      ggplot(aes(x = Sample, y = value, color=GroupName)) +
+      ggbeeswarm::geom_quasirandom()
+  } else {
+    gp <- ggplot(smsum) +
+      geom_point(aes(x=Sample,
+                     y=value,
+                     colour=GroupName),
+                 size=cex.pch,
+                 shape=pch,
+                 show.legend=show_group_legend)
+  }
 
-  gp <- gp + geom_point(aes(x=Sample,
-                            y=value,
-                            colour=GroupName),
-                        size=cex.pch,
-                        shape=pch,
-                        show.legend=show_group_legend) +
+  gp <- gp +
     scale_colour_manual("Sample Group", values=reordered$group_order$RColorCode)
+
+  # Add error bars if subgrouping with mean
+  if (subg && subg.show == "mean") {
+
+    # Adjust y-axis to fit error bars
+    if (is.null(ylim)) {
+      ylim <- c(max(c(0, min(smsum$lo - 3, na.rm=T)), na.rm=T),
+                max(smsum$hi + 3, na.rm=T))
+    }
+
+    gp <- gp +
+      ylim(ylim) +
+      geom_errorbar(
+                    aes(x=Sample,
+                        ymin=lo,
+                        ymax=hi,
+                        colour=GroupName),
+                    width=0.1,
+                    position=position_dodge(width=.5),
+                    show.legend = F)
+  } else {
+    if (!is.null(ylim)) {
+      gp <- gp + ylim(ylim)
+    }
+  }
 
   if(!is.null(config) && groupmean) {
     gp <- draw_group_means(gp,
@@ -190,8 +243,7 @@ plot_expr <- function(
                            reordered)
   }
 
-  gp <- gp + ylab(ylab) +
-    ylim(ylim) +
+  gp <- gp + ylab(ylab) + xlab(xlab) +
     ggtitle(title) +
     theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1, size = cex.xaxis),

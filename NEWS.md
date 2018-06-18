@@ -1,3 +1,15 @@
+# Version 2.3.0
+- The columns **Order** and **RColorCode** in the configuration file are now optional.
+Only columns **SampleName** and **GroupName** are mandatory.
+This should simplify the minimum requirements needed to create a functional config.
+  - Without **Order**, the order defaults to 1,2,...,N where 1 is the first row of the config
+  and N is the last row.
+  - Without **RColorCode**, the default ggplot2 color palette is used.
+- New subgroup feature: instead of displaying the average PSI of subgroups,
+the individual point estimates are plotted.
+- Updates to vignette
+- Bug fixes
+
 # Version 2.2.0
 
 - Support for sample subgroups in all plot functions, through the config files. PSIs of samples in a subgroup are averaged and displayed as a single data point. Confidence intervals are computed by fitting a joint beta distribution to a population of points sampled from beta distributions coming from the individual samples, and then applying the same method as for single samples.

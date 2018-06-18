@@ -4,12 +4,12 @@
 \alias{plot_expr}
 \title{Plot cRPKM values of a given gene}
 \usage{
-plot_expr(x, config = NULL, subg = FALSE, trim_colnames = NULL,
-  counts = FALSE, groupmean = ifelse(is.null(config), FALSE, TRUE),
-  col = NULL, title = NULL, xlab = "", ylab = "Expression (cRPKM)",
-  ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE,
-  show_group_legend = TRUE)
+plot_expr(x, config = NULL, subg = FALSE, subg.show = c("mean", "all",
+  "beeswarm"), trim_colnames = NULL, counts = FALSE,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
+  title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
+  cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
+  cex.pch = 3, plot = NULL, gridlines = TRUE, show_group_legend = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing cRPKM values to be plotted}
@@ -22,6 +22,11 @@ file. Use the latter option if you are calling \code{plot_expr} multiple times.}
 If \code{TRUE}, the average of all samples in a subgroup is plotted as a single
 data point. See \code{\link{plot_event}} and \code{\link{preprocess_sample_colors}}
 for more details on subgrouping.}
+
+\item{subg.show}{Only applies when \code{subg == TRUE}. Default is \code{mean},
+in which the average PSI is computed for each subgroup. If \code{all}, then
+individual point estimates with error bars are shown. If \code{beeswarm}, this is
+similar to \code{all}, but shown as a beeswarm plot and without error bars.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
@@ -97,7 +102,7 @@ plot_expr(crpkm[1,], config = "/path/to/config")
 plot_expr(crpkm[1,], config = config, pch = 9, ylim = c(20, 80))
 }
 
-#' # Plot with subgrouped samples
+# Plot with subgrouped samples
 plot_expr(crpkm[1,], config=config, subg=TRUE)
 
 # Plot directly from a table with suffixes and read counts

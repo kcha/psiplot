@@ -18,6 +18,8 @@
 #' \code{\link{plot_multi}} can be used to plot multiple events in the form
 #' of a heatmap.
 #'
+#'See \code{vignette('psiplot-usage', package="psiplot")} for usage details.
+#'
 #' Report bugs and issues to \url{https://github.com/kcha/psiplot/issues}.
 #'
 #' @name psiplot

@@ -4,10 +4,10 @@
 \alias{plot_event}
 \title{Plot PSI values of a given alternative splicing event}
 \usage{
-plot_event(x, config = NULL, subg = FALSE, trim_colnames = NULL,
-  qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE,
-  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
-  title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
+plot_event(x, config = NULL, subg = FALSE, subg.show = c("mean", "all",
+  "beeswarm"), trim_colnames = NULL, qual = c("VLOW", "N", "LOW", "OK",
+  "SOK"), errorbar = TRUE, groupmean = ifelse(is.null(config), FALSE, TRUE),
+  col = NULL, title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
   cex.pch = 3, plot = NULL, gridlines = TRUE, show_group_legend = TRUE)
 }
@@ -19,6 +19,11 @@ a path to the \code{.config} file, or 4/5-column data frame of the \code{.config
 file. Use the latter option if you are calling \code{plot_event} multiple times.}
 
 \item{subg}{Logical indicating whether samples should be subgrouped for plotting.}
+
+\item{subg.show}{Only applies when \code{subg == TRUE}. Default is \code{mean},
+in which the average PSI is computed for each subgroup. If \code{all}, then
+individual point estimates with error bars are shown. If \code{beeswarm}, this is
+similar to \code{all}, but shown as a beeswarm plot and without error bars.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.}
@@ -94,7 +99,17 @@ If subgroups are defined in \code{config} and \code{subg=TRUE}:
   coverage and PSI values near 0 or 1.}
   \item{Subgroups will be ordered by the minimum \emph{Order} value of their
   samples, and assigned to the first group to which they are matched.}
-  }
+  \item{(Experimental) Instead of computing the average PSI, the individual
+  PSI values can be plotted for each subgroup by setting \code{subg.show}. The
+  default is "mean", which plots the average PSI. The other two options are
+  "all" or "beeswarm". For "all", the individual PSI values and error bars
+  are plotted for each subgroup and sorted in increasing order. For
+  "beeswarm", the optional
+  \href{https://github.com/eclarke/ggbeeswarm}{ggbeeswarm} package is used to
+  create beeswarm scatterplots for each subgroup (error bars are not possible).
+  As this is an optional feature, please manually install the package first
+  before using it: \code{install.packages("ggbeeswarm")}.}
+}
 
 If no subgroups are defined in \code{config}, or \code{subg=FALSE} (default),
 a subgroup will be defined for each sample, preserving their name and order.
@@ -109,8 +124,8 @@ colors of the lines are determined by the color set to the first sample of
 each group by \code{RColorCode} in \code{config}. A corresponding legend key
 will also be drawn.
 
-(See also \code{\link{preprocess_sample_colors}} to see details on how configs
-are used).
+(See also \code{\link{preprocess_sample_colors}} and \code{vignette('psiplot-usage')}
+for details on how to use config files).
 
 PSI values that have \emph{NA} value are omitted and not plotted.
 

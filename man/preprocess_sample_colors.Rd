@@ -68,8 +68,8 @@ taken from a pre-defined tab-delimited file (see \code{details}).
 \details{
 \code{preprocess_sample_colors} depends on a pre-defined "sample inventory"
 database file in tab-delimited format. This file is species-specific and
-consists of five columns: \emph{Order}, \emph{SampleName}, \emph{SubroupName}
-(optional), \emph{GroupName}, \emph{RColorCode}. The header is required in
+consists of five columns: (optional) \emph{Order}, \emph{SampleName}, \emph{SubroupName}
+(optional), \emph{GroupName}, (optional) \emph{RColorCode}. The header is required in
 the file. Order of the columns is flexible.
 
 For example:
@@ -84,7 +84,7 @@ etc..}
 
 where:
 \itemize{
- \item{Order: The ordering of the samples from left to right.}
+ \item{Order: A specific ordering of the samples from left to right of the plot.}
  \item{SampleName: Name of the sample. MUST match sample name in input table.}
  \item{SubgroupName: Use to define sample pools that will be plotted in the
  same data point (see \code{plot_event}, \code{plot_expr} and
