@@ -4,12 +4,13 @@
 \alias{plot_expr}
 \title{Plot cRPKM values of a given gene}
 \usage{
-plot_expr(x, config = NULL, subg = FALSE, subg.show = c("mean", "all",
-  "beeswarm"), trim_colnames = NULL, counts = FALSE,
+plot_expr(x, config = NULL, subg = FALSE, subg.show = c("mean",
+  "all", "beeswarm"), trim_colnames = NULL, counts = FALSE,
   groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
-  title = NULL, xlab = "", ylab = "Expression (cRPKM)", ylim = NULL,
-  cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
-  cex.pch = 3, plot = NULL, gridlines = TRUE, show_group_legend = TRUE)
+  title = NULL, xlab = "", ylab = "Expression (cRPKM)",
+  ylim = NULL, cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
+  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE,
+  show_group_legend = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing cRPKM values to be plotted}
@@ -30,10 +31,10 @@ similar to \code{all}, but shown as a beeswarm plot and without error bars.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
 of every sample column in x. Useful to trim the "-cRPKM" suffix from expression
-tables. If no string must be trimmed, leave as \code{FALSE}.}
+tables. If no string must be trimmed, leave as \code{NULL}.}
 
 \item{counts}{Logical indicating whether the data frame contains read counts.
-Set to \code{TRUE} if the data frame contains two rows per sample (cRPKM and
+Set to \code{TRUE} if the data frame contains two columns per sample (cRPKM and
 counts), otherwise leave as \code{FALSE} (default).}
 
 \item{groupmean}{Logical indicating whether grouped means should be drawn.

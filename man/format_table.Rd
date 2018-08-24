@@ -4,8 +4,9 @@
 \alias{format_table}
 \title{Format input event data}
 \usage{
-format_table(x, qual = c("VLOW", "N", "LOW", "OK", "SOK"), expr = FALSE,
-  counts = FALSE, trim_colnames = NULL, short_ids = FALSE)
+format_table(x, qual = c("VLOW", "N", "LOW", "OK", "SOK"),
+  expr = FALSE, counts = FALSE, trim_colnames = NULL,
+  short_ids = FALSE)
 }
 \arguments{
 \item{x}{A data frame of event data as outputted by \code{vast-tools combine}.

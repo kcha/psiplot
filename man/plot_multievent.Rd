@@ -5,11 +5,12 @@
 \title{Plot PSI values of multiple alternative splicing events}
 \usage{
 plot_multievent(x, config = NULL, subg = FALSE, trim_colnames = NULL,
-  qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE, col = NULL,
-  event_col = NULL, title = "MULTI EVENT PLOT", xlab = "", ylab = "PSI",
-  ylim = c(0, 100), cex.main = 14, cex.yaxis = 12, cex.xaxis = 12,
-  pch = 20, cex.pch = 3, plot = NULL, gridlines = TRUE, lwd = 0.5,
-  show_event_legend = T, show_group_legend = T)
+  qual = c("VLOW", "N", "LOW", "OK", "SOK"), errorbar = TRUE,
+  col = NULL, event_col = NULL, title = "MULTI EVENT PLOT",
+  xlab = "", ylab = "PSI", ylim = c(0, 100), cex.main = 14,
+  cex.yaxis = 12, cex.xaxis = 12, pch = 20, cex.pch = 3,
+  plot = NULL, gridlines = TRUE, lwd = 0.5, show_event_legend = T,
+  show_group_legend = T)
 }
 \arguments{
 \item{x}{A data frame containing PSI values to be plotted.}

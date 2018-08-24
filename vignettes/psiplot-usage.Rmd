@@ -207,7 +207,7 @@ first one.
 The colors and other graphical parameters can also be configured in R via arguments.
 The `plot_*` family of methods provide a limited set of graphical arguments and can be 
 used in conjunction with a config file. See the help pages for each method 
-(e.g. `?plot_event`) and for more details on the available options. 
+(e.g. `?plot_event`) for more details on the available options. 
 
 For example, the following command uses `config` to customize the colors and groupings, sets the
 point symbol, and restricts the y-axis to (20, 80):

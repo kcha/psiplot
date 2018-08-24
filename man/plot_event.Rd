@@ -4,12 +4,14 @@
 \alias{plot_event}
 \title{Plot PSI values of a given alternative splicing event}
 \usage{
-plot_event(x, config = NULL, subg = FALSE, subg.show = c("mean", "all",
-  "beeswarm"), trim_colnames = NULL, qual = c("VLOW", "N", "LOW", "OK",
-  "SOK"), errorbar = TRUE, groupmean = ifelse(is.null(config), FALSE, TRUE),
-  col = NULL, title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
+plot_event(x, config = NULL, subg = FALSE, subg.show = c("mean",
+  "all", "beeswarm"), trim_colnames = NULL, qual = c("VLOW", "N",
+  "LOW", "OK", "SOK"), errorbar = TRUE,
+  groupmean = ifelse(is.null(config), FALSE, TRUE), col = NULL,
+  title = NULL, xlab = "", ylab = "PSI", ylim = c(0, 100),
   cex.main = 14, cex.yaxis = 12, cex.xaxis = 12, pch = 20,
-  cex.pch = 3, plot = NULL, gridlines = TRUE, show_group_legend = TRUE)
+  cex.pch = 3, plot = NULL, gridlines = TRUE,
+  show_group_legend = TRUE)
 }
 \arguments{
 \item{x}{A 1-row data frame containing PSI values to be plotted.}
@@ -26,7 +28,7 @@ individual point estimates with error bars are shown. If \code{beeswarm}, this i
 similar to \code{all}, but shown as a beeswarm plot and without error bars.}
 
 \item{trim_colnames}{String that must be searched for and trimmed at the end
-of every sample column in x. If no string must be trimmed, leave as \code{FALSE}.}
+of every sample column in x. If no string must be trimmed, leave as \code{NULL}.}
 
 \item{qual}{String indicating the minimun \emph{vast-tools} quality score
 for the PSI to be accepted. Defaults to \code{'VLOW'}. See the

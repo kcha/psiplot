@@ -7,8 +7,9 @@
 plot_multi(df, config = NULL, subg = FALSE, expr = FALSE,
   trim_colnames = FALSE, qual = c("VLOW", "N", "LOW", "OK", "SOK"),
   counts = FALSE, xlab = "", ylab = "", title = "",
-  cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE, FALSE),
-  fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"), ...)
+  cluster_rows = TRUE, cluster_cols = ifelse(is.null(config), TRUE,
+  FALSE), fill = NULL, usepkg = c("ggplot2", "gplots", "pheatmap"),
+  ...)
 }
 \arguments{
 \item{df}{A data frame of input values (PSI or cRPKM). If the latter, need to
