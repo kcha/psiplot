@@ -1,6 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build
 Status](https://travis-ci.org/kcha/psiplot.svg?branch=master)](https://travis-ci.org/kcha/psiplot)
+[![GitHub release](https://img.shields.io/github/release/kcha/psiplot.svg)](https://github.com/kcha/psiplot)
+[![GitHub license](https://img.shields.io/github/license/kcha/psiplot.svg)](https://github.com/kcha/psiplot/blob/master/LICENSE)
 
 psiplot
 =======
@@ -68,7 +70,8 @@ plot_multievent(psi[c(1,2),], config = config, event_col = c("black", "red"))
 See this
 [vignette](https://htmlpreview.github.io/?https://github.com/kcha/psiplot/blob/master/vignettes/psiplot-usage.html)
 for more detailed usage, including how to customize psiplots using a
-configuration file.
+configuration file. The vignette is also available in R using the
+command `vignette("psiplot-usage")`.
 
 Issues
 ------
