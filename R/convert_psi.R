@@ -14,7 +14,6 @@
 #' @return Data frame with the same dimensions as \emph{t} and low/bad quality P
 #' SI values converted to \code{NA}
 #' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @examples
 #' \dontrun{
 #' psiplot:::convert_psi(psi[,7:ncol(psi)])

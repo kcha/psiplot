@@ -65,7 +65,6 @@
 #' @import dplyr
 #' @import tidyr
 #' @import purrr
-#' @importFrom magrittr "%>%"
 #' @examples
 #' \dontrun{
 #' plot_expr(crpkm[1,])

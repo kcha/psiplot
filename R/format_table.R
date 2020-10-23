@@ -31,7 +31,6 @@
 #' @seealso \code{\link{convert_psi}}
 #' @export
 #' @import dplyr
-#' @importFrom magrittr "%>%"
 #' @importFrom stats setNames
 #' @examples
 #' # For example input, see:

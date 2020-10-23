@@ -110,7 +110,6 @@
 #' @export
 #' @import dplyr
 #' @import readr
-#' @importFrom magrittr "%>%"
 #' @examples
 #' #Tables from vast-tools need formatting before using this function
 #' a <- format_table(psi)

@@ -75,7 +75,6 @@
 #' @import tidyr
 #' @import purrr
 #' @import ggplot2
-#' @importFrom magrittr "%>%"
 #' @examples
 #' plot_multievent(psi, config = config)
 #'

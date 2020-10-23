@@ -24,7 +24,6 @@ Imports:
     tidyr,
     purrr,
     readr,
-    magrittr,
     ggplot2 (>= 2.2.1)
 Suggests:
     testthat,

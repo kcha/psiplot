@@ -57,7 +57,6 @@
 #' @import dplyr
 #' @import tidyr
 #' @importFrom grDevices colorRampPalette
-#' @importFrom magrittr "%>%"
 #' @importFrom stats dist
 #' @importFrom stats hclust
 #' @examples

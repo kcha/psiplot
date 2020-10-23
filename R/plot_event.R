@@ -110,7 +110,6 @@
 #' @import dplyr
 #' @import tidyr
 #' @import purrr
-#' @importFrom magrittr "%>%"
 #' @import ggplot2
 #' @examples
 #' \dontrun{
