@@ -27,9 +27,10 @@ jobs:
         uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
         with:
           r-version: ${{ matrix.r-version }}
+      - uses: r-lib/actions/setup-pandoc@v2
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck"))
+          install.packages(c("remotes", "rcmdcheck", "testthat"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
