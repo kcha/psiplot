@@ -16,9 +16,10 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: ['macos-latest', 'ubuntu-latest']
         r-version: ['3.6.3', '4.1.1']
 
     steps:
@@ -36,3 +37,7 @@ jobs:
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}
+      - name: Run tests
+        run: |
+          cd tests
+          Rscript run_tests.R
